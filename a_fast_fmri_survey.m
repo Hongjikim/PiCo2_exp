@@ -1,4 +1,4 @@
-function survey = a_fast_fmri_survey(words, varargin)
+function survey = a_fast_fmri_survey(basedir, words, varargin)
 %
 %   survey.dat{target_i,seeds_i}{barsize(5,j)}.tracjectory
 %   survey.dat{target_i,seeds_i}{barsize(5,j)}.time
@@ -17,9 +17,8 @@ function survey = a_fast_fmri_survey(words, varargin)
 %
 %% default setting
 
-basedir =  '/Users/hongji/Dropbox/PiCo_git';
 datdir = fullfile(basedir, 'data') ;
-sid = input('Subject ID? (e.g., pico001): ', 's');
+sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 [~, sid] = fileparts(subject_dir);
 
@@ -39,7 +38,7 @@ subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 data.subject = sid;
 survey.surveyfile = fullfile(savedir, ['surveydata_sub' sid '.mat']) ;
-data.version = 'PICO_v1_09-2018_Cocoanlab';
+data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
 data.starttime_getsecs = GetSecs;
 

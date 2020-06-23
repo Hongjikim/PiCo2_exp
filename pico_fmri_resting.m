@@ -1,4 +1,4 @@
-function pico_fmri_resting(varargin)
+function pico_fmri_resting(basedir, varargin)
 
 
 %% DEFAULT
@@ -9,12 +9,7 @@ testmode = false;
 USE_EYELINK = false;
 USE_BIOPAC = false;
 
-basedir = 'C:\Users\Cocoanlab_WL01\Desktop\PiCo_exp-master\story_display'; 
-% basedir = pwd;
-datdir = fullfile(basedir, 'data'); % (, 'data');
-if ~exist(datdir, 'dir'), error('You need to run this code within the PiCo directory.'); end
-addpath(genpath(basedir));
-
+datdir = fullfile(basedir, 'data');
 
 %% PARSING VARARGIN
 
@@ -37,38 +32,47 @@ end
 
 %% LOAD TRIAL SEQUENCE AND GET RUN NUMBER
 
-sid = input('Subject ID? (e.g., pico001): ', 's');
-subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
-[~, sid] = fileparts(subject_dir);
+sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 
-% ts_fname = filenames(fullfile(subject_dir, 'trial_sequence*.mat'));
-% if numel(ts_fname)>1
-%     error('There are more than one ts file. Please check and delete the wrong files.')
-% else
-%     load(ts_fname{1}); %Q?? ts_fname
-% end
+while true
+    
+    subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
+    
+    if size(subject_dir,1) == 1
+        if contains(subject_dir, 'no matches found') % mac: no subject dir
+            mkdir(fullfile(datdir, sid)); % make subject directory
+        end
+    elseif size(subject_dir,1)>1
+        error('There are more than one subject directory. Please check and delete the wrong directory.')
+    elseif size(subject_dir,1) == 0 % in WL01
+        mkdir(fullfile(datdir, sid)); % make subject directory
+    end
+    
+end
 
-ft_num = input('FREE THKINING Run number? (1 or 2): ');
+ft_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
 
 %% CREATE AND SAVE DATA
+
+[~, sid] = fileparts(subject_dir);
 
 nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 data.subject = sid;
 data.datafile = fullfile(subject_dir, [subjdate, '_', sid, '_FT_run', sprintf('%.2d', ft_num), '.mat']);
-data.version = 'PICO_v1_08-2018_Cocoanlab';
+data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
 data.starttime_getsecs = GetSecs;
-% data.trial_sequence = ts{run_n};
+data.run_number = ft_num;
 
 if exist(data.datafile, 'file')
-    fprintf('\n ** EXSITING FILE: %s %s **', data.subject, subjdate);
+    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_', sid, '_FT_run', sprintf('%.2d', ft_num), '.mat']);
     cont_or_not = input(['\nYou type the run number that is inconsistent with the data previously saved.', ...
         '\nWill you go on with your run number that typed just before?', ...
         '\n1: Yes, continue with typed run number.  ,   2: No, it`s a mistake. I`ll break.\n:  ']);
     if cont_or_not == 2
-        error('Breaked.')
+        error('Break.')
     elseif cont_or_not == 1
         save(data.datafile, 'data');
     end
@@ -87,11 +91,11 @@ global fontsize window_rect text_color % lb tb recsize barsize rec; % rating sca
 % Screen setting
 bgcolor = 50;
 
-% if testmode == true
-%     window_ratio = 1.6;
-% else
-%     window_ratio = 1;
-% end
+if testmode == true
+    window_ratio = 1.6;
+else
+    window_ratio = 1;
+end
 
 text_color = 255;
 fontsize = [28, 32, 41, 54];
@@ -99,10 +103,9 @@ fontsize = [28, 32, 41, 54];
 
 screens = Screen('Screens');
 window_num = screens(end);
-Screen('Preference', 'SkipSyncTests', 1); 
+Screen('Preference', 'SkipSyncTests', 1);
 window_info = Screen('Resolution', window_num);
-window_rect = [0 0 window_info.width window_info.height]; %for mac, [0 0 2560 1600];
-
+window_rect = [0 0 window_info.width/window_ratio window_info.height/window_ratio]; %for mac, [0 0 2560 1600];
 
 W = window_rect(3); %width of screen
 H = window_rect(4); %height of screen
@@ -119,8 +122,6 @@ try
     
     [theWindow, ~] = Screen('OpenWindow',0, bgcolor, window_rect);%[0 0 2560/2 1440/2]
     Screen('Preference','TextEncodingLocale','ko_KR.UTF-8');
-    % font = 'NanumBarunGothic'; % check
-    % Screen('TextFont', theWindow, font);
     Screen('TextSize', theWindow, fontsize(3));
     if ~testmode, HideCursor; end
     
@@ -141,7 +142,7 @@ try
     end
     
     %% HEAD SCOUT AND DISTORTION CORRECTION
-    if ft_num == 1
+    if ft_num == 1 % the first run
         while (1)
             [~,~,keyCode] = KbCheck;
             
@@ -266,10 +267,10 @@ try
             DrawFormattedText(theWindow, start_msg, 'center', 'center', text_color, [], [], [], 1.3);
             Screen('Flip', theWindow);
             
-        end 
+        end
     end
     
-    %% FOR DISDAQ 10 SECONDS
+    %% For DISDAQ
     
     % gap between 's' key push and the first stimuli (disdaqs: data.disdaq_sec)
     % 4 seconds: "시작합니다..."
@@ -279,14 +280,14 @@ try
     DrawFormattedText(theWindow, double('시작합니다...'), 'center', 'center', white, [], [], [], 1.2);
     Screen('Flip', theWindow);
     
-    waitsec_fromstarttime(data.runscan_starttime, 4); % For disdaq
+    waitsec_fromstarttime(data.runscan_starttime, 4);
     Screen(theWindow,'FillRect',bgcolor, window_rect);
     Screen('Flip', theWindow);
     
     % biopac
     % eyelink
     
-    waitsec_fromstarttime(data.runscan_starttime, 8); % total 8 for disdaq 
+    waitsec_fromstarttime(data.runscan_starttime, 8); % 8 seconds for disdaq
     
     
     %% EYELINK AND BIOPAC START
@@ -310,10 +311,12 @@ try
     Screen(theWindow,'FillRect',bgcolor, window_rect);
     Screen('Flip', theWindow);
     
-    waitsec_fromstarttime(data.runscan_starttime, 12);
+    waitsec_fromstarttime(data.runscan_starttime, 16); % after 8 seconds of disdaq, 8 seconds of baseline
     
     data.freethinking_start_time{ft_num} = GetSecs;
-    data = free_thinking(data, ft_num); %free thinking without story!
+    
+    data = thought_sampling(data); % thought sampling tasks
+    
     save(data.datafile, 'data', '-append');
     data.freethinking_end_time = GetSecs;
     
@@ -323,7 +326,7 @@ try
         Screen('Flip', theWindow);
     end
     
-    data = pico_post_run_survey_resting(data, ft_num); %free thinking for story!
+    data = pico_post_run_survey_resting(data);
     save(data.datafile, 'data', '-append');
     
     Screen(theWindow, 'FillRect', bgcolor, window_rect);
@@ -331,9 +334,6 @@ try
     Screen('TextSize', theWindow, fontsize(3));
     DrawFormattedText(theWindow, double(run_END_msg), 'center', textH, white);
     Screen('Flip', theWindow);
-    
-    save(data.datafile, 'data', '-append');
-    WaitSecs(.5);
     
     if USE_EYELINK
         Eyelink('Message','Story Run END');
@@ -384,7 +384,7 @@ end
 %% ====== SUBFUNCTIONS ======
 
 
-function data = free_thinking(data, ft_num)
+function data = thought_sampling(data)
 
 global theWindow W H; % window property
 global fontsize window_rect text_color textH % lb tb recsize barsize rec; % rating scale
@@ -395,7 +395,7 @@ DrawFormattedText(theWindow, fixation_point, 'center', 'center', text_color);
 Screen('Flip', theWindow);
 
 resting_sTime = GetSecs;
-data.FTfunction{ft_num}.fixation_start_time = resting_sTime;
+data.FTfunction.fixation_start_time = resting_sTime;
 
 rng('shuffle')
 
@@ -409,8 +409,8 @@ resting_total_time = 14*60;
 
 % sampling_time = [60 120 180 240 300] + randi(10,1,5) - 5;
 % resting_total_time = 360;
-% 
-data.FTfunction{ft_num}.sampling_time = sampling_time;
+%
+data.FTfunction.sampling_time = sampling_time;
 
 while GetSecs - resting_sTime < resting_total_time
     for i = 1:numel(sampling_time)
@@ -418,9 +418,9 @@ while GetSecs - resting_sTime < resting_total_time
         while GetSecs - resting_sTime > (sampling_time(i) - 2.5) && GetSecs - resting_sTime < (sampling_time(i) + 2.5)
             k = k +1;
             if k == 1
-                data.FTfunction{ft_num}.start_Sampling{i} = GetSecs;
+                data.FTfunction.start_Sampling{i} = GetSecs;
             end
-            data.FTfunction{ft_num}.end_Sampling{i} = GetSecs;
+            data.FTfunction.end_Sampling{i} = GetSecs;
             Screen('TextSize', theWindow, fontsize(3));
             FT_msg = double('지금 무슨 생각을 하고 있는지 \n단어나 구로 말해주세요.') ;
             DrawFormattedText(theWindow, FT_msg, 'center', 'center', text_color, [], [], [], 1.5);
@@ -429,13 +429,18 @@ while GetSecs - resting_sTime < resting_total_time
         Screen('TextSize', theWindow, fontsize(3));
         DrawFormattedText(theWindow, fixation_point, 'center', 'center', text_color);
         Screen('Flip', theWindow);
+        
+        if i == 7 % when 7th trial is done, save taskdata
+            save(data.datafile, 'data', '-append');
+        end
+        
     end
 end
 
-data.FTfunction{ft_num}.fixation_end_time = GetSecs;
+data.FTfunction.fixation_end_time = GetSecs;
 data.runscan_endtime = GetSecs;
 
-while GetSecs - data.FTfunction{ft_num}.fixation_end_time <5
+while GetSecs - data.FTfunction.fixation_end_time <5
     end_msg = double('지금 무슨 생각을 하고 있는지 \n단어나 구로 말해주세요.') ;
     Screen('TextSize', theWindow, fontsize(3));
     DrawFormattedText(theWindow, end_msg, 'center', 'center', text_color, [], [], [], 1.5);
@@ -469,7 +474,7 @@ disp(str); %present this text in command window
 
 end
 
-function data = pico_post_run_survey_resting(data, ft_num)
+function data = pico_post_run_survey_resting(data)
 
 global theWindow W H; % window property
 global white red orange bgcolor tb rec recsize; % color
@@ -602,7 +607,7 @@ for j=1:numel(barsize(5,:))
             rec_i = rec_i+1; % the number of recordings
             post_run.dat{barsize(5,j)}.trajectory(rec_i,1) = rating_5d(x, j);
             post_run.dat{barsize(5,j)}.time(rec_i,1) = GetSecs - starttime;
-
+            
             if GetSecs - starttime >= rT_post
                 post_run.dat{barsize(5,j)}.button_press = false;
                 button(1) = true;
@@ -653,7 +658,7 @@ waitsec_fromstarttime(post_run.response_endtime, 2)
 
 post_run.end_time = GetSecs;
 
-data.postrunQ{ft_num} = post_run ;
+data.postrunQ = post_run ;
 
 save(data.datafile, 'data', '-append');
 
@@ -813,12 +818,11 @@ for i = 1:(numel(title(1,:))-1)
     end
 end
 WaitSecs(.1);
-    
-    data.rating = rating ;
-    
-    save(data.datafile, 'data', '-append');
-    
-    
+
+data.rating = rating ;
+
+save(data.datafile, 'data', '-append');
+
 end
 
 

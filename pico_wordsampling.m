@@ -1,10 +1,10 @@
-function pico_ws(varargin)
+function pico_wordsampling(basedir, varargin)
 
 % This function can be used to transcribe the PiCo fmri word generation responses.
 %
 % :Usage:
 % ::
-%       fast_fmri_transcribe_responses(varargin)
+%       pico_wordsampling(varargin)
 %
 %
 % :Optional Inputs: Enter keyword followed by variable with values
@@ -24,41 +24,23 @@ function pico_ws(varargin)
 %           This will play the sound for the responses you couldn't hear at
 %           the first try ('na').
 %
-% :Example:
-%    fast_fmri_transcribe_responses('nosound') % while running fast_fmri_word_generation in the scanner
-%
-%    fast_fmri_transcribe_responses('only_na') % after running fast_fmri_word_generation
-%
-%    fast_fmri_transcribe_responses('response_n', [2 6 38]) % playing sound only a few specific trials
-%
-%    fast_fmri_transcribe_responses('response_n', [2 6 38], 'nosound') % playing sound only a few specific trials
-%
-%    fast_fmri_transcribe_responses % after running fast_fmri_word_generation
-%
-% ..
 %    Copyright (C) 2017 COCOAN lab
 % ..
 %
-%    If you have any questions, please email to:
-%
-%          Byeol Kim (roadndream@naver.com) or
-%          Wani Woo (waniwoo@skku.edu)
 %
 
 %% PARSING OUT OPTIONAL INPUT
-savedir = fullfile(pwd, 'data');
+% savedir = fullfile(pwd, 'data');
 % do_playsound = true;
 
-
 %% INFO CHECK
-basedir =  '/Users/hongji/Dropbox/PiCo_git';
 datdir = fullfile(basedir, 'data') ;
 
-sid = input('Subject ID? (e.g., pico001): ', 's');
+sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 [~, sid] = fileparts(subject_dir);
 
-run_n = input('RUN number? (1=preFT, 2~6 = Story, 7 = postFT): ');
+run_n = input('RUN number? (1, 2, 3): ');
 
 %% CREATE AND SAVE DATA
 
@@ -66,8 +48,8 @@ nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 data.subject = sid;
-data.datafile = fullfile(subject_dir, ['WORDSAMPLING_', sprintf('%.7s', sid), '_run', sprintf('%.1d', run_n), '.mat']);
-data.version = 'PICO_v1_09-2018_Cocoanlab';
+data.datafile = fullfile(subject_dir, ['THOUGHT_SAMPLING_', sprintf('%.7s', sid), '_run', sprintf('%.1d', run_n), '.mat']);
+data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
 data.starttime_getsecs = GetSecs;
 
@@ -85,15 +67,7 @@ else
     save(data.datafile, 'data');
 end
 
-% dat_file = fullfile(datdir, ['a_wordsampling_sub' SID '_sess' SessID '.mat']);
-% %save_file = fullfile(savedir, ['b_responsedata_sub' SID '_sess' SessID '.mat']);
-%
-% load(dat_file);
-% %load(save_file);
-
-% Response_N
-% response_n = 1:numel(wgdata.audiodata); % wgdata.audiodata = 1x40
-response_n = [1:6];
+response_n = [1:15];
 for i = 1:length(varargin)
     if ischar(varargin{i})
         switch varargin{i}
@@ -124,7 +98,7 @@ for response_i = response_n   % in case of no-sound, 1:40
     input_key = '';
     while isempty(deblank(input_key))
         sprintf('    %2d번째 자유생각 단어는 무엇인가요   ', response_i);
-        input_key = input('단어를 적고 엔터키를 눌러주세요. 못들었으면 ''X''를 적은 후 엔터키를 눌러주세요:  ', 's');
+        input_key = input('단어를 적고 엔터키를 눌러주세요. 못 들었으면 ''X''를 적은 후 엔터키를 눌러주세요:  ', 's');
     end
     
     response{response_i} = input_key;
