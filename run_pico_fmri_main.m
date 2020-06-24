@@ -4,7 +4,7 @@
 
 clear;
 
-basedir = set_directory('hj_mac'); % 'dj_mac', 'WL01'
+basedir = set_directory('WL01');% hj_mac'); % 'dj_mac', 'WL01'
 cd(basedir);
 
 % cd('C:\Users\Cocoanlab_WL01\Desktop\PiCo_exp-master\story_display');

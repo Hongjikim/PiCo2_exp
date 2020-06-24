@@ -20,7 +20,7 @@ switch where
         basedir = '/Users/dongjupark/Dropbox/Cocoan_github/PiCo2_exp';
         
     case 'WL01'
-        basedir = 'C:\Users\Cocoanlab_WL01\Desktop\PiCo_exp-master';
+        basedir = 'C:\Users\Cocoanlab_WL01\Dropbox\PiCo2\PiCo2_exp-master';
 end
 
 addpath(genpath(basedir));
