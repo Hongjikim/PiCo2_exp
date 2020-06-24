@@ -34,21 +34,20 @@ end
 
 sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 
-while true
-    
-    subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
-    
-    if size(subject_dir,1) == 1
-        if contains(subject_dir, 'no matches found') % mac: no subject dir
-            mkdir(fullfile(datdir, sid)); % make subject directory
-        end
-    elseif size(subject_dir,1)>1
-        error('There are more than one subject directory. Please check and delete the wrong directory.')
-    elseif size(subject_dir,1) == 0 % in WL01
+subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
+
+if size(subject_dir,1) == 1
+    if contains(subject_dir, 'no matches found') % mac: no subject dir
+        mkdir(fullfile(datdir, sid)); % make subject directory
+    elseif contains(subject_dir, '파일을 찾을 수 없습니다.') % mac: no subject dir
         mkdir(fullfile(datdir, sid)); % make subject directory
     end
-    
+elseif size(subject_dir,1)>1
+    error('There are more than one subject directory. Please check and delete the wrong directory.')
+elseif size(subject_dir,1) == 0 % in WL01
+    mkdir(fullfile(datdir, sid)); % make subject directory
 end
+
 
 ft_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
 
@@ -846,5 +845,3 @@ data.rating = rating ;
 save(data.datafile, 'data', '-append');
 
 end
-
-
