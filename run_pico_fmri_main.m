@@ -18,5 +18,5 @@ pico_wordsampling(basedir);
 
 %% WORD SURVEY
 cd(basedir);
-words = pico_wholewords(basedir);
-a_fast_fmri_survey(basedir, words);
+[words, sid] = pico_wholewords(basedir);
+a_fast_fmri_survey(basedir, sid, words);

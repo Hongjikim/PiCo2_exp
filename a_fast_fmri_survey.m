@@ -1,4 +1,4 @@
-function survey = a_fast_fmri_survey(basedir, words, varargin)
+function survey = a_fast_fmri_survey(basedir, sid, words, varargin)
 %
 %   survey.dat{target_i,seeds_i}{barsize(5,j)}.tracjectory
 %   survey.dat{target_i,seeds_i}{barsize(5,j)}.time
@@ -18,7 +18,7 @@ function survey = a_fast_fmri_survey(basedir, words, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;
-sid = input('Subject ID? (e.g., coco001_khj): ', 's');
+% sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 [~, sid] = fileparts(subject_dir);
 
