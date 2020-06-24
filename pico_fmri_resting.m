@@ -438,14 +438,36 @@ while GetSecs - resting_sTime < resting_total_time
 end
 
 data.FTfunction.fixation_end_time = GetSecs;
-data.runscan_endtime = GetSecs;
 
+% last trial
 while GetSecs - data.FTfunction.fixation_end_time <5
+    
+    k = k +1;
+    if k == 1
+        data.FTfunction.start_Sampling{i+1} = GetSecs;
+    end
+    data.FTfunction.end_Sampling{i+1} = GetSecs;
+    
     end_msg = double('지금 무슨 생각을 하고 있는지 \n단어나 구로 말해주세요.') ;
     Screen('TextSize', theWindow, fontsize(3));
     DrawFormattedText(theWindow, end_msg, 'center', 'center', text_color, [], [], [], 1.5);
     Screen('Flip', theWindow);
+    
 end
+
+data.FTfunction.last_sampling_end_time = GetSecs;
+
+
+% after last trial, wait for 15 seconds
+
+while GetSecs - data.FTfunction.last_sampling_end_time < 15
+    
+    Screen('TextSize', theWindow, fontsize(3));
+    DrawFormattedText(theWindow, fixation_point, 'center', 'center', text_color);
+    Screen('Flip', theWindow);
+    
+end
+data.runscan_endtime = GetSecs;
 end
 
 function abort_experiment(varargin)
