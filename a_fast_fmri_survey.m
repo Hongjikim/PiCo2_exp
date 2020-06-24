@@ -152,7 +152,7 @@ if ~practice_mode % if not practice mode, save the data
         survey.body_xy = [body_x body_y];     % coordinate inside of body
         survey.words = words;
         survey.exp_starttime = datestr(clock, 0); % date-time: timestamp of first start
-        survey.dat = cell(size(words,1)-1, size(words,2));  % 40x4 cell
+        survey.dat = cell(size(words,2), size(words,1));  % 15x3 cell
         save(survey.surveyfile, 'survey');
     end
 end
