@@ -402,12 +402,10 @@ rng('shuffle')
 % sampling_time = [5] ;
 % resting_total_time = 10;
 
-resting_total_time = 14*50;
+resting_total_time = 14*60;
 iti = resting_total_time/15;
-base_time = iti:iti:(resting_total_time-iti);
-
-vari_size = 15;
-sampling_time = base_time + randi(vari_size,1,14) - vari_size/2;
+base_time = iti:iti:(14*60-iti);
+sampling_time = base_time + randi(10,1,14) - 5;
 
 % [sampling_time resting_total_time]
 

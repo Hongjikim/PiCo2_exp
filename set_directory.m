@@ -14,7 +14,7 @@ function basedir = set_directory(where)
 %%
 switch where
     case 'hj_mac'
-        basedir = '/Users/hongji/Dropbox/github_hongji/PiCo2_exp';
+        basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
         
     case 'dj_mac'
         basedir = '/Users/dongjupark/Dropbox/PiCo2/PiCo2_exp-master';

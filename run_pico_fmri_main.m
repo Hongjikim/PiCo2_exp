@@ -4,11 +4,11 @@
 
 clear;
 
-basedir = set_directory('dj_mac'); % 'dj_mac', 'WL01'
+basedir = set_directory('hj_mac'); % 'dj_mac', 'WL01'
 cd(basedir);
 
 %%
-pico_fmri_resting_v2(basedir);% 'test', 'biopac'
+pico_fmri_resting(basedir);% 'test', 'biopac'
 
 %% INPUT WORDS (N = 1, 2, 3)
 
@@ -18,4 +18,4 @@ pico_wordsampling(basedir);
 %% WORD SURVEY
 cd(basedir);
 [words, sid] = pico_wholewords(basedir);
-a_fast_fmri_survey(basedir, sid, words); % body map  right
+a_fast_fmri_survey(basedir, sid, words); % body map right boundary
