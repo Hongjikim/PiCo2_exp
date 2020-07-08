@@ -34,20 +34,11 @@ end
 
 sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 
-subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
+subject_dir = fullfile(datdir, sid);
 
-if size(subject_dir,1) == 1
-    if contains(subject_dir, 'no matches found') % mac: no subject dir
-        mkdir(fullfile(datdir, sid)); % make subject directory
-    elseif contains(subject_dir, '������ ã�� �� �����ϴ�.') % mac: no subject dir
-        mkdir(fullfile(datdir, sid)); % make subject directory
-    end
-elseif size(subject_dir,1)>1
-    error('There are more than one subject directory. Please check and delete the wrong directory.')
-elseif size(subject_dir,1) == 0 % in WL01
-    mkdir(fullfile(datdir, sid)); % make subject directory
+if exist(subject_dir, 'dir') == 0 % no subject dir
+    mkdir(subject_dir);
 end
-
 
 ft_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
 
@@ -402,10 +393,12 @@ rng('shuffle')
 % sampling_time = [5] ;
 % resting_total_time = 10;
 
-resting_total_time = 14*60;
+resting_total_time = 14*50;
 iti = resting_total_time/15;
-base_time = iti:iti:(14*60-iti);
-sampling_time = base_time + randi(10,1,14) - 5;
+base_time = iti:iti:(resting_total_time-iti);
+
+vari_size = 15;
+sampling_time = base_time + randi(vari_size,1,14) - vari_size/2;
 
 % [sampling_time resting_total_time]
 
