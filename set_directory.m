@@ -17,7 +17,7 @@ switch where
         basedir = '/Users/hongji/Dropbox/github_hongji/PiCo2_exp';
         
     case 'dj_mac'
-        basedir = '/Users/dongjupark/Dropbox/Cocoan_github/PiCo2_exp';
+        basedir = '/Users/dongjupark/Dropbox/PiCo2/PiCo2_exp-master';
         
     case 'WL01'
         basedir = 'C:\Users\Cocoanlab_WL01\Dropbox\PiCo2\PiCo2_exp-master';
