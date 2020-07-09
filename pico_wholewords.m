@@ -6,15 +6,13 @@ subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 [~, sid] = fileparts(subject_dir);
 sid = sid(1:7);
 
-dat_file{1} = fullfile(subject_dir, ['THOUGHT_SAMPLING_' sid '_run1.mat']);
-dat_file{2} = fullfile(subject_dir, ['THOUGHT_SAMPLING_' sid '_run2.mat']);
-dat_file{3} = fullfile(subject_dir, ['THOUGHT_SAMPLING_' sid '_run3.mat']);
+fname_words = filenames(fullfile(subject_dir, ['THOUGHT_SAMPLING*.mat']));
 
-data = cell(3, 15);
-%
-for i=1:3
-    load(dat_file{i});
-    data(i,:)=response;
+data = cell(size(fname_words,1), 15);
+
+for r = 1:size(fname_words,1)
+    load(fname_words{r});
+    data(r,:)=response;
 end
 
 words = data;
