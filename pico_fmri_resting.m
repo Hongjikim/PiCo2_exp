@@ -150,6 +150,7 @@ try
     %% HEAD SCOUT AND DISTORTION CORRECTION
     if ft_num == 1 % the first run
         while (1)
+            
             [~,~,keyCode] = KbCheck;
             
             if keyCode(KbName('a'))==1
@@ -163,8 +164,11 @@ try
             Screen('Flip', theWindow);
             
         end
+        
         WaitSecs(0.5);
+        
         while (1)
+            
             [~,~,keyCode] = KbCheck;
             
             if keyCode(KbName('b'))==1
@@ -180,7 +184,9 @@ try
         end
         
         WaitSecs(0.5);
+        
         while (1)
+            
             [~,~,keyCode] = KbCheck;
             
             if keyCode(KbName('space'))==1
@@ -195,7 +201,9 @@ try
         end
         
         WaitSecs(0.5);
+        
         while (1)
+            
             [~,~,keyCode] = KbCheck;
             
             if keyCode(KbName('space'))==1
@@ -210,7 +218,9 @@ try
         end
         
         WaitSecs(0.5);
+        
         while (1)
+            
             [~,~,keyCode] = KbCheck;
             
             if keyCode(KbName('space'))==1
@@ -226,7 +236,9 @@ try
         end
         
         WaitSecs(0.5);
+        
         while (1)
+            
             [~,~,keyCode] = KbCheck;
             
             if keyCode(KbName('space'))==1
@@ -240,13 +252,17 @@ try
             Screen('Flip', theWindow);
             
         end
+        
         WaitSecs(0.5);
+        
     end
     
     %% Start FT session
     
-    %INPUT FROM THE SCANNER
+    % INPUT (s key) FROM THE SCANNER
+    
     while (1)
+        
         [~,~,keyCode] = KbCheck;
         
         if keyCode(KbName('s'))==1
@@ -271,7 +287,7 @@ try
     %% For DISDAQ
     
     % gap between 's' key push and the first stimuli (disdaqs: data.disdaq_sec)
-    % 4 seconds: "ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½..."
+    % 4 seconds: "½ÃÀÛÇÕ´Ï´Ù..."
     
     data.runscan_starttime = GetSecs; % run start timestamp
     Screen(theWindow, 'FillRect', bgcolor, window_rect);
@@ -287,7 +303,6 @@ try
     
     waitsec_fromstarttime(data.runscan_starttime, 8); % 8 seconds for disdaq
     
-    
     %% EYELINK AND BIOPAC START
     
     if USE_EYELINK
@@ -299,13 +314,13 @@ try
     if USE_BIOPAC
         data.biopac_starttime = GetSecs; % biopac timestamp
         BIOPAC_trigger(ljHandle, biopac_channel, 'on');
-        waitsec_fromstarttime(data.biopac_starttime, 1);
+        waitsec_fromstarttime(data.biopac_starttime, 1); % biopac start trigger: 1
         BIOPAC_trigger(ljHandle, biopac_channel, 'off');
     end
     
     %% START FREE THINKING
     
-    % 6 seconds for being ready
+    % 8 seconds for being ready
     Screen(theWindow,'FillRect',bgcolor, window_rect);
     Screen('Flip', theWindow);
     
@@ -338,12 +353,8 @@ try
     if USE_BIOPAC
         data.biopac_endtime = GetSecs; % biopac timestamp
         BIOPAC_trigger(ljHandle, biopac_channel, 'on');
-        if ft_num == 1
-            ending_trigger = 0.1;
-        else
-            ending_trigger = 0.7;
-        end
-        waitsec_fromstarttime(data.biopac_endtime, ending_trigger); % BIOPAC TRIGGER for FT run = 0.1, 0.7
+        ending_trigger =  0.1 * ft_num; % biopac run ending trigger: 0.1 * run_number
+        waitsec_fromstarttime(data.biopac_endtime, ending_trigger); 
         BIOPAC_trigger(ljHandle, biopac_channel, 'off');
     end
     
