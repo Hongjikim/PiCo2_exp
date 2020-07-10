@@ -449,7 +449,7 @@ while GetSecs - data.FTfunction.fixation_end_time <5
     data.FTfunction.end_Sampling{i+1} = GetSecs;
     
     Screen('TextSize', theWindow, fontsize(3));
-    DrawFormattedText(theWindow, msg.ThoughtSampling, 'center', 'center', text_color, [], [], [], 1.5);
+    DrawFormattedText(theWindow, end_msg, 'center', 'center', text_color, [], [], [], 1.5);
     Screen('Flip', theWindow);
     
 end
@@ -462,7 +462,7 @@ data.FTfunction.last_sampling_end_time = GetSecs;
 while GetSecs - data.FTfunction.last_sampling_end_time < 15
     
     Screen('TextSize', theWindow, fontsize(3));
-    DrawFormattedText(theWindow, msg.fixation, 'center', 'center', text_color);
+    DrawFormattedText(theWindow, fixation_point, 'center', 'center', text_color);
     Screen('Flip', theWindow);
     
 end
@@ -513,7 +513,7 @@ barsizeO=[W*340/1280, W*180/1280, W*340/1280, W*180/1280, W*340/1280, 0;
     10, 10, 10, 10, 10, 0; 10, 0, 10, 0, 10, 0;
     10, 10, 10, 10, 10, 0; 1, 2, 3, 4, 5, 0]*1;
 rec=[lb,tb; lb+recsize(1),tb; lb,tb+recsize(2); lb+recsize(1),tb+recsize(2);
-    lb,tb+2*recsize(2); lb+recsize(1),tb+2*recsize(2)]; % 6°³ »ç°¢ÇüÀÇ ¿ÞÂÊ À§ ²ÀÁþÁ¡ÀÇ ÁÂÇ¥
+    lb,tb+2*recsize(2); lb+recsize(1),tb+2*recsize(2)]; %6ï¿½ï¿½ ï¿½ç°¢ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
 
 % trajectory = [];
 % trajectory_time = [];
@@ -525,18 +525,19 @@ question_type = {'Valence','Self-relevance','Time','Vividness','Safe&Threat'};
 % save(data.datafile, 'data', '-append');
 
 Screen(theWindow, 'FillRect', bgcolor, window_rect);
-intro_prompt1 = double('¹æ±Ý ÀÚÀ¯ »ý°¢ °úÁ¦¸¦ ÇÏ´Âµ¿¾È ÀÚ¿¬½º·´°Ô ¶°¿Ã¸° »ý°¢¿¡ ´ëÇÑ Áú¹®ÀÔ´Ï´Ù.') ;
+intro_prompt1 = double('ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´Âµï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.') ;
 Screen('TextSize', theWindow, fontsize(2));
 DrawFormattedText(theWindow, intro_prompt1,'center', H/5-80, white);
 
 title={'','', '','', '', '';
-    'ºÎÁ¤', 'ÀüÇô ³ª¿Í\n°ü·ÃÀÌ ¾øÀ½', '°ú°Å', 'ÀüÇô »ý»ýÇÏÁö ¾ÊÀ½', 'À§Çù', '';
-    'Áß¸³', '', 'ÇöÀç', '', 'Áß¸³', '';
-    '±àÁ¤','³ª¿Í °ü·ÃÀÌ\n¸Å¿ì ¸¹À½', '¹Ì·¡','¸Å¿ì »ý»ýÇÔ','¾ÈÀü','';
-    '´À²¸Áö´Â °¨Á¤', 'ÀÚ½Å°ú °ü·ÃÀÌ ÀÖ´Â Á¤µµ', '°¡Àå °ü·ÃÀÌ ÀÖ´Â ÀÚ½ÅÀÇ ½Ã°£', ...
-    '¾î¶² »óÈ²ÀÌ³ª Àå¸éÀ»\n¾ó¸¶³ª »ý»ýÇÏ°Ô ¶°¿Ã¸®°Ô ÇÏ´ÂÁö', '¾ÈÀü ¶Ç´Â À§ÇùÀ»\nÀÇ¹ÌÇÏ°Å³ª ´À³¢°Ô ÇÏ´ÂÁö', '';
-    '±× »ý°¢ÀÌ ÀÏÀ¸Å² °¨Á¤Àº?', '±× »ý°¢ÀÌ ³ª¿Í °ü·ÃÀÌ ÀÖ´Â Á¤µµ´Â?', '±× »ý°¢ÀÌ °¡Àå °ü·ÃÀÌ ÀÖ´Â ÀÚ½ÅÀÇ ½Ã°£?', ...
-    '±× »ý°¢ÀÌ ¾î¶² »óÈ²ÀÌ³ª Àå¸éÀ»\n»ý»ýÇÏ°Ô ¶°¿Ã¸®°Ô Çß³ª¿ä?', '±× »ý°¢ÀÌ ¾ÈÀü ¶Ç´Â À§ÇùÀ»\nÀÇ¹ÌÇÏ°Å³ª ´À³¢°Ô Çß³ª¿ä?',''};
+    'ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½', '';
+    'ï¿½ß¸ï¿½', '', 'ï¿½ï¿½ï¿½ï¿½', '', 'ï¿½ß¸ï¿½', '';
+    'ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½Ì·ï¿½','ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','';
+    'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½Ú½Å°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½', ...
+    'ï¿½î¶² ï¿½ï¿½È²ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿?\nï¿½ó¸¶³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½Ç¹ï¿½ï¿½Ï°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½', '';
+    'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?', 'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?', 'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½?', ...
+    'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½È²ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿?\nï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ ï¿½ß³ï¿½ï¿½ï¿½?', 'ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½Ç¹ï¿½ï¿½Ï°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß³ï¿½ï¿½ï¿½?',''};
+
 
 rng('shuffle');
 z = randperm(6);
@@ -671,7 +672,6 @@ for j=1:numel(barsize(5,:))
         end
     end
 end
-
 post_run.response_endtime = GetSecs;
 Screen(theWindow, 'FillRect', bgcolor, window_rect);
 Screen('Flip', theWindow);
@@ -679,9 +679,169 @@ waitsec_fromstarttime(post_run.response_endtime, 2)
 
 post_run.end_time = GetSecs;
 
-data.postrunQ = post_run;
+data.postrunQ = post_run ;
 
 save(data.datafile, 'data', '-append');
 
 end
 
+
+function data = pico_post_run_survey_resting_old(data, varargin)
+
+global theWindow W H; % window property
+global white red orange blue bgcolor tb ; % color
+global fontsize window_rect text_color
+tb = H/5;
+question_type = {'Valence','Self','Time','Vividness','Safe&Threat'};
+
+for i = 1:5
+    rating{1,i} = question_type{i};
+end
+
+save(data.datafile, 'data', '-append');
+
+% QUESTION
+title={'ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.\n\nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å² ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Î°ï¿½ï¿½ï¿½?',...
+    'ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.\n\nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½Î°ï¿½ï¿½ï¿½?',...
+    'ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.\n\nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Î°ï¿½ï¿½ï¿½?', ...
+    'ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.\n\nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½È²ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ï¿½ï¿½ ï¿½ß³ï¿½ï¿½ï¿½?',...
+    'ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.\n\nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹ï¿½ï¿½Ï°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß³ï¿½ï¿½ï¿½?',...
+    'ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ô´Ï´ï¿½.\n\nï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¾ï¿½ï¿? ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ï¿½?';
+    'ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½', 'ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½';
+    'ï¿½ß¸ï¿½', '', 'ï¿½ï¿½ï¿½ï¿½', '', 'ï¿½ß¸ï¿½', '';
+    'ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\nï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½', 'ï¿½Ì·ï¿½','ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½','ï¿½ï¿½ï¿½ï¿½','ï¿½Å¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½'};
+
+linexy1 = [W/4 W*3/4 W/4 W/4 W/2 W/2 W*3/4 W*3/4;
+    H/2 H/2 H/2-7 H/2+7 H/2-7 H/2+7 H/2-7 H/2+7];
+linexy2 = [W*3/8 W*5/8 W*3/8 W*3/8 W*5/8 W*5/8;
+    H/2 H/2 H/2-7 H/2+7 H/2-7 H/2+7];
+rng('shuffle');
+z = randperm(5);
+
+
+for i = 1:(numel(title(1,:))-1)
+    if mod(z(i),2) % odd number, valence, time, safe&threat
+        question_start = GetSecs;
+        SetMouse(W/2, H/2);
+        
+        while(1)
+            % Track Mouse coordinate
+            [mx, ~, button] = GetMouse(theWindow);
+            
+            x = mx;
+            y = H/2;
+            if x < W/4, x = W/4;
+            elseif x > W*3/4, x = W*3/4;
+            end
+            Screen(theWindow, 'FillRect', bgcolor, window_rect);
+            Screen('DrawLines',theWindow, linexy1, 3, 255);
+            DrawFormattedText(theWindow, double(title{1,z(i)}), 'center', tb, white, [], [], [], 1.5);
+            DrawFormattedText(theWindow, double(title{2,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                [linexy1(1,1)-15, linexy1(2,1)+20, linexy1(1,1)+20, linexy1(2,1)+80]);
+            DrawFormattedText(theWindow, double(title{3,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                [W/2-15, linexy1(2,1)+20, W/2+20, linexy1(2,1)+80]);
+            DrawFormattedText(theWindow, double(title{4,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                [linexy1(1,2)-15, linexy1(2,1)+20, linexy1(1,2)+20, linexy1(2,1)+80]);
+            
+            Screen('DrawDots', theWindow, [x;y], 12, orange, [0 0], 1); % check size
+            Screen('Flip', theWindow);
+            
+            if GetSecs - question_start >= 5
+                button(1) = true;
+            end
+            
+            if button(1)
+                rating{2,z(i)} = (x-W/2)/(W/4);
+                rating{3,z(i)} = GetSecs-question_start;
+                rrtt = GetSecs;
+                
+                Screen(theWindow, 'FillRect', bgcolor, window_rect);
+                Screen('DrawLines',theWindow, linexy1, 3, 255);
+                DrawFormattedText(theWindow, double(title{1,z(i)}), 'center', tb, white, [], [], [], 1.5);
+                
+                DrawFormattedText(theWindow, double(title{2,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                    [linexy1(1,1)-15, linexy1(2,1)+20, linexy1(1,1)+20, linexy1(2,1)+80]);
+                DrawFormattedText(theWindow, double(title{3,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                    [W/2-15, linexy1(2,1)+20, W/2+20, linexy1(2,1)+80]);
+                DrawFormattedText(theWindow, double(title{4,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                    [linexy1(1,2)-15, linexy1(2,1)+20, linexy1(1,2)+20, linexy1(2,1)+80]);
+                
+                Screen('DrawDots', theWindow, [x,y], 9, red, [0 0], 1);
+                Screen('Flip', theWindow);
+                %                     if USE_EYELINK
+                %                         Eyelink('Message','Rest Question response');
+                %                     end
+                waitsec_fromstarttime(question_start, 5);
+                rating{4,z(i)} = GetSecs;
+                WaitSecs(0.5)
+                break;
+            end
+        end
+        
+    else   % even number, self-relevance, vividness
+        question_start = GetSecs;
+        SetMouse(W*3/8, H/2);
+        
+        while(1)
+            % Track Mouse coordinate
+            [mx, ~, button] = GetMouse(theWindow);
+            
+            x = mx;
+            y = H/2;
+            if x < W*3/8, x = W*3/8;
+            elseif x > W*5/8, x = W*5/8;
+            end
+            
+            Screen(theWindow, 'FillRect', bgcolor, window_rect);
+            Screen('DrawLines',theWindow, linexy2, 3, 255);
+            DrawFormattedText(theWindow, double(title{1,z(i)}), 'center', tb, white, [], [], [], 1.5);
+            
+            DrawFormattedText(theWindow, double(title{2,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                [linexy2(1,1)-15, linexy2(2,1)+20, linexy2(1,1)+20, linexy2(2,1)+80]);
+            DrawFormattedText(theWindow, double(title{3,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                [W/2-15, linexy2(2,1)+20, W/2+20, linexy2(2,1)+80]);
+            DrawFormattedText(theWindow, double(title{4,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                [linexy2(1,2)-15, linexy2(2,1)+20, linexy2(1,2)+20, linexy2(2,1)+80]);
+            
+            Screen('DrawDots', theWindow, [x;y], 9, orange, [0 0], 1);
+            Screen('Flip', theWindow);
+            
+            if GetSecs - question_start >= 5
+                button(1) = true;
+            end
+            if button(1)
+                rating{2,z(i)} = (x-W*3/8)/(W/4);
+                rating{3,z(i)} = GetSecs-question_start;
+                rrtt = GetSecs;
+                
+                Screen(theWindow, 'FillRect', bgcolor, window_rect);
+                Screen('DrawLines',theWindow, linexy2, 3, 255);
+                DrawFormattedText(theWindow, double(title{1,z(i)}), 'center', tb, white, [], [], [], 1.5);
+                
+                DrawFormattedText(theWindow, double(title{2,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                    [linexy2(1,1)-15, linexy2(2,1)+20, linexy2(1,1)+20, linexy2(2,1)+80]);
+                DrawFormattedText(theWindow, double(title{3,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                    [W/2-15, linexy2(2,1)+20, W/2+20, linexy2(2,1)+80]);
+                DrawFormattedText(theWindow, double(title{4,z(i)}),'center', 'center', white, [],[],[],[],[],...
+                    [linexy2(1,2)-15, linexy2(2,1)+20, linexy2(1,2)+20, linexy2(2,1)+80]);
+                
+                Screen('DrawDots', theWindow, [x;y], 9, red, [0 0], 1);
+                Screen('Flip', theWindow);
+                %                     if USE_EYELINK
+                %                         Eyelink('Message','Rest Question response');
+                %                     end
+                waitsec_fromstarttime(question_start, 5);
+                rating{4,z(i)} = GetSecs;
+                WaitSecs(0.5)
+                break;
+            end
+        end
+    end
+end
+WaitSecs(.1);
+
+data.rating = rating ;
+
+save(data.datafile, 'data', '-append');
+
+end
