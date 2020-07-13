@@ -1,4 +1,4 @@
-function [words, sid] = pico_wholewords(basedir)
+function [words, sid] = pico2_wholewords(basedir)
 %%
 datdir = fullfile(basedir, 'data') ;
 sid = input('Subject ID? (e.g., coco001_khj): ', 's');

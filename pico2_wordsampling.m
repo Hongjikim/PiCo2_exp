@@ -1,4 +1,4 @@
-function pico_wordsampling(basedir, varargin)
+function pico2_wordsampling(basedir, varargin)
 
 % This function can be used to transcribe the PiCo fmri word generation responses.
 %
