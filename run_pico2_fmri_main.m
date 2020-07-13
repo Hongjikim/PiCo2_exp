@@ -3,11 +3,11 @@
 %% FREE THINKING (N = 1, 2, 3)
 
 clear;
-basedir = pico2_set_directory('dj_mac'); % 'dj_mac', 'WL01'
+basedir = pico2_set_directory('WL01'); % 'dj_mac', 'WL01'
 cd(basedir);
 
 %%
-pico2_fmri_resting(basedir);% 'test', 'biopac'
+pico2_fmri_free_thinking(basedir);% 'test', 'biopac'
 
 %% INPUT WORDS (N = 1, 2, 3)
 
