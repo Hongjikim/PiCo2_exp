@@ -50,14 +50,14 @@ nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 data.subject = sid;
-data.datafile = fullfile(subject_dir, [subjdate, '_', sid, '_FT_run', sprintf('%.2d', ft_num), '.mat']);
+data.datafile = fullfile(subject_dir, [subjdate, '_', sid, '_FS_run', sprintf('%.2d', ft_num), '.mat']);
 data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
 data.starttime_getsecs = GetSecs;
 data.run_number = ft_num;
 
 if exist(data.datafile, 'file')
-    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_', sid, '_FT_run', sprintf('%.2d', ft_num), '.mat']);
+    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_', sid, '_FS_run', sprintf('%.2d', ft_num), '.mat']);
     cont_or_not = input(['\nYou type the run number that is inconsistent with the data previously saved.', ...
         '\nWill you go on with your run number that typed just before?', ...
         '\n1: Yes, continue with typed run number.  ,   2: No, it`s a mistake. I`ll break.\n:  ']);
@@ -108,12 +108,11 @@ orange = [255 164 0];
 
 %% KOREAN INSTRUCTIONS
 msg.hs_dc = double('스캐너 조정 작업중입니다.\n 소음이 발생할 수 있습니다. 화면 중앙의 십자표시를\n 편안한 마음으로 바라봐주세요.'); % head scout and distortion correction
-msg.inst1 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. \n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 연습을 한번 해보겠습니다.') ;
+msg.inst1 = double('이번 세션은 자유 말하기 세션입니다. \n 화면에 나타난 단어에 대해 자유롭게 생각하시다가 지시문이 나왔다가 사라지면 이야기를 시작해주세요 \n\n 연습을 한번 해보겠습니다.') ;
 msg.inst2 = double('잘하셨습니다. 세션을 시작하겠습니다.');
 
-
 msg.s_key = double('참가자가 준비되었으면, \n 이미징을 시작합니다 (s).');
-msg.s_key2 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. ...\n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
+msg.s_key2 = double('이번 세션은 자유 말하기 세션입니다. \n 화면에 나타난 단어에 대해 자유롭게 생각하시다가 지시문이 나왔다가 사라지면 이야기를 시작해주세요 \n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
 
 msg.start_buffer = double('시작합니다...');
 
@@ -122,6 +121,8 @@ msg.fixation = double('+');
 
 msg.postQ_inst = double('이번 세션이 끝났습니다. \n 나타나는 질문들에 답변해주세요.');
 msg.run_end = double('잘하셨습니다. 잠시 대기해 주세요.');
+
+msg.fs_inst = double('방금 보신 단어에 대해 자유롭게 이야기해주세요. \n + 표시가 사라질 때 까지 계속 이야기해주세요');
 
 survey_msg.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
 
@@ -133,6 +134,7 @@ survey_msg.title={'','', '','', '', '';
     '어떤 상황이나 장면을\n얼마나 생생하게 떠올리게 하는지', '안전 또는 위협을\n의미하거나 느끼게 하는지', '';
     '그 생각이 일으킨 감정은?', '그 생각이 나와 관련이 있는 정도는?', '그 생각이 가장 관련이 있는 자신의 시간?', ...
     '그 생각이 어떤 상황이나 장면을\n생생하게 떠올리게 했나요?', '그 생각이 안전 또는 위협을\n의미하거나 느끼게 했나요?',''};
+
 %% FULL SCREEN
 
 try
@@ -241,7 +243,7 @@ try
             end
             
             Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.ThoughtSampling,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
+            DrawFormattedText(theWindow, msg.fs_inst,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
             Screen('Flip', theWindow);
             
         end
@@ -282,17 +284,10 @@ try
             abort_experiment('manual');
         end
         
-        if ft_num == 1
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.s_key,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
-            Screen('Flip', theWindow);
-            
-        else
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.s_key2, 'center', 'center', text_color, [], [], [], 1.3);
-            Screen('Flip', theWindow);
-            
-        end
+        Screen(theWindow, 'FillRect', bgcolor, window_rect);
+        DrawFormattedText(theWindow, msg.s_key2, 'center', 'center', text_color, [], [], [], 1.3);
+        Screen('Flip', theWindow);
+        
     end
     
     %% For DISDAQ

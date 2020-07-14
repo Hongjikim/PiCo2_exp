@@ -111,7 +111,6 @@ msg.hs_dc = double('스캐너 조정 작업중입니다.\n 소음이 발생할 수 있습니다. 화면 
 msg.inst1 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. \n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 연습을 한번 해보겠습니다.') ;
 msg.inst2 = double('잘하셨습니다. 세션을 시작하겠습니다.');
 
-
 msg.s_key = double('참가자가 준비되었으면, \n 이미징을 시작합니다 (s).');
 msg.s_key2 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. ...\n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
 
@@ -123,6 +122,8 @@ msg.fixation = double('+');
 msg.postQ_inst = double('이번 세션이 끝났습니다. \n 나타나는 질문들에 답변해주세요.');
 msg.run_end = double('잘하셨습니다. 잠시 대기해 주세요.');
 
+msg2 = msg;
+
 survey_msg.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
 
 survey_msg.title={'','', '','', '', '';
@@ -133,6 +134,8 @@ survey_msg.title={'','', '','', '', '';
     '어떤 상황이나 장면을\n얼마나 생생하게 떠올리게 하는지', '안전 또는 위협을\n의미하거나 느끼게 하는지', '';
     '그 생각이 일으킨 감정은?', '그 생각이 나와 관련이 있는 정도는?', '그 생각이 가장 관련이 있는 자신의 시간?', ...
     '그 생각이 어떤 상황이나 장면을\n생생하게 떠올리게 했나요?', '그 생각이 안전 또는 위협을\n의미하거나 느끼게 했나요?',''};
+
+survey_msg2 = survey_msg;
 %% FULL SCREEN
 
 try
@@ -339,7 +342,7 @@ try
     
     data.freethinking_start_time = GetSecs;
     
-    data = thought_sampling(data); % thought sampling tasks
+    data = thought_sampling(data, msg); % thought sampling tasks
     
     save(data.datafile, 'data', '-append');
     data.freethinking_end_time = GetSecs;
@@ -349,7 +352,7 @@ try
         Screen('Flip', theWindow);
     end
     
-    data = pico_post_run_survey_resting(data);
+    data = pico_post_run_survey_resting(data, msg, survey_msg);
     save(data.datafile, 'data', '-append');
     
     Screen(theWindow, 'FillRect', bgcolor, window_rect);
@@ -402,7 +405,7 @@ end
 %% ====== SUBFUNCTIONS ======
 
 
-function data = thought_sampling(data)
+function data = thought_sampling(data, msg)
 
 global theWindow W H; % window property
 global fontsize window_rect text_color textH % lb tb recsize barsize rec; % rating scale
@@ -517,9 +520,9 @@ disp(str); %present this text in command window
 
 end
 
-function data = pico_post_run_survey_resting(data)
+function data = pico_post_run_survey_resting(data, msg, survey_msg)
 
-global theWindow W H; % window property
+global theWindow W H; % window property 
 global white red orange bgcolor tb rec recsize; % color
 global window_rect USE_EYELINK
 global fontsize barsize
