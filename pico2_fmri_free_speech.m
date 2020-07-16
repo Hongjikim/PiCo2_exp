@@ -40,7 +40,7 @@ if exist(subject_dir, 'dir') == 0 % no subject dir
     mkdir(subject_dir);
 end
 
-ft_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
+run_num = input('FREE Speech Run number? (n = 1, 2, 3): ');
 
 %% CREATE AND SAVE DATA
 
@@ -50,14 +50,14 @@ nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 data.subject = sid;
-data.datafile = fullfile(subject_dir, [subjdate, '_', sid, '_FS_run', sprintf('%.2d', ft_num), '.mat']);
+data.datafile = fullfile(subject_dir, [subjdate, '_', sid, '_FS_run', sprintf('%.2d', run_num), '.mat']);
 data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
 data.starttime_getsecs = GetSecs;
-data.run_number = ft_num;
+data.run_number = run_num;
 
 if exist(data.datafile, 'file')
-    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_', sid, '_FS_run', sprintf('%.2d', ft_num), '.mat']);
+    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_', sid, '_FS_run', sprintf('%.2d', run_num), '.mat']);
     cont_or_not = input(['\nYou type the run number that is inconsistent with the data previously saved.', ...
         '\nWill you go on with your run number that typed just before?', ...
         '\n1: Yes, continue with typed run number.  ,   2: No, it`s a mistake. I`ll break.\n:  ']);
@@ -68,6 +68,30 @@ if exist(data.datafile, 'file')
     end
 else
     save(data.datafile, 'data');
+end
+
+%% preallocate seed words
+
+fname_words = filenames(fullfile(subject_dir, ['THOUGHT_SAMPLING*.mat']));
+
+whole_words = cell(size(fname_words,1), 15);
+
+for r = 1:size(fname_words,1)
+    load(fname_words{r});
+    whole_words(r,:)=response;
+end
+
+seedwords.given = {'눈물', '학대', '거울', '가족'};
+
+while true
+    seedwords.personal = whole_words(randperm(numel(whole_words),4));
+    
+    fprintf('\n ** check seed words %s ', string(seedwords.personal));
+    ok_or_not = input(['\n okay to proceed?', ...
+        '\n1: Yes.  ,   2: No, pick words again.\n:  ']);
+    if ok_or_not == 1
+        break
+    end
 end
 
 %% EXPERIMENT START
@@ -107,26 +131,23 @@ blue = [0 85 169];
 orange = [255 164 0];
 
 %% KOREAN INSTRUCTIONS
-msg.hs_dc = double('스캐너 조정 작업중입니다.\n 소음이 발생할 수 있습니다. 화면 중앙의 십자표시를\n 편안한 마음으로 바라봐주세요.'); % head scout and distortion correction
 msg.inst1 = double('이번 세션은 자유 말하기 세션입니다. \n 화면에 나타난 단어에 대해 자유롭게 생각하시다가 지시문이 나왔다가 사라지면 이야기를 시작해주세요 \n\n 연습을 한번 해보겠습니다.') ;
 msg.inst2 = double('잘하셨습니다. 세션을 시작하겠습니다.');
 
-msg.s_key = double('참가자가 준비되었으면, \n 이미징을 시작합니다 (s).');
-msg.s_key2 = double('이번 세션은 자유 말하기 세션입니다. \n 화면에 나타난 단어에 대해 자유롭게 생각하시다가 지시문이 나왔다가 사라지면 이야기를 시작해주세요 \n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
-
 msg.start_buffer = double('시작합니다...');
-
-msg.ThoughtSampling = double('지금 무슨 생각을 하고 있는지 \n 단어나 구로 말해주세요.');
 msg.fixation = double('+');
+
+msg.s_key = double('이번 세션은 자유 말하기 세션입니다. \n 화면에 나타난 단어에 대해 자유롭게 생각하시다가 지시문이 나왔다가 사라지면 이야기를 시작해주세요 \n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
+msg.fs_inst1 = double('아래 단어에 대해 생각해주세요 \n\n');
+msg.fs_inst2 = double('+ 표시가 나타나면, 방금 보신 단어에 대해 자유롭게 이야기해주세요. \n + 표시가 사라질 때 까지 계속 이야기해주세요');
+msg.fs_inst3 = double('잘하셨습니다. 다음 단어로 넘어가겠습니다. \n 잠시 대기해주세요.');
 
 msg.postQ_inst = double('이번 세션이 끝났습니다. \n 나타나는 질문들에 답변해주세요.');
 msg.run_end = double('잘하셨습니다. 잠시 대기해 주세요.');
 
-msg.fs_inst = double('방금 보신 단어에 대해 자유롭게 이야기해주세요. \n + 표시가 사라질 때 까지 계속 이야기해주세요');
+msg.survey.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
 
-survey_msg.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
-
-survey_msg.title={'','', '','', '', '';
+msg.survey.title={'','', '','', '', '';
     '부정', '전혀 나와\n관련이 없음', '과거', '전혀 생생하지 않음', '위협', '';
     '중립', '', '현재', '', '중립', '';
     '긍정','나와 관련이\n매우 많음', '미래','매우 생생함','안전','';
@@ -147,7 +168,7 @@ try
     %% SETUP: Eyelink
     % need to be revised when the eyelink is here.
     if USE_EYELINK
-        edf_filename = ['E' sid(5:7), '_F' sprintf('%.1d', ft_num)]; % name should be equal or less than 8
+        edf_filename = ['E' sid(5:7), '_F' sprintf('%.1d', run_num)]; % name should be equal or less than 8
         % E_F for Free_thinking
         edfFile = sprintf('%s.EDF', edf_filename);
         eyelink_main(edfFile, 'Init');
@@ -160,117 +181,99 @@ try
         waitsec_fromstarttime(GetSecs, .5);
     end
     
-    %% HEAD SCOUT AND DISTORTION CORRECTION
-    if ft_num == 1 % the first run
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('a'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.hs_dc,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
-            Screen('Flip', theWindow);
-            
+    %% Practice
+    while (1)
+        
+        [~,~,keyCode] = KbCheck;
+        
+        if keyCode(KbName('space'))==1
+            break
+        elseif keyCode(KbName('q'))==1
+            abort_experiment('manual');
         end
         
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('b'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.fixation,'center', 'center', white); %'center', 'textH'
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            DrawFormattedText(theWindow, msg.inst1, 'center', 'center', text_color, [], [], [], 1.5);
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            DrawFormattedText(theWindow, msg.fixation, 'center', 'center', text_color, [], [], [], 1.5);
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.fs_inst,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.inst2,'center', 'center', white); %'center', 'textH'
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
+        Screen(theWindow, 'FillRect', bgcolor, window_rect);
+        DrawFormattedText(theWindow, msg.inst1,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
+        Screen('Flip', theWindow);
         
     end
     
-    %% Start FT session
+    WaitSecs(0.5);
+    
+    while (1)
+        
+        [~,~,keyCode] = KbCheck;
+        
+        if keyCode(KbName('space'))==1
+            break
+        elseif keyCode(KbName('q'))==1
+            abort_experiment('manual');
+        end
+        
+        Screen(theWindow, 'FillRect', bgcolor, window_rect);
+        DrawFormattedText(theWindow, msg.fs_inst1,'center', 'center', white);
+        DrawFormattedText(theWindow, double('사랑'),'center', 'center', white);
+        Screen('Flip', theWindow);
+        
+    end
+    
+    WaitSecs(0.5);
+    
+    temp_t = GetSecs;
+    while GetSecs - temp_t < 5
+        
+        [~,~,keyCode] = KbCheck;
+        
+        if keyCode(KbName('space'))==1
+            break
+        elseif keyCode(KbName('q'))==1
+            abort_experiment('manual');
+        end
+        
+        Screen(theWindow, 'FillRect', bgcolor, window_rect);
+        DrawFormattedText(theWindow, msg.fs_inst2,'center', 'center', white);
+        Screen('Flip', theWindow);
+        
+    end
+    
+    temp_t = GetSecs;
+    while GetSecs - temp_t < 30
+        
+        [~,~,keyCode] = KbCheck;
+        
+        if keyCode(KbName('space'))==1
+            break
+        elseif keyCode(KbName('q'))==1
+            abort_experiment('manual');
+        end
+        
+        Screen(theWindow, 'FillRect', bgcolor, window_rect);
+        DrawFormattedText(theWindow, msg.fixation,'center', 'center', white);
+        Screen('Flip', theWindow);
+        
+    end
+    
+    WaitSecs(0.5);
+    
+    while (1)
+        
+        [~,~,keyCode] = KbCheck;
+        
+        if keyCode(KbName('c'))==1
+            break
+        elseif keyCode(KbName('q'))==1
+            abort_experiment('manual');
+        end
+        
+        DrawFormattedText(theWindow, msg.inst2, 'center', 'center', text_color, [], [], [], 1.5);
+        Screen('Flip', theWindow);
+        
+    end
+    
+    WaitSecs(0.5);
+    
+    
+    %% Start free speech session
     
     % INPUT (s key) FROM THE SCANNER
     
@@ -285,7 +288,7 @@ try
         end
         
         Screen(theWindow, 'FillRect', bgcolor, window_rect);
-        DrawFormattedText(theWindow, msg.s_key2, 'center', 'center', text_color, [], [], [], 1.3);
+        DrawFormattedText(theWindow, msg.s_key, 'center', 'center', text_color, [], [], [], 1.3);
         Screen('Flip', theWindow);
         
     end
@@ -303,9 +306,6 @@ try
     waitsec_fromstarttime(data.runscan_starttime, 4);
     Screen(theWindow,'FillRect',bgcolor, window_rect);
     Screen('Flip', theWindow);
-    
-    % biopac
-    % eyelink
     
     waitsec_fromstarttime(data.runscan_starttime, 8); % 8 seconds for disdaq
     
@@ -332,19 +332,19 @@ try
     
     waitsec_fromstarttime(data.runscan_starttime, 16); % after 8 seconds of disdaq, 8 seconds of baseline
     
-    data.freethinking_start_time = GetSecs;
+    data.freespeech_start_time = GetSecs;
     
-    data = thought_sampling(data); % thought sampling tasks
+    data = free_speech(data, seedwords, msg); % free speech tasks
     
     save(data.datafile, 'data', '-append');
-    data.freethinking_end_time = GetSecs;
+    data.freespeech_end_time = GetSecs;
     
-    while GetSecs - data.freethinking_end_time < 3
+    while GetSecs - data.freespeech_end_time < 3
         DrawFormattedText(theWindow, msg.postQ_inst, 'center', 'center', text_color, [], [], [], 1.5);
         Screen('Flip', theWindow);
     end
     
-    data = pico_post_run_survey_resting(data);
+    data = pico_post_run_survey_resting(data, seedwords, msg);
     save(data.datafile, 'data', '-append');
     
     Screen(theWindow, 'FillRect', bgcolor, window_rect);
@@ -359,8 +359,8 @@ try
     if USE_BIOPAC
         data.biopac_endtime = GetSecs; % biopac timestamp
         BIOPAC_trigger(ljHandle, biopac_channel, 'on');
-        ending_trigger =  0.1 * ft_num; % biopac run ending trigger: 0.1 * run_number
-        waitsec_fromstarttime(data.biopac_endtime, ending_trigger); 
+        ending_trigger =  0.1 * run_num; % biopac run ending trigger: 0.1 * run_number
+        waitsec_fromstarttime(data.biopac_endtime, ending_trigger);
         BIOPAC_trigger(ljHandle, biopac_channel, 'off');
     end
     
@@ -397,62 +397,66 @@ end
 %% ====== SUBFUNCTIONS ======
 
 
-function data = thought_sampling(data)
+function data = free_speech(data, seedwords, msg)
 
 global theWindow W H; % window property
 global fontsize window_rect text_color textH % lb tb recsize barsize rec; % rating scale
 
-fixation_point = double('+') ;
-Screen('TextSize', theWindow, fontsize(3));
-DrawFormattedText(theWindow, fixation_point, 'center', 'center', text_color);
+% blank
+Screen(theWindow,'FillRect',bgcolor, window_rect);
 Screen('Flip', theWindow);
 
-resting_sTime = GetSecs;
-data.FTfunction.fixation_start_time = resting_sTime;
+fs_sTime = GetSecs;
+data.FSfunction.blank_start_time = fs_sTime;
 
 rng('shuffle')
 
-% % % edit
-% sampling_time = [5] ;
-% resting_total_time = 10;
+n_trial = numel(seedwords.personal)+numel(seedwords.given);
+order_idx = zeros(1,n_trial);
+while mean(order_idx(1:4)) < 3 || mean(order_idx(5:8)) < 3 
+    order_idx = randperm(n_trial);
+end
 
-resting_total_time = 14*50;
-iti = resting_total_time/15;
-base_time = iti:iti:(resting_total_time-iti);
-
-vari_size = 15;
-sampling_time = base_time + randi(vari_size,1,14) - vari_size/2;
-
-% [sampling_time resting_total_time]
-
-% sampling_time = [60 120 180 240 300] + randi(10,1,5) - 5;
-% resting_total_time = 360;
-%
-data.FTfunction.sampling_time = sampling_time;
-
-while GetSecs - resting_sTime < resting_total_time
-    for i = 1:numel(sampling_time)
-        k = 0;
-        while GetSecs - resting_sTime > (sampling_time(i) - 2.5) && GetSecs - resting_sTime < (sampling_time(i) + 2.5)
-            k = k +1;
-            if k == 1
-                data.FTfunction.start_Sampling{i} = GetSecs;
-            end
-            data.FTfunction.end_Sampling{i} = GetSecs;
-            Screen('TextSize', theWindow, fontsize(3));
-            DrawFormattedText(theWindow, msg.ThoughtSampling, 'center', 'center', text_color, [], [], [], 1.5);
-            Screen('Flip', theWindow);
-        end
-        Screen('TextSize', theWindow, fontsize(3));
-        DrawFormattedText(theWindow, msg.fixation, 'center', 'center', text_color);
-        Screen('Flip', theWindow);
-        
-        if i == 7 % when 7th trial is done, save taskdata
-            save(data.datafile, 'data', '-append');
-        end
-        
+for w = 1:n_trial
+    if order_idx(w) < 5
+        word_list{w} = seedwords.given{order_idx(w)};
+    else
+        word_list{w} = seedwords.personal{order_idx(w)-4};
     end
 end
+
+% time
+% think: 20, cue: 5, +: 60, next: 10 --> total 95
+fs_total_time = n_trial*95;
+base_time = 0:95:fs_total_time-95;
+base_time(2) = 2;
+
+jitter = randi([-5 5],1,n_trial);
+
+%  for i = 1:n_trial
+%      trial_sTime = GetSecs;
+%      
+%      while GetSecs - trial_sTime < base_time(i) + 20 + jitter(i) % 20 seconds "think"
+%      
+%          Screen(theWindow, 'FillRect', bgcolor, window_rect);
+%          DrawFormattedText(theWindow, msg.fs_inst1,'center', 'center', white);
+%          DrawFormattedText(theWindow, double(word_list{i}),'center', 'center', white);
+%          Screen('Flip', theWindow);
+%      
+%      end
+%      
+%      while GetSecs - trial_sTime < base_time(i) + 20 + jitter(i) % 20 seconds "think"
+%      
+%          Screen(theWindow, 'FillRect', bgcolor, window_rect);
+%          DrawFormattedText(theWindow, msg.fs_inst1,'center', 'center', white);
+%          DrawFormattedText(theWindow, double(word_list{i}),'center', 'center', white);
+%          Screen('Flip', theWindow);
+%      
+%      end
+%         
+%         
+%     end
+% end
 
 data.FTfunction.fixation_end_time = GetSecs;
 
@@ -512,7 +516,7 @@ disp(str); %present this text in command window
 
 end
 
-function data = pico_post_run_survey_resting(data)
+function data = pico_post_run_survey_resting(data, seedwords, msg)
 
 global theWindow W H; % window property
 global white red orange bgcolor tb rec recsize; % color
@@ -530,7 +534,7 @@ barsizeO=[W*340/1280, W*180/1280, W*340/1280, W*180/1280, W*340/1280, 0;
     10, 10, 10, 10, 10, 0; 10, 0, 10, 0, 10, 0;
     10, 10, 10, 10, 10, 0; 1, 2, 3, 4, 5, 0]*1;
 rec=[lb,tb; lb+recsize(1),tb; lb,tb+recsize(2); lb+recsize(1),tb+recsize(2);
-    lb,tb+2*recsize(2); lb+recsize(1),tb+2*recsize(2)]; 
+    lb,tb+2*recsize(2); lb+recsize(1),tb+2*recsize(2)];
 
 % trajectory = [];
 % trajectory_time = [];

@@ -7,7 +7,7 @@ basedir = pico2_set_directory('WL01'); % 'dj_mac', 'WL01'
 cd(basedir);
 
 %%
-pico2_fmri_free_thinking(basedir, 'biopac'); % , 'biopac');% 'test', 'biopac'
+pico2_fmri_free_thinking(basedir);% , 'biopac'); % , 'biopac');% 'test', 'biopac'
 
 %% INPUT WORDS (N = 1, 2, 3)
 
