@@ -40,7 +40,7 @@ if exist(subject_dir, 'dir') == 0 % no subject dir
     mkdir(subject_dir);
 end
 
-ft_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
+run_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
 
 %% CREATE AND SAVE DATA
 
@@ -50,14 +50,14 @@ nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 data.subject = sid;
-data.datafile = fullfile(subject_dir, [subjdate, '_', sid, '_FT_run', sprintf('%.2d', ft_num), '.mat']);
+data.datafile = fullfile(subject_dir, [subjdate, '_', sid, '_FT_run', sprintf('%.2d', run_num), '.mat']);
 data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
 data.starttime_getsecs = GetSecs;
-data.run_number = ft_num;
+data.run_number = run_num;
 
 if exist(data.datafile, 'file')
-    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_', sid, '_FT_run', sprintf('%.2d', ft_num), '.mat']);
+    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_', sid, '_FT_run', sprintf('%.2d', run_num), '.mat']);
     cont_or_not = input(['\nYou type the run number that is inconsistent with the data previously saved.', ...
         '\nWill you go on with your run number that typed just before?', ...
         '\n1: Yes, continue with typed run number.  ,   2: No, it`s a mistake. I`ll break.\n:  ']);
@@ -120,13 +120,12 @@ msg.ThoughtSampling = double('지금 무슨 생각을 하고 있는지 \n 단어나 구로 말해주
 msg.fixation = double('+');
 
 msg.postQ_inst = double('이번 세션이 끝났습니다. \n 나타나는 질문들에 답변해주세요.');
+%%여기서부터 끊김
 msg.run_end = double('잘하셨습니다. 잠시 대기해 주세요.');
 
-msg2 = msg;
+msg.survey.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
 
-survey_msg.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
-
-survey_msg.title={'','', '','', '', '';
+msg.survey.title={'','', '','', '', '';
     '부정', '전혀 나와\n관련이 없음', '과거', '전혀 생생하지 않음', '위협', '';
     '중립', '', '현재', '', '중립', '';
     '긍정','나와 관련이\n매우 많음', '미래','매우 생생함','안전','';
@@ -135,7 +134,6 @@ survey_msg.title={'','', '','', '', '';
     '그 생각이 일으킨 감정은?', '그 생각이 나와 관련이 있는 정도는?', '그 생각이 가장 관련이 있는 자신의 시간?', ...
     '그 생각이 어떤 상황이나 장면을\n생생하게 떠올리게 했나요?', '그 생각이 안전 또는 위협을\n의미하거나 느끼게 했나요?',''};
 
-survey_msg2 = survey_msg;
 %% FULL SCREEN
 
 try
@@ -148,7 +146,7 @@ try
     %% SETUP: Eyelink
     % need to be revised when the eyelink is here.
     if USE_EYELINK
-        edf_filename = ['E' sid(5:7), '_F' sprintf('%.1d', ft_num)]; % name should be equal or less than 8
+        edf_filename = ['E' sid(5:7), '_F' sprintf('%.1d', run_num)]; % name should be equal or less than 8
         % E_F for Free_thinking
         edfFile = sprintf('%s.EDF', edf_filename);
         eyelink_main(edfFile, 'Init');
@@ -162,7 +160,7 @@ try
     end
     
     %% HEAD SCOUT AND DISTORTION CORRECTION
-    if ft_num == 1 % the first run
+    if run_num == 1 % the first run
         while (1)
             
             [~,~,keyCode] = KbCheck;
@@ -285,7 +283,7 @@ try
             abort_experiment('manual');
         end
         
-        if ft_num == 1
+        if run_num == 1
             Screen(theWindow, 'FillRect', bgcolor, window_rect);
             DrawFormattedText(theWindow, msg.s_key,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
             Screen('Flip', theWindow);
@@ -352,7 +350,7 @@ try
         Screen('Flip', theWindow);
     end
     
-    data = pico_post_run_survey_resting(data, msg, survey_msg);
+    data = pico_post_run_survey_resting(data, msg);
     save(data.datafile, 'data', '-append');
     
     Screen(theWindow, 'FillRect', bgcolor, window_rect);
@@ -367,7 +365,7 @@ try
     if USE_BIOPAC
         data.biopac_endtime = GetSecs; % biopac timestamp
         BIOPAC_trigger(ljHandle, biopac_channel, 'on');
-        ending_trigger =  0.1 * ft_num; % biopac run ending trigger: 0.1 * run_number
+        ending_trigger =  0.1 * run_num; % biopac run ending trigger: 0.1 * run_number
         waitsec_fromstarttime(data.biopac_endtime, ending_trigger); 
         BIOPAC_trigger(ljHandle, biopac_channel, 'off');
     end
@@ -520,7 +518,7 @@ disp(str); %present this text in command window
 
 end
 
-function data = pico_post_run_survey_resting(data, msg, survey_msg)
+function data = pico_post_run_survey_resting(data, msg)
 
 global theWindow W H; % window property 
 global white red orange bgcolor tb rec recsize; % color
@@ -551,12 +549,12 @@ question_type = {'Valence','Self-relevance','Time','Vividness','Safe&Threat'};
 
 Screen(theWindow, 'FillRect', bgcolor, window_rect);
 Screen('TextSize', theWindow, fontsize(2));
-DrawFormattedText(theWindow, survey_msg.intro_prompt1,'center', H/5-80, white);
+DrawFormattedText(theWindow, msg.survey.intro_prompt1,'center', H/5-80, white);
 
 rng('shuffle');
 z = randperm(6);
 barsize = barsizeO(:,z);
-title = survey_msg.title(:,z);
+title = msg.survey.title(:,z);
 
 
 linexy = zeros(2,48);
@@ -607,7 +605,7 @@ for j=1:numel(barsize(5,:))
             % Draw scale lines
             Screen('DrawLines',theWindow, linexy, 4, 255);
             Screen('TextSize', theWindow, fontsize(2));
-            DrawFormattedText(theWindow, intro_prompt1,'center', H/5-80, white)
+            DrawFormattedText(theWindow, msg.survey.intro_prompt1,'center', H/5-80, white)
             % Draw scale letter
             
             for i = 1:numel(title(1,:))
@@ -653,7 +651,7 @@ for j=1:numel(barsize(5,:))
                 % Draw scale lines
                 Screen('DrawLines',theWindow, linexy, 4, 255);
                 Screen('TextSize', theWindow, fontsize(2));
-                DrawFormattedText(theWindow, intro_prompt1,'center', H/5-80, white)
+                DrawFormattedText(theWindow, msg.survey.intro_prompt1,'center', H/5-80, white)
                 % Draw scale letter
                 
                 for i = 1:numel(title(1,:))
