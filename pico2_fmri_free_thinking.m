@@ -33,6 +33,7 @@ end
 %% LOAD TRIAL SEQUENCE AND GET RUN NUMBER
 
 sid = input('Subject ID? (e.g., coco001_khj): ', 's');
+sid(isspace(sid)) = []; % remove every blank
 
 subject_dir = fullfile(datdir, sid);
 
