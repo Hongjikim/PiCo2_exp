@@ -3,7 +3,7 @@
 %% FREE THINKING (N = 1, 2, 3)
 
 clear;
-basedir = pico2_set_directory('WL01'); % 'dj_mac', 'WL01'
+basedir = pico2_set_directory('WL01'); % 'dj_mac', 'WL01', 'int01', 'hj_mac'
 cd(basedir);
 
 %%
@@ -17,4 +17,6 @@ pico2_wordsampling(basedir);
 %% WORD SURVEY
 cd(basedir);
 [words, sid] = pico2_wholewords(basedir);
-a_fast_fmri_survey(basedir, sid, words); % body map right boundary
+
+%%
+a_fast_fmri_survey(basedir, sid, words, 'mgkey'); % if using magic keyboard, add 'mgkey'
