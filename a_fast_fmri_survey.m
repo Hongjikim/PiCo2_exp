@@ -1,20 +1,4 @@
 function survey = a_fast_fmri_survey(basedir, sid, words, varargin)
-%
-%   survey.dat{target_i,seeds_i}{barsize(5,j)}.tracjectory
-%   survey.dat{target_i,seeds_i}{barsize(5,j)}.time
-%   survey.dat{target_i,seeds_i}{barsize(5,j)}.rating
-%                               for bodymap, rating_red & rating_blue
-%   survey.dat{target_i,seeds_i}{barsize(5,j)}.RT
-%
-%       for example,
-%   survey.dat{target_i,seeds_i}{1}.tracjectory = 'Valence'
-%   survey.dat{target_i,seeds_i}{2}.tracjectory = 'Self-relevance'
-%   survey.dat{target_i,seeds_i}{3}.tracjectory = 'Time'
-%   survey.dat{target_i,seeds_i}{4}.tracjectory = 'Vividness'
-%   survey.dat{target_i,seeds_i}{5}.tracjectory = 'SafetyThreat'
-%   survey.dat{target_i,seeds_i}{6}.tracjectory = 'Bodymap'
-%
-%
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;
@@ -57,6 +41,8 @@ else
 end
 
 %% PARSING OUT OPTIONAL INPUT
+magic_keyboard = false;
+
 for i = 1:length(varargin)
     if ischar(varargin{i})
         switch varargin{i}
@@ -67,6 +53,8 @@ for i = 1:length(varargin)
                 testmode = true;
             case {'savedir'}
                 savedir = varargin{i+1};
+            case {'mgkey'}
+                magic_keyboard = true;
         end
     end
 end
@@ -85,15 +73,6 @@ window_num = screens(end);
 Screen('Preference', 'SkipSyncTests', 1);
 window_info = Screen('Resolution', window_num);
 window_rect = [0 0 window_info.width window_info.height]/2 ;
-% if testmode
-%     window_rect = [0 0 1260 760]; % in the test mode, use a little smaller screen
-% else
-%     window_rect1 = get(0, 'MonitorPositions'); % full screen
-%     window_rect = [ 0 0 window_rect1(3) window_rect1(4)];
-%     if size(window_rect1,1)>1   % for Byeol's desk, when there are two moniter
-%         window_rect = window_rect1(1,:);
-%     end
-% end
 
 W = window_rect(3); %width of screen
 H = window_rect(4); %height of screen
@@ -140,14 +119,9 @@ if ~practice_mode % if not practice mode, save the data
         
     else  % First start condition, make new file
         % add some task information
-%         survey.version = 'FAST_fmri_task_v1_12-05-2017';
-%         survey.github = 'https://github.com/ByeolEtoileKim/fast_fmri_v1';
         survey.subject = sid;
         survey.wordfile = fullfile(savedir, ['WORDSAMPLING_' sid '_run1.mat']);
-%        survey.responsefile = fullfile(savedir, ['b_responsedata_sub' sid '_sessnumber.mat']);
- %       survey.taskfile = fullfile(savedir, ['c_taskdata_sub' sid '_sessnumber.mat']);
         survey.surveyfile = fullfile(savedir, ['surveydata_sub' sid '.mat']);
-%         survey.restingfile = fullfile(savedir, ['e_restingdata_sub' sid '.mat']);
         survey.dat_descript = {'survey.dat{target_i,seeds_i}';'6 Questions'; '1:Valence'; '2:Self-relevance'; '3:Time'; '4:Vividness'; '5:SafetyThreat'; '6:Bodymap'};
         survey.body_xy = [body_x body_y];     % coordinate inside of body
         survey.words = words;
@@ -161,7 +135,7 @@ end
 %% Survey start: =========================================================
 
 %% START: Screen
-Screen('Preference', 'SkipSyncTests', 1); 
+Screen('Preference', 'SkipSyncTests', 1);
 theWindow = Screen('OpenWindow', 0, bgcolor, window_rect); % start the screen
 Screen('Preference','TextEncodingLocale','ko_KR.UTF-8');
 Screen('TextFont', theWindow, font);
@@ -203,7 +177,13 @@ if numel(start_line) == 1  % if restart, skip the practice
     pw = {'카페'; '커피'};
     seeds_i = 1;
     while (1)
-        [~,~,keyCode] = KbCheck;
+        
+        if magic_keyboard
+            [~,~,keyCode]=PsychHID('KbCheck', 3);
+        else
+            [~,~,keyCode] = KbCheck;
+        end
+        
         if keyCode(KbName('space'))==1
             break;
         elseif keyCode(KbName('q'))==1
@@ -267,7 +247,12 @@ if numel(start_line) == 1  % if restart, skip the practice
         
         % Track Mouse coordinate
         [x, y, button] = GetMouse(theWindow);
-        [~,~,keyCode] = KbCheck;
+        
+        if magic_keyboard
+            [~,~,keyCode]=PsychHID('KbCheck', 3);
+        else
+            [~,~,keyCode] = KbCheck;
+        end
         
         if keyCode(KbName('r'))==1
             color = red;
@@ -308,7 +293,13 @@ if numel(start_line) == 1  % if restart, skip the practice
     
     % Practice End prompt
     while (1)
-        [~,~,keyCode] = KbCheck;
+        
+        if magic_keyboard
+            [~,~,keyCode]=PsychHID('KbCheck', 3);
+        else
+            [~,~,keyCode] = KbCheck;
+        end
+        
         if keyCode(KbName('space'))==1
             break;
         elseif keyCode(KbName('q'))==1
@@ -324,7 +315,13 @@ end
 %% Main function: show 2 words
 
 while (1)
-    [~,~,keyCode] = KbCheck;
+    
+    if magic_keyboard
+        [~,~,keyCode]=PsychHID('KbCheck', 3);
+    else
+        [~,~,keyCode] = KbCheck;
+    end
+    
     if keyCode(KbName('space'))==1
         break;
     elseif keyCode(KbName('q'))==1
@@ -350,7 +347,13 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
     
     % Get ready message: waiting for a space bar
     while (1)
-        [~,~,keyCode] = KbCheck;
+        
+        if magic_keyboard
+            [~,~,keyCode]=PsychHID('KbCheck', 3);
+        else
+            [~,~,keyCode] = KbCheck;
+        end
+        
         if keyCode(KbName('space'))==1
             break;
         elseif keyCode(KbName('q'))==1
@@ -450,7 +453,12 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
             
             % Track Mouse coordinate
             [x, y, button] = GetMouse(theWindow);
-            [~,~,keyCode] = KbCheck;
+            
+            if magic_keyboard
+                [~,~,keyCode]=PsychHID('KbCheck', 3);
+            else
+                [~,~,keyCode] = KbCheck;
+            end
             
             if keyCode(KbName('r'))==1
                 color = red;
@@ -505,7 +513,13 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
     
     if seeds_i < numel(words(1,:))
         while (1)
-            [~,~,keyCode] = KbCheck;
+            
+            if magic_keyboard
+                [~,~,keyCode]=PsychHID('KbCheck', 3);
+            else
+                [~,~,keyCode] = KbCheck;
+            end
+            
             if keyCode(KbName('space'))==1
                 break;
             end
@@ -515,7 +529,7 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
         end
     elseif seeds_i == numel(words(1,:))
         survey.exp_endtime = datestr(clock, 0);
-        save(survey.surveyfile, 'survey', '-append') 
+        save(survey.surveyfile, 'survey', '-append')
     end
     WaitSecs(1.0);
     
