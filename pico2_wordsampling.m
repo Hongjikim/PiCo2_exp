@@ -48,7 +48,7 @@ nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 data.subject = sid;
-data.datafile = fullfile(subject_dir, ['THOUGHT_SAMPLING_', sprintf('%.7s', sid), '_run', sprintf('%.1d', run_n), '.mat']);
+data.datafile = fullfile(subject_dir, ['WORDS_', sprintf('%.7s', sid), '_run', sprintf('%.1d', run_n), '.mat']);
 data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
 data.starttime_getsecs = GetSecs;
@@ -105,7 +105,19 @@ for response_i = response_n   % in case of no-sound, 1:40
     
     save(data.datafile, 'response'); % save the data
 end
+
 response
+
+% save words in txt file (to show to participants)
+fid = fopen(fullfile(subject_dir, ['WORDS_', sprintf('%.7s', sid), '_run', sprintf('%.1d', run_n), '.txt']), 'w');
+for words = 1:numel(response)
+    if words < numel(response)
+        fprintf(fid, '%s - ', response{words});
+    else
+        fprintf(fid, '%s', response{words});
+    end
+end
+fclose(fid)
 
 end
 
