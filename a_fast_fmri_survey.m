@@ -34,6 +34,8 @@ if exist(survey.surveyfile, 'file')
     if cont_or_not == 2
         error('Breaked.')
     elseif cont_or_not == 1
+        copy_fname = fullfile(savedir, ['surveydata_sub' sid '_copy.mat']);
+        copyfile(survey.surveyfile, copy_fname);
         save(survey.surveyfile, 'data', 'survey');
     end
 else
@@ -122,7 +124,7 @@ if ~practice_mode % if not practice mode, save the data
         survey.subject = sid;
         survey.wordfile = fullfile(savedir, ['WORDSAMPLING_' sid '_run1.mat']);
         survey.surveyfile = fullfile(savedir, ['surveydata_sub' sid '.mat']);
-        survey.dat_descript = {'survey.dat{target_i,seeds_i}';'6 Questions'; '1:Valence'; '2:Self-relevance'; '3:Time'; '4:Vividness'; '5:SafetyThreat'; '6:Bodymap'};
+        survey.dat_descript = {'survey.dat{ft_run_i, target_i}';'6 Questions'; '1:Valence'; '2:Self-relevance'; '3:Time'; '4:Vividness'; '5:SafetyThreat'; '6:Bodymap'};
         survey.body_xy = [body_x body_y];     % coordinate inside of body
         survey.words = words;
         survey.exp_starttime = datestr(clock, 0); % date-time: timestamp of first start
@@ -175,7 +177,7 @@ exp_end_prompt = double('설문을 모두 마치셨습니다. 감사합니다!');
 if numel(start_line) == 1  % if restart, skip the practice
     % viewing the practice prompt until click.
     pw = {'카페'; '커피'};
-    seeds_i = 1;
+    ft_run_i = 1;
     while (1)
         
         if magic_keyboard
@@ -215,12 +217,12 @@ if numel(start_line) == 1  % if restart, skip the practice
                 if x < rec(j,1)+(recsize(1)-barsize(1,j))/2, x = rec(j,1)+(recsize(1)-barsize(1,j))/2;
                 elseif x > rec(j,1)+(recsize(1)+barsize(1,j))/2, x = rec(j,1)+(recsize(1)+barsize(1,j))/2;
                 end
-                a_display_survey(z, seeds_i, 1, pw,'practice1');
+                a_display_survey(z, ft_run_i, 1, pw,'practice1');
                 Screen('DrawDots', theWindow, [x;y], 9, orange, [0 0], 1);
                 Screen('Flip', theWindow);
                 
                 if button(1)
-                    a_display_survey(z, seeds_i, 1, pw,'practice1');
+                    a_display_survey(z, ft_run_i, 1, pw,'practice1');
                     Screen('DrawDots', theWindow, [x,y], 9, red, [0 0], 1);
                     Screen('Flip', theWindow);
                     WaitSecs(.3);
@@ -243,7 +245,7 @@ if numel(start_line) == 1  % if restart, skip the practice
     else color = blue; color_code = 2;   end
     
     while(1)
-        a_display_survey(z, seeds_i, 1, pw,'practice2');
+        a_display_survey(z, ft_run_i, 1, pw,'practice2');
         
         % Track Mouse coordinate
         [x, y, button] = GetMouse(theWindow);
@@ -335,11 +337,11 @@ while (1)
     Screen('Flip', theWindow);
 end
 
-for seeds_i = start_line(1):size(words',2) % loop through the seed words
+for ft_run_i = start_line(1):size(words',2) % loop through the seed words
     % Set restart point in case of overwrite.
     % Restart target word from 'start_line(2)'
     % just for stopped seed words.
-    if numel(start_line) == 2 && seeds_i == start_line(1)
+    if numel(start_line) == 2 && ft_run_i == start_line(1)
         start_target = start_line(2);
     else
         start_target = 1;
@@ -383,8 +385,8 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
                 end
                 
                 rec_i = 0;
-                survey.dat{target_i, seeds_i}{barsize(5,j)}.trajectory = [];
-                survey.dat{target_i, seeds_i}{barsize(5,j)}.time = [];
+                survey.dat{ft_run_i, target_i}{barsize(5,j)}.trajectory = [];
+                survey.dat{ft_run_i, target_i}{barsize(5,j)}.time = [];
                 
                 starttime = GetSecs; % Each question start time
                 
@@ -399,22 +401,22 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
                     end
                     
                     % display scales and cursor
-                    a_display_survey(z, seeds_i, target_i, words','whole');
+                    a_display_survey(z, ft_run_i, target_i, words','whole');
                     Screen('DrawDots', theWindow, [x;y], 9, orange, [0 0], 1);
                     Screen('Flip', theWindow);
                     
                     % Get trajectory
                     rec_i = rec_i+1; % the number of recordings
-                    survey.dat{target_i, seeds_i}{barsize(5,j)}.trajectory(rec_i,1) = rating(x, j);
-                    survey.dat{target_i, seeds_i}{barsize(5,j)}.time(rec_i,1) = GetSecs - starttime;
+                    survey.dat{ft_run_i, target_i}{barsize(5,j)}.trajectory(rec_i,1) = rating(x, j);
+                    survey.dat{ft_run_i, target_i}{barsize(5,j)}.time(rec_i,1) = GetSecs - starttime;
                     
                     if button(1)
-                        survey.dat{target_i, seeds_i}{barsize(5,j)}.rating = rating(x, j);
-                        survey.dat{target_i, seeds_i}{barsize(5,j)}.RT = ...
-                            survey.dat{target_i, seeds_i}{barsize(5,j)}.time(end) - ...
-                            survey.dat{target_i, seeds_i}{barsize(5,j)}.time(1);
+                        survey.dat{ft_run_i, target_i}{barsize(5,j)}.rating = rating(x, j);
+                        survey.dat{ft_run_i, target_i}{barsize(5,j)}.RT = ...
+                            survey.dat{ft_run_i, target_i}{barsize(5,j)}.time(end) - ...
+                            survey.dat{ft_run_i, target_i}{barsize(5,j)}.time(1);
                         
-                        a_display_survey(z, seeds_i, target_i, words','whole');
+                        a_display_survey(z, ft_run_i, target_i, words','whole');
                         Screen('DrawDots', theWindow, [x,y], 9, red, [0 0], 1);
                         Screen('Flip', theWindow);
                         
@@ -434,10 +436,10 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
         SetMouse(W*8.5/10, H/2); % set mouse at the center of the body
         
         rec_i = 0;
-        survey.dat{target_i, seeds_i}{6}.trajectory = [];
-        survey.dat{target_i, seeds_i}{6}.time = [];
-        survey.dat{target_i, seeds_i}{6}.rating_red = [];
-        survey.dat{target_i, seeds_i}{6}.rating_blue = [];
+        survey.dat{ft_run_i, target_i}{6}.trajectory = [];
+        survey.dat{ft_run_i, target_i}{6}.time = [];
+        survey.dat{ft_run_i, target_i}{6}.rating_red = [];
+        survey.dat{ft_run_i, target_i}{6}.rating_blue = [];
         
         starttime = GetSecs; % bodymap start time
         
@@ -449,7 +451,7 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
         
         while(1)
             % draw scale
-            a_display_survey(z, seeds_i, target_i, words','whole');
+            a_display_survey(z, ft_run_i, target_i, words','whole');
             
             % Track Mouse coordinate
             [x, y, button] = GetMouse(theWindow);
@@ -472,30 +474,30 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
             
             % Get trajectory
             rec_i = rec_i+1; % the number of recordings
-            survey.dat{target_i, seeds_i}{6}.trajectory(rec_i,:) = [x y color_code button(1)];
-            survey.dat{target_i, seeds_i}{6}.time(rec_i,1) = GetSecs - starttime;
+            survey.dat{ft_run_i, target_i}{6}.trajectory(rec_i,:) = [x y color_code button(1)];
+            survey.dat{ft_run_i, target_i}{6}.time(rec_i,1) = GetSecs - starttime;
             
             % current location
             Screen('DrawDots', theWindow, [x;y], 6, color, [0 0], 1);
             
             % color the previous clicked regions
-            if ~isempty(survey.dat{target_i, seeds_i}{6}.rating_red)
-                Screen('DrawDots', theWindow, survey.dat{target_i, seeds_i}{6}.rating_red', 6, red, [0 0], 1);
+            if ~isempty(survey.dat{ft_run_i, target_i}{6}.rating_red)
+                Screen('DrawDots', theWindow, survey.dat{ft_run_i, target_i}{6}.rating_red', 6, red, [0 0], 1);
             end
-            if ~isempty(survey.dat{target_i, seeds_i}{6}.rating_blue)
-                Screen('DrawDots', theWindow, survey.dat{target_i, seeds_i}{6}.rating_blue', 6, blue, [0 0], 1);
+            if ~isempty(survey.dat{ft_run_i, target_i}{6}.rating_blue)
+                Screen('DrawDots', theWindow, survey.dat{ft_run_i, target_i}{6}.rating_blue', 6, blue, [0 0], 1);
             end
             Screen('Flip', theWindow);
             
             % Sort the regions of red and blue
             if button(1) && color_code == 1
-                survey.dat{target_i, seeds_i}{6}.rating_red = [survey.dat{target_i, seeds_i}{6}.rating_red; [x y]];
+                survey.dat{ft_run_i, target_i}{6}.rating_red = [survey.dat{ft_run_i, target_i}{6}.rating_red; [x y]];
             elseif button(1) && color_code == 2
-                survey.dat{target_i, seeds_i}{6}.rating_blue = [survey.dat{target_i, seeds_i}{6}.rating_blue; [x y]];
+                survey.dat{ft_run_i, target_i}{6}.rating_blue = [survey.dat{ft_run_i, target_i}{6}.rating_blue; [x y]];
             end
             
             if keyCode(KbName('a'))==1
-                survey.dat{target_i, seeds_i}{6}.RT = survey.dat{target_i, seeds_i}{6}.time(end) - survey.dat{target_i, seeds_i}{6}.time(1);
+                survey.dat{ft_run_i, target_i}{6}.RT = survey.dat{ft_run_i, target_i}{6}.time(end) - survey.dat{ft_run_i, target_i}{6}.time(1);
                 Screen(theWindow, 'FillRect', bgcolor, window_rect);
                 Screen('Flip', theWindow);
                 WaitSecs(.5);
@@ -511,7 +513,7 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
     %% Run (1 seed word) End
     save(survey.surveyfile, 'survey', '-append')
     
-    if seeds_i < numel(words(1,:))
+    if ft_run_i < numel(words(1,:))
         while (1)
             
             if magic_keyboard
@@ -527,7 +529,7 @@ for seeds_i = start_line(1):size(words',2) % loop through the seed words
             DrawFormattedText(theWindow, run_end_prompt, 'center', textH, white, [], [], [], 1.5);
             Screen('Flip', theWindow);
         end
-    elseif seeds_i == numel(words(1,:))
+    elseif ft_run_i == numel(words(1,:))
         survey.exp_endtime = datestr(clock, 0);
         save(survey.surveyfile, 'survey', '-append')
     end

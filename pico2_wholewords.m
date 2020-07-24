@@ -2,7 +2,7 @@ function [words, sid] = pico2_wholewords(basedir)
 %%
 datdir = fullfile(basedir, 'data') ;
 sid = input('Subject ID? (e.g., coco001_khj): ', 's');
-subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
+subject_dir = filenames(fullfile(datdir, [sid, '*']), 'char');
 [~, sid] = fileparts(subject_dir);
 sid = sid(1:7);
 
