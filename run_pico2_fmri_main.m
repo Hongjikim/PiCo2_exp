@@ -19,4 +19,4 @@ cd(basedir);
 [words, sid] = pico2_wholewords(basedir);
 
 %%
-a_fast_fmri_survey(basedir, sid, words, 'mgkey'); % if using magic keyboard, add 'mgkey'
+a_fast_fmri_survey(basedir, sid, words); %, 'mgkey'); % if using magic keyboard, add 'mgkey'
