@@ -8,6 +8,7 @@ global USE_EYELINK USE_BIOPAC
 testmode = false;
 USE_EYELINK = false;
 USE_BIOPAC = false;
+scan_adjust = false;
 
 datdir = fullfile(basedir, 'data');
 
@@ -43,7 +44,7 @@ if exist(subject_dir, 'dir') == 0 % no subject dir
     mkdir(subject_dir);
 end
 
-run_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
+run_num = input('FREE THKINING Run number? (n = 1, 2, 3, 4): ');
 
 %% CREATE AND SAVE DATA
 
@@ -115,7 +116,7 @@ msg.inst1 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나�
 msg.inst2 = double('잘하셨습니다. 세션을 시작하겠습니다.');
 
 msg.s_key = double('참가자가 준비되었으면, \n 이미징을 시작합니다 (s).');
-msg.s_key2 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. ...\n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
+msg.s_key2 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. \n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
 
 msg.start_buffer = double('시작합니다...');
 
