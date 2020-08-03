@@ -40,7 +40,7 @@ sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 [~, sid] = fileparts(subject_dir);
 
-run_n = input('RUN number? (1, 2, 3): ');
+run_n = input('RUN number? (1, 2, 3, 4): ');
 
 %% CREATE AND SAVE DATA
 
@@ -68,6 +68,7 @@ else
 end
 
 response_n = [1:15];
+
 for i = 1:length(varargin)
     if ischar(varargin{i})
         switch varargin{i}
