@@ -3,7 +3,7 @@
 %% FREE THINKING (N = 1, 2, 3)
 
 clear;
-basedir = pico2_set_directory('WL01'); % 'dj_mac', 'WL01', 'int01', 'hj_mac'
+basedir = pico2_set_directory('dj_mac'); % 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac'
 cd(basedir);
 
 %%
