@@ -1,15 +1,18 @@
-%% Run PiCo 2 experiment
-
-%% FREE THINKING (N = 1, 2, 3)
-
+%% Set directory for PiCo2 
 clear;
-basedir = pico2_set_directory('dj_mac'); % 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac'
+basedir = pico2_set_directory('hj_mac'); % 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac'
 cd(basedir);
 
-%%
-pico2_fmri_free_thinking(basedir);% , 'biopac'); % , 'biopac');% 'test', 'biopac'
+%% Resting (N = 1, 2)
+cd(basedir);
+pico2_fmri_resting(basedir); % 'biopac' % TR = 616 seconds (1340)
 
-%% INPUT WORDS (N = 1, 2, 3)
+%% FREE THINKING (N = 1, 2, 3, 4)
+
+cd(basedir);
+pico2_fmri_free_thinking(basedir); % 'biopac', 'hc/dc'
+
+%% INPUT WORDS (N = 1, 2, 3, 4)
 
 cd(basedir);
 pico2_wordsampling(basedir);     

@@ -1,4 +1,4 @@
-function pico2_fmri_free_thinking(basedir, varargin)
+function pico2_fmri_resting(basedir, varargin)
 
 
 %% DEFAULT
@@ -26,8 +26,6 @@ for i = 1:length(varargin)
                 channel_n = 1;
                 biopac_channel = 0;
                 ljHandle = BIOPAC_setup(channel_n); % BIOPAC SETUP
-            case {'scan_adjust', 'hs/dc'}
-                scan_adjust = true;
         end
     end
 end
@@ -43,7 +41,7 @@ if exist(subject_dir, 'dir') == 0 % no subject dir
     mkdir(subject_dir);
 end
 
-run_num = input('FREE THKINING Run number? (n = 1, 2, 3): ');
+run_num = input('Resting Run number? (n = 1(pre-resting), 2(post-resting)): ');
 
 %% CREATE AND SAVE DATA
 
@@ -111,11 +109,9 @@ orange = [255 164 0];
 
 %% KOREAN INSTRUCTIONS
 msg.hs_dc = double('스캐너 조정 작업중입니다.\n 소음이 발생할 수 있습니다. 화면 중앙의 십자표시를\n 편안한 마음으로 바라봐주세요.'); % head scout and distortion correction
-msg.inst1 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. \n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 연습을 한번 해보겠습니다.') ;
-msg.inst2 = double('잘하셨습니다. 세션을 시작하겠습니다.');
 
 msg.s_key = double('참가자가 준비되었으면, \n 이미징을 시작합니다 (s).');
-msg.s_key2 = double('이번 세션은 자유 생각 세션입니다. \n 화면에 + 표시가 나타나면, 자유 생각을 시작하세요. ...\n + 표시가 사라질 때마다 지시문에 답변을 해주세요.\n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
+msg.s_key2 = double('이번 세션은 휴식 세션입니다. \n 화면에 나타는 + 표시를 바라보며, 움직이지 말고 가만히 있어주세요. \n\n 참가자가 준비되었으면 이미징을 시작합니다. (s)') ;
 
 msg.start_buffer = double('시작합니다...');
 
@@ -126,7 +122,7 @@ msg.postQ_inst = double('이번 세션이 끝났습니다. \n 나타나는 질문들에 답변해주세
 
 msg.run_end = double('잘하셨습니다. 잠시 대기해 주세요.');
 
-msg.survey.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
+msg.survey.intro_prompt1 = double('방금 휴식 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
 
 msg.survey.title={'','', '','', '', '';
     '부정', '전혀 나와\n관련이 없음', '과거', '전혀 생생하지 않음', '위협', '';
@@ -163,7 +159,7 @@ try
     end
     
     %% HEAD SCOUT AND DISTORTION CORRECTION
-    if scan_adjust == true % the first run
+    if run_num == 1 % the first run
         while (1)
             
             [~,~,keyCode] = KbCheck;
@@ -194,79 +190,6 @@ try
             
             Screen(theWindow, 'FillRect', bgcolor, window_rect);
             DrawFormattedText(theWindow, msg.fixation,'center', 'center', white); %'center', 'textH'
-            Screen('Flip', theWindow);
-            
-        end
-    end
-    
-    if run_num == 1
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            DrawFormattedText(theWindow, msg.inst1, 'center', 'center', text_color, [], [], [], 1.5);
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            DrawFormattedText(theWindow, msg.fixation, 'center', 'center', text_color, [], [], [], 1.5);
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.ThoughtSampling,'center', 'center', white, [], [], [], 1.5); %'center', 'textH'
-            Screen('Flip', theWindow);
-            
-        end
-        
-        WaitSecs(0.5);
-        
-        while (1)
-            
-            [~,~,keyCode] = KbCheck;
-            
-            if keyCode(KbName('space'))==1
-                break
-            elseif keyCode(KbName('q'))==1
-                abort_experiment('manual');
-            end
-            
-            Screen(theWindow, 'FillRect', bgcolor, window_rect);
-            DrawFormattedText(theWindow, msg.inst2,'center', 'center', white); %'center', 'textH'
             Screen('Flip', theWindow);
             
         end
@@ -336,7 +259,7 @@ try
         BIOPAC_trigger(ljHandle, biopac_channel, 'off');
     end
     
-    %% START FREE THINKING
+    %% START resting
     
     % 8 seconds for being ready
     Screen(theWindow,'FillRect',bgcolor, window_rect);
@@ -344,14 +267,15 @@ try
     
     waitsec_fromstarttime(data.runscan_starttime, 16); % after 8 seconds of disdaq, 8 seconds of baseline
     
-    data.freethinking_start_time = GetSecs;
+    data.resting_start_time = GetSecs;
     
-    data = thought_sampling(data, msg); % thought sampling tasks
+    data = pico_resting(data, msg); % resting
     
     save(data.datafile, 'data', '-append');
-    data.freethinking_end_time = GetSecs;
+    data.resting_end_time = GetSecs;
     
-    while GetSecs - data.freethinking_end_time < 3
+    
+    while GetSecs - data.resting_end_time < 3
         DrawFormattedText(theWindow, msg.postQ_inst, 'center', 'center', text_color, [], [], [], 1.5);
         Screen('Flip', theWindow);
     end
@@ -409,7 +333,7 @@ end
 %% ====== SUBFUNCTIONS ======
 
 
-function data = thought_sampling(data, msg)
+function data = pico_resting(data, msg)
 
 global theWindow W H; % window property
 global fontsize window_rect text_color textH % lb tb recsize barsize rec; % rating scale
@@ -420,53 +344,22 @@ DrawFormattedText(theWindow, fixation_point, 'center', 'center', text_color);
 Screen('Flip', theWindow);
 
 resting_sTime = GetSecs;
-data.FTfunction.fixation_start_time = resting_sTime;
+data.resting.fixation_start_time = resting_sTime;
 
 rng('shuffle')
 
-% % % edit
-% sampling_time = [5] ;
-% resting_total_time = 10;
 
-resting_total_time = 14*50;
-iti = resting_total_time/15;
-base_time = iti:iti:(resting_total_time-iti);
+resting_total_time = 10*60; % 10 minutes
 
-vari_size = 15;
-sampling_time = base_time + randi(vari_size,1,14) - vari_size/2;
 
-% [sampling_time resting_total_time]
-
-% sampling_time = [60 120 180 240 300] + randi(10,1,5) - 5;
-% resting_total_time = 360;
-%
-data.FTfunction.sampling_time = sampling_time;
-
-while GetSecs - resting_sTime < resting_total_time
-    for i = 1:numel(sampling_time)
-        k = 0;
-        while GetSecs - resting_sTime > (sampling_time(i) - 2.5) && GetSecs - resting_sTime < (sampling_time(i) + 2.5)
-            k = k +1;
-            if k == 1
-                data.FTfunction.start_Sampling{i} = GetSecs;
-            end
-            data.FTfunction.end_Sampling{i} = GetSecs;
-            Screen('TextSize', theWindow, fontsize(3));
-            DrawFormattedText(theWindow, msg.ThoughtSampling, 'center', 'center', text_color, [], [], [], 1.5);
-            Screen('Flip', theWindow);
-        end
         Screen('TextSize', theWindow, fontsize(3));
         DrawFormattedText(theWindow, msg.fixation, 'center', 'center', text_color);
         Screen('Flip', theWindow);
-        
-        if i == 7 % when 7th trial is done, save taskdata
-            save(data.datafile, 'data', '-append');
-        end
-        
-    end
-end
 
-data.FTfunction.fixation_end_time = GetSecs;
+        waitsec_fromstarttime(resting_sTime, resting_total_time)
+
+
+data.resting.fixation_end_time = GetSecs;
 
 % last trial
 while GetSecs - data.FTfunction.fixation_end_time <5
@@ -495,7 +388,6 @@ while GetSecs - data.FTfunction.last_sampling_end_time < 15
     Screen('Flip', theWindow);
     
 end
-data.runscan_endtime = GetSecs;
 end
 
 function abort_experiment(varargin)
