@@ -17,13 +17,16 @@ switch where
         basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
         
     case 'dj_mac'
-        basedir = '/Users/dongjupark/Dropbox/PiCo2/PiCo2_exp';
+        basedir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
         
     case 'WL01'
-        basedir = 'C:\Users\Cocoanlab_WL01\Dropbox\PiCo2\PiCo2_exp';
+        basedir = '/Users/Cocoanlab_WL01/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'BE_imac'
+        basedir = '/Users/cocoanlab/Dropbox/PiCo2_sync/PiCo2_exp'
         
     case 'int01' % interview room 01 in CNIR
-        basedir = '/Users/cocoan/PiCo2_exp';
+        basedir = '/Users/cocoan/Dropbox/PiCo2_sync/PiCo2_exp';
 end
 
 addpath(genpath(basedir));
