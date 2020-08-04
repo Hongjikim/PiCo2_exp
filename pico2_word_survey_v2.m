@@ -67,7 +67,7 @@ end
 global theWindow W H; % window property
 global white red orange blue bgcolor ; % color
 global fontsize window_rect lb tb bodymap recsize barsize rec; % rating scale
-global center_X center_Y white Xgap Ygap y_len
+global center_X center_Y Xgap Ygap y_len
 
 bgcolor = 100;
 
@@ -164,6 +164,27 @@ for run_i = start_run:1% size(words,1)
                     Screen('DrawDots', theWindow, [x;y], 9, orange, [0 0], 1);
                     
                     Screen('Flip', theWindow);
+                    
+%                     % if press 'b', go back one trial
+%                     if magic_keyboard
+%                         [~,~,keyCode]=PsychHID('KbCheck', 3);
+%                     else
+%                         [~,~,keyCode] = KbCheck;
+%                     end
+%                     
+%                     if keyCode(KbName('b'))==1
+%                         if c_response ~= 1
+%                             c_response = c_response - 1;
+%                         else % c_response == 1, r_response ~= 1
+%                             c_response = column; r_response = r_response - 1;     
+%                         end
+%                         word_count = word_count - 1;
+%                         
+%                         draw_horizontal_lines(row,column, temp_words, target_dim);
+%                         Screen('Flip', theWindow);
+%                         WaitSecs(0.5);
+%                         break
+%                     end
                     
                     if any(button)
                         draw_horizontal_lines(row,column, temp_words, target_dim);
