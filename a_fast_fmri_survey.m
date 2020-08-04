@@ -20,14 +20,14 @@ rng('shuffle');
 nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
-data.subject = sid;
+survey.subject = sid;
 survey.surveyfile = fullfile(savedir, ['surveydata_sub' sid '.mat']) ;
-data.version = 'PICO2_v1_06-2020_Cocoanlab';
-data.starttime = datestr(clock, 0);
-data.starttime_getsecs = GetSecs;
+survey.version = 'PICO2_v1_06-2020_Cocoanlab';
+survey.starttime = datestr(clock, 0);
+survey.starttime_getsecs = GetSecs;
 
 if exist(survey.surveyfile, 'file')
-    fprintf('\n ** EXSITING FILE: %s %s **', data.subject, subjdate);
+    fprintf('\n ** EXSITING FILE: %s %s **', survey.subject, subjdate);
     cont_or_not = input(['\nYou type the run number that is inconsistent with the data previously saved.', ...
         '\nWill you go on with your run number that typed just before?', ...
         '\n1: Yes, continue with typed run number.  ,   2: No, it`s a mistake. I`ll break.\n:  ']);
@@ -36,10 +36,10 @@ if exist(survey.surveyfile, 'file')
     elseif cont_or_not == 1
         copy_fname = fullfile(savedir, ['surveydata_sub' sid '_copy.mat']);
         copyfile(survey.surveyfile, copy_fname);
-        save(survey.surveyfile, 'data', 'survey');
+        save(survey.surveyfile, 'survey');
     end
 else
-    save(survey.surveyfile, 'data', 'survey');
+    save(survey.surveyfile, 'survey');
 end
 
 %% PARSING OUT OPTIONAL INPUT

@@ -1,4 +1,4 @@
-function pico2_wordsampling(basedir, varargin)
+function pico2_wordsampling(basedir, sid, varargin)
 
 % This function can be used to transcribe the PiCo fmri word generation responses.
 %
@@ -36,7 +36,6 @@ function pico2_wordsampling(basedir, varargin)
 %% INFO CHECK
 datdir = fullfile(basedir, 'data') ;
 
-sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 [~, sid] = fileparts(subject_dir);
 

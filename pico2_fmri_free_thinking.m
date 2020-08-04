@@ -1,4 +1,4 @@
-function pico2_fmri_free_thinking(basedir, varargin)
+function pico2_fmri_free_thinking(basedir, sid, varargin)
 
 
 %% DEFAULT
@@ -11,6 +11,7 @@ USE_BIOPAC = false;
 scan_adjust = false;
 
 datdir = fullfile(basedir, 'data');
+subject_dir = fullfile(datdir, sid);
 
 %% PARSING VARARGIN
 
@@ -33,16 +34,7 @@ for i = 1:length(varargin)
     end
 end
 
-%% LOAD TRIAL SEQUENCE AND GET RUN NUMBER
-
-sid = input('Subject ID? (e.g., coco001_khj): ', 's');
-sid(isspace(sid)) = []; % remove every blank
-
-subject_dir = fullfile(datdir, sid);
-
-if exist(subject_dir, 'dir') == 0 % no subject dir
-    mkdir(subject_dir);
-end
+%% GET RUN NUMBER
 
 run_num = input('FREE THKINING Run number? (n = 1, 2, 3, 4): ');
 
@@ -127,7 +119,7 @@ msg.postQ_inst = double('이번 세션이 끝났습니다. \n 나타나는 질문들에 답변해주세
 
 msg.run_end = double('잘하셨습니다. 잠시 대기해 주세요.');
 
-msg.survey.intro_prompt1 = double('방금 자유 생각 과제를 하는동안 자연스럽게 떠올린 생각에 대한 질문입니다.') ;
+msg.survey.intro_prompt1 = double('방금 자유 생각 과제를 하는 동안 *마지막으로* 말씀하신 단어에 대하여 답변해주세요. \n 단어가 기억나지 않으면 알려주세요.') ;
 
 msg.survey.title={'','', '','', '', '';
     '부정', '전혀 나와\n관련이 없음', '과거', '전혀 생생하지 않음', '위협', '';

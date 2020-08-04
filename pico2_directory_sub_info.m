@@ -1,4 +1,4 @@
-function basedir = pico2_set_directory(where)
+function [basedir, sid, subject_dir] = pico2_directory_sub_info(where)
 %
 % It sets up the essential directories according to where you are.
 % and in case of server, it adds paths
@@ -30,5 +30,23 @@ switch where
 end
 
 addpath(genpath(basedir));
+
+sid = input('Subject ID? (e.g., coco001_khj): ', 's');
+sid(isspace(sid)) = []; % remove every blank
+
+datdir = fullfile(basedir, 'data');
+subject_dir = fullfile(datdir, sid);
+
+if exist(subject_dir, 'dir') == 0 % no subject dir
+    fprintf(['\n ** no existing directory: ', sid, ' **']);
+    cont_or_not = input(['\n Do you want to make new subject directory?', ...
+        '\n1: Yes, make directory.  ,   2: No, it`s a mistake. I`ll break.\n:  ']);
+    if cont_or_not == 2
+        error('Break.')
+    elseif cont_or_not == 1
+        mkdir(subject_dir);
+    end
+end
+
 
 end
