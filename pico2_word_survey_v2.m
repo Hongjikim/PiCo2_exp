@@ -1,9 +1,9 @@
-function survey = pico2_word_survey_v2(basedir, sid_short, words, varargin)
+function survey = pico2_word_survey_v2(basedir, sid, words, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;
 % sid = input('Subject ID? (e.g., coco001_khj): ', 's');
-subject_dir = filenames(fullfile(datdir, [sid_short '*']), 'char');
+subject_dir = filenames(fullfile(datdir, sid), 'char');
 [~, sid] = fileparts(subject_dir);
 
 testmode = false;
@@ -17,11 +17,11 @@ rng('shuffle');
 nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
-data.subject = sid;
+survey.subject = sid;
 survey.surveyfile = fullfile(savedir, [subjdate, '_surveydata_' sid '.mat']);
-data.version = 'PICO2_v1_08-2020_Cocoanlab';
-data.starttime = datestr(clock, 0);
-data.starttime_getsecs = GetSecs;
+survey.version = 'PICO2_v1_08-2020_Cocoanlab';
+survey.starttime = datestr(clock, 0);
+survey.starttime_getsecs = GetSecs;
 
 if exist(survey.surveyfile, 'file')
     fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_surveydata_' sid '.mat']);
@@ -33,14 +33,17 @@ if exist(survey.surveyfile, 'file')
     elseif cont_or_not == 1
         copy_fname = fullfile(savedir, ['surveydata_sub' sid '_copy.mat']);
         copyfile(survey.surveyfile, copy_fname);
-        save(survey.surveyfile, 'data', 'survey');
+        save(survey.surveyfile, 'survey');
     end
 else
-    save(survey.surveyfile, 'data', 'survey');
+    save(survey.surveyfile, 'survey');
 end
+
+survey.dat.whole_words = words;
 
 %% PARSING OUT OPTIONAL INPUT
 magic_keyboard = false;
+start_run = 1;
 
 for i = 1:length(varargin)
     if ischar(varargin{i})
@@ -54,6 +57,8 @@ for i = 1:length(varargin)
                 savedir = varargin{i+1};
             case {'mgkey'}
                 magic_keyboard = true;
+            case {'run_number'}
+                start_run = varagin{i+1};
         end
     end
 end
@@ -77,6 +82,8 @@ orange = [255 164 0];
 dims = {'자기 관련도', '긍정', '부정', '중요도', '관계성', '중심성', '과거', '현재', '미래', ...
     '빈도', '안전', '위협', '시각적 형상', '텍스트성', '강도/세기', '구체성/선명도', '추상정/관념성', ...
     '자발성', '목표'};
+
+survey.dat.whole_dims = dims;
 
 screens = Screen('Screens');
 window_num = screens(end);
@@ -109,23 +116,32 @@ for r = 1:row % row
     for c = 1:column % column
         % get center of each cell
         center_X(r,c) = Xgap * (2*c);
-        center_Y(r,c) = Ygap * (2*r+1);
+        center_Y(r,c) = Ygap * (2*r+1) - Ygap/4;
     end
 end
 
 dim_order = randperm(numel(dims));
-
-for run_i = 1:size(words,1)
+survey.dat.dim_order = dim_order;
+for run_i = start_run:1% size(words,1)
     
     temp_words = words(run_i,:);
     
-    for page_num = 1:numel(dims)
+    for page_num = 1% numel(dims)
+        
+        word_count = 0; 
+        
+        if run_i == 1
+            survey.dat.response{dim_order(page_num)} = nan(size(words));
+        end
         
         target_dim = dims{dim_order(page_num)};
+        
+        survey.dat.dim_type{dim_order(page_num)} = target_dim;
         
         for r_response = 1:row % row
             for c_response = 1:column % column
                 
+                word_count = word_count + 1; 
                 button = [];
                 
                 SetMouse(center_X(r_response,c_response), center_Y(r_response,c_response));
@@ -153,14 +169,20 @@ for run_i = 1:size(words,1)
                         draw_horizontal_lines(row,column, temp_words, target_dim);
                         Screen('DrawDots', theWindow, [x;y], 12, red, [0 0], 1);
                         Screen('Flip', theWindow);
+                        
+                        survey.dat.response{dim_order(page_num)}(run_i, word_count) = (center_Y(r_response,c_response)-y)/(Ygap*y_len*2);
+                        
                         WaitSecs(0.5);
                         break
                     end
                 end
             end
         end
+        save(survey.surveyfile, 'survey');
     end
+    save(survey.surveyfile, 'survey');
 end
+save(survey.surveyfile, 'survey');
 
 
 %
@@ -191,7 +213,7 @@ end
                         new_word_temp(2,:) = temp_words{wc}(ceil(numel(temp_words{wc})/2)+1:end);
                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
                     end
-                    DrawFormattedText(theWindow, double(new_word), center_X(r,c)-Xgap/4, center_Y(r,c), white);
+                    DrawFormattedText(theWindow, double(new_word), center_X(r,c)-Xgap/4, center_Y(r,c), white);                    
                 else
                     DrawFormattedText(theWindow, double(temp_words{wc}), center_X(r,c)-Xgap/4, center_Y(r,c), white);
                 end

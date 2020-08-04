@@ -1,4 +1,4 @@
-function pico2_fmri_resting(basedir, varargin)
+function pico2_fmri_resting(basedir, sid, varargin)
 
 
 %% DEFAULT
@@ -10,6 +10,7 @@ USE_EYELINK = false;
 USE_BIOPAC = false;
 
 datdir = fullfile(basedir, 'data');
+subject_dir = fullfile(datdir, sid);
 
 %% PARSING VARARGIN
 
@@ -30,16 +31,7 @@ for i = 1:length(varargin)
     end
 end
 
-%% LOAD TRIAL SEQUENCE AND GET RUN NUMBER
-
-sid = input('Subject ID? (e.g., coco001_khj): ', 's');
-sid(isspace(sid)) = []; % remove every blank
-
-subject_dir = fullfile(datdir, sid);
-
-if exist(subject_dir, 'dir') == 0 % no subject dir
-    mkdir(subject_dir);
-end
+%% GET RUN NUMBER
 
 run_num = input('Resting Run number? (n = 1(pre-resting), 2(post-resting)): ');
 
