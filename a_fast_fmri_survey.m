@@ -1,4 +1,4 @@
-function survey = a_fast_fmri_survey(basedir, sid, words, varargin)
+function survey = a_fast_fmri_survey(basedir, words, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;
