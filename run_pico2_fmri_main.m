@@ -15,7 +15,10 @@ pico2_fmri_free_thinking(basedir, sid); % 'biopac', 'hs/dc'
 %% INPUT WORDS (N = 1, 2, 3, 4)
 
 cd(basedir);
-pico2_wordsampling(basedir, sid);     
+pico2_wordsampling(basedir, sid);    
+
+%% edit words
+pico2_editwords(basedir, sid)
 
 %% WORD SURVEY
 cd(basedir);
