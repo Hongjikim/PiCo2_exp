@@ -29,6 +29,6 @@ words{1,7} = 'ÀÏÀÌ»ï»ç¿ÀÀ°Ä¥ÆÈ'; words{1,10} = 'ÀÏÀÌ»ï»ç¿ÀÀ°Ä¥ÆÈ±¸½Ê½ÊÀÏ½ÊÀÌ';
 survey = pico2_word_survey_v2(basedir, sid, words); % if restart: use 'run_number', 2
 
 % todo: 1) if mistake, go back
-% current range: [-0.5 ~ 0.5]
+
 %%
 a_fast_fmri_survey(basedir, sid_short, words); %, 'mgkey'); % if using magic keyboard, add 'mgkey'
