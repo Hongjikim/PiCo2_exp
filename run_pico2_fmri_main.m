@@ -26,7 +26,7 @@ words = pico2_wholewords(basedir, sid);
 
 %%
 words{1,7} = 'ÀÏÀÌ»ï»ç¿ÀÀ°Ä¥ÆÈ'; words{1,10} = 'ÀÏÀÌ»ï»ç¿ÀÀ°Ä¥ÆÈ±¸½Ê½ÊÀÏ½ÊÀÌ';
-survey = pico2_word_survey_v2(basedir, sid, words); % if restart: use 'run_number', 2
+survey = pico2_word_survey(basedir, sid, words); % if restart: use 'run_number', 2
 
 % todo: 1) if mistake, go back
 
