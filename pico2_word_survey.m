@@ -1,4 +1,4 @@
-function survey = pico2_word_survey(basedir, sid, words, varargin)
+function survey = pico2_word_survey(basedir, sid, words, dims, anchor, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;
@@ -26,7 +26,7 @@ survey.starttime = datestr(clock, 0);
 survey.starttime_getsecs = GetSecs;
 
 if exist(survey.surveyfile, 'file')
-    fprintf('\n ** EXSITING FILE: %s %s **', [subjdate, '_surveydata_' sid '.mat']);
+    fprintf('\n ** EXSITING FILE: %s %s **', survey.surveyfile);
     cont_or_not = input(['\nYou type the run number that is inconsistent with the data previously saved.', ...
         '\nWill you go on with your run number that typed just before?', ...
         '\n1: Yes, continue with typed run number.  ,   2: No, it`s a mistake. I`ll break.\n:  ']);
@@ -81,17 +81,7 @@ red = [189 0 38];
 blue = [0 85 169];
 orange = [255 164 0];
 
-dims.name = {'자기 관련도', '긍정', '부정', '중요도', '관계성', '중심성', '과거', '현재', '미래', ...
-    '빈도', '안전', '위협', '시각적 형상', '텍스트성', '강도/세기', '구체성/선명도', '추상정/관념성', ...
-    '자발성', '목표'};
-dims.msg = {'이 생각은 나와 관련이 있다.', '이 생각은 나에게 중요하다.', '이 생각은 나의 자아정체감에 핵심적이다', ...
-    '이 생각은 다른 사람들과 관련이 있다.', '이 생각은 과거 시점과 관련이 있다.', '이 생각은 현재 시점과 관련이 있다.', ...
-    '이 생각은 미래 시점과 관련이 있다.', '최근에 이 생각이 자주 들었다.', '이 생각에 대한 나의 감정은 긍정적이다.', ...
-    '이 생각에 대한 나의 감정은 부정적이다.', '이 생각은 나에게 안전감을 준다.', '이 생각은 나에게 위협감을 준다.', ...
-    '이 생각은 시각적 이미지로 떠오른다.', '이 생각은 글의 형태로 떠오른다.', '이 생각에 대한 나의 감정은..', ...
-    '이 생각은 구체적이고 선명하다.', '이 생각은 추상적이고 관념적이다.', '이 생각은 자연스럽게 떠올랐다.', '이 생각은 특정 목표를 이루는 것과 관련이 있다.'};
 
-anchor = {'매우\n그렇다', '전혀\n아니다', '매우 강함', '매우 약함'};
 
 % [dims.name' dims.msg']
 
