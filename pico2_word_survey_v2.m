@@ -1,4 +1,4 @@
-function survey = pico2_word_survey(basedir, sid, words, varargin)
+function survey = pico2_word_survey_v2(basedir, sid, words, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;

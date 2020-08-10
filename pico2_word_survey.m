@@ -12,13 +12,15 @@ savedir = subject_dir;
 
 rng('shuffle');
 
+run_number = input('which run do you want to run? (1, 2, 3, 4): ');
+
 %% CREATE AND SAVE DATA
 
 nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 survey.subject = sid;
-survey.surveyfile = fullfile(savedir, [subjdate, '_surveydata_' sid '.mat']);
+survey.surveyfile = fullfile(savedir, [subjdate, '_surveydata_' sid, '_run', num2str(run_number), '.mat']);
 survey.version = 'PICO2_v1_08-2020_Cocoanlab';
 survey.starttime = datestr(clock, 0);
 survey.starttime_getsecs = GetSecs;
@@ -67,7 +69,7 @@ end
 global theWindow W H; % window property
 global white red orange blue bgcolor ; % color
 global fontsize window_rect lb tb bodymap recsize barsize rec; % rating scale
-global center_X center_Y Xgap Ygap y_len
+global center_X center_Y Xgap Ygap y_len anchor
 
 bgcolor = 100;
 
@@ -89,6 +91,8 @@ dims.msg = {'이 생각은 나와 관련이 있다.', '이 생각은 나에게 중요하다.', '이 생�
     '이 생각은 시각적 이미지로 떠오른다.', '이 생각은 글의 형태로 떠오른다.', '이 생각에 대한 나의 감정은..', ...
     '이 생각은 구체적이고 선명하다.', '이 생각은 추상적이고 관념적이다.', '이 생각은 자연스럽게 떠올랐다.', '이 생각은 특정 목표를 이루는 것과 관련이 있다.'};
 
+anchor = {'매우\n그렇다', '전혀\n아니다', '매우 강함', '매우 약함'};
+
 % [dims.name' dims.msg']
 
 survey.dat.whole_dims = dims;
@@ -97,7 +101,7 @@ screens = Screen('Screens');
 window_num = screens(end);
 Screen('Preference', 'SkipSyncTests', 1);
 window_info = Screen('Resolution', window_num);
-window_rect = [0 0 window_info.width window_info.height]/2.5 ; %
+window_rect = [0 0 window_info.width window_info.height] ; %
 
 W = window_rect(3); % width of screen
 H = window_rect(4); % height of screen
@@ -130,7 +134,7 @@ end
 
 dim_order = randperm(numel(dims.name));
 survey.dat.dim_order = dim_order;
-for run_i = start_run:1% size(words,1)
+for run_i = run_number% start_run:1% size(words,1)
     
     temp_words = words(run_i,:);
     
@@ -156,7 +160,7 @@ for run_i = start_run:1% size(words,1)
                 
                 while ~any(button)
                     
-                    draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num);
+                    draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
                     
                     [~, y, button] = GetMouse(theWindow);
                     
@@ -195,7 +199,7 @@ for run_i = start_run:1% size(words,1)
                     %                     end
                     
                     if any(button)
-                        draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num);
+                        draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
                         Screen('DrawDots', theWindow, [x;y], 12, red, [0 0], 1);
                         Screen('Flip', theWindow);
                         
@@ -218,14 +222,29 @@ end
 save(survey.surveyfile, 'survey');
 
 
+
+% while (1)
+%     if magic_keyboard
+%         [~,~,keyCode]=PsychHID('KbCheck', 3);
+%     else
+%         [~,~,keyCode] = KbCheck;
+%     end
+%     if keyCode(KbName('space'))==1
+%         break
+%     end
+% end
+
+ShowCursor();
+Screen('Clear');
+Screen('CloseAll');
+
 %
 %
 % frameDuration = Screen('GetFlipInterval', theWindow);
 % fliptime = Screen('Flip', theWindow);
 
-    function draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num)
+    function draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor)
         
-        anchor = {'매우\n그렇다', '전혀\n아니다', '매우 강함', '매우 약함'};
         %         global words center_X center_Y white Xgap Ygap y_len
         
         wc = 0; % word count
