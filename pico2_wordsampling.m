@@ -50,7 +50,7 @@ data.subject = sid;
 data.datafile = fullfile(subject_dir, ['WORDS_', sprintf('%.7s', sid), '_run', sprintf('%.1d', run_n), '.mat']);
 data.version = 'PICO2_v1_06-2020_Cocoanlab';
 data.starttime = datestr(clock, 0);
-data.starttime_getsecs = GetSecs;
+% data.starttime_getsecs = GetSecs;
 
 if exist(data.datafile, 'file')
     fprintf('\n ** EXSITING FILE: %s %s **', data.subject, subjdate);

@@ -27,6 +27,9 @@ switch where
         
     case 'int01' % interview room 01 in CNIR
         basedir = '/Users/cocoan/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'exp_room' % interview room 01 in CNIR
+        basedir = '/Users/cocoanlab/Dropbox/PiCo2_sync/PiCo2_exp';
 end
 
 addpath(genpath(basedir));
