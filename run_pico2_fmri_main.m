@@ -1,6 +1,6 @@
 %% Set directory and register participant 
 clear;
-[basedir, sid, subject_dir] = pico2_directory_sub_info('dj_mac'); % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01'
+[basedir, sid, subject_dir] = pico2_directory_sub_info('hj_mac'); % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01'
 cd(basedir);
 
 %% Resting (N = 1, 2)
@@ -25,8 +25,8 @@ cd(basedir);
 words = pico2_wholewords(basedir, sid);
 
 %%
-% words{1,7} = '���̻�����ĥ��'; words{1,10} = '���̻�����ĥ�ȱ��ʽ��Ͻ���';
-survey = pico2_word_survey(basedir, sid, words, 'mgkey'); % if restart: use 'run_number', 2
+load('dims_anchor_korean.mat'); % load('dims_anchor_english.mat') 
+survey = pico2_word_survey(basedir, sid, words, dims, anchor, 'mgkey'); % if restart: use 'run_number', 2
 
 % todo: 1) if mistake, go back
 % todo: instruction, practice, run transition

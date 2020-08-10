@@ -12,7 +12,9 @@ data = cell(size(fname_words,1), 15);
 
 for r = 1:size(fname_words,1)
     load(fname_words{r});
-    data(r,:)=response;
+    if numel(response) == 15
+        data(r,:)=response;
+    end
 end
 
 words = data;
@@ -38,7 +40,9 @@ data = cell(size(fname_words,1), 15);
 
 for r = 1:size(fname_words,1)
     load(fname_words{r});
-    data(r,:)=response;
+    if numel(response) == 15
+        data(r,:)=response;
+    end
 end
 
 words = data;
