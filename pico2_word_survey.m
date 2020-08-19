@@ -261,7 +261,7 @@ Screen('CloseAll');
                 
                 Screen('TextSize', theWindow, fontsize(1));
                 clear new_word new_word_temp
-                if numel(temp_words{wc}) > 5
+                if numel(temp_words{wc}) > 12
                     if contains(temp_words{wc}, ' ')
                         new_word_temp = char(split(temp_words{wc}, ' '));
                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
