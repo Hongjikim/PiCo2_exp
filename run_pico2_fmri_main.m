@@ -1,16 +1,16 @@
 %% Set directory and register participant 
 clear;
-[basedir, sid, subject_dir] = pico2_directory_sub_info('hj_mac'); % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01'
+[basedir, sid, subject_dir] = pico2_directory_sub_info('exp_room'); % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01'
 cd(basedir);
 
 %% Resting (N = 1, 2)
 cd(basedir);
-pico2_fmri_resting(basedir, sid, 'biopac') % TR = 616 seconds (1340)
+pico2_fmri_resting(basedir, sid); %, 'biopac') % TR = 616 seconds (1340)
 
 %% FREE THINKING (N = 1, 2, 3, 4)
 
 cd(basedir);
-pico2_fmri_free_thinking(basedir, sid, 'biopac'); %, 'hs/dc' 
+pico2_fmri_free_thinking(basedir, sid); % , 'biopac'); %, 'hs/dc' 
 
 %% INPUT WORDS (N = 1, 2, 3, 4)
 
