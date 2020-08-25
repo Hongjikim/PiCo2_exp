@@ -1,4 +1,5 @@
-function words = pico2_editwords(basedir, sid)
+function seg_result = pico2_word_segmentation(basedir, sid)
+
 %%
 datdir = fullfile(basedir, 'data');
 subject_dir = filenames(fullfile(datdir, [sid, '*']), 'char');
@@ -46,4 +47,6 @@ for r = 1:size(fname_words,1)
 end
 
 words = data;
+
+seg_result
 

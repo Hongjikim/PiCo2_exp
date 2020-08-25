@@ -17,7 +17,7 @@ dims.msg = {'이 생각은 나와 관련이 있다.', '이 생각은 나에게 중요하다.', '이 생�
 mycolormap = [165,0,38; 215,48,39; 244,109,67; 253,174,97;
     254,224,144; 255,255,191; 224,243,248; 171,217,233;
     116,173,209; 69,117,180; 49,54,149]/255;
-mycolormap = cbrewer('div','Spectral',15);
+% mycolormap = cbrewer('div','Spectral',15);
 mycolormap = flip(mycolormap);
 %% subject-wise result
 
@@ -44,8 +44,8 @@ end
 %% group-wise result
 
 clf;
-
-basedir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
+basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
+% basedir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
 datdir = fullfile(basedir, 'data');
 
 subject_codes = {'coco006_psj', 'coco008_kjw', 'coco010_khb', 'coco011_lada'};
