@@ -122,7 +122,19 @@ for r = 1:row % row
     end
 end
 
-dim_order = randperm(numel(dims.name));
+% pseudo-randomize dimension orders
+dim_rule = {2:3, 7:9, 11:12, 13:14, 16:17, ...
+    1, 4, 5, 6, 10, 15, 18, 19};
+
+idx = randperm(length(dim_rule));
+dim_rule = dim_rule(idx);
+
+for ii = 1:length(dim_rule)    
+    dim_rule{ii} = dim_rule{ii}(randperm(length(dim_rule{ii})));
+end
+
+dim_order =cat(2,dim_rule{:});
+
 survey.dat.dim_order = dim_order;
 for run_i = run_number% start_run:1% size(words,1)
     
@@ -261,7 +273,7 @@ Screen('CloseAll');
                 
                 Screen('TextSize', theWindow, fontsize(1));
                 clear new_word new_word_temp
-                if numel(temp_words{wc}) > 12
+                if numel(temp_words{wc}) > 5
                     if contains(temp_words{wc}, ' ')
                         new_word_temp = char(split(temp_words{wc}, ' '));
                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];

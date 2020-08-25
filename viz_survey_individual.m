@@ -32,6 +32,6 @@ for sub = 1:4
     end
     
     subplot(2,2, sub)
-    scatter(new_dat(2,:)', new_dat(3,:)', [], cols(sub,:), 'filled'); lsline;
+    scatter(new_dat(13,:)', new_dat(14,:)', [], cols(sub,:), 'filled'); lsline;
     set(gcf, 'color', 'white');
 end
