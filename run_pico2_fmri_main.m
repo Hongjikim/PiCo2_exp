@@ -20,6 +20,9 @@ pico2_wordsampling(basedir, sid);
 %% edit words
 pico2_editwords(basedir, sid)
 
+%% word segmentation
+pico2_word_segmentation(basedir, sid);
+
 %% WORD SURVEY
 cd(basedir);
 words = pico2_wholewords(basedir, sid);

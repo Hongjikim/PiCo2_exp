@@ -1,4 +1,4 @@
-function pico2_word_segmentation(basedir, sid)
+function seg_result = pico2_word_segmentation(basedir, sid)
 
 %%
 datdir = fullfile(basedir, 'data');
@@ -22,11 +22,9 @@ words = data;
 
 target_run_words = words(run_num,:);
 
-all_add = []; clear temp_list
-count = 0 ;
+all_add = [];
 while true
-    count = count + 1;
-    if count == 1, string(target_run_words), end
+    string(target_run_words)
     clc; clear add_or_delete;
     add_or_delete = input('** 구분선을 더하고 싶으면 a를, 빼고 싶으면 d를 눌러주세요. (끝내고 싶을 땐 z를 눌러주세요.):', 's');
     [(1:numel(target_run_words))', string(target_run_words')]
@@ -57,24 +55,55 @@ while true
     % display current word list
     if numel(all_add) == 0
         temp_list = target_run_words(1:end);
-    elseif numel(all_add) == 1
-        temp_list = [target_run_words(1:all_add), '/', target_run_words(all_add+1:end)];
     else
         for i = 1:numel(all_add)
             if i == 1
                 temp_list = [target_run_words(1:all_add(i)), '/'];
             elseif i == numel(all_add)
-                temp_list = [temp_list, target_run_words(all_add(i-1)+1:all_add(i)), ...
-                    '/', target_run_words(all_add(i)+1:end)];
+                temp_list = [temp_list, target_run_words(all_add(i-1)), '/'];
             else
-                temp_list = [temp_list, target_run_words(all_add(i-1)+1:all_add(i)), '/'];
+                temp_list = [temp_list, target_run_words(all_add(i-1):all_add(i)), '/'];
+                string([target_run_words(1:3), '/'])
             end
         end
-    end
-    string(temp_list)
 end
-
-seg_result = temp_list;
-savename = fullfile(subject_dir, ['Word_Segmentation_run', num2str(run_num), '.mat']);
-
-save(savename, 'seg_result')
+        
+        edit_num = input('which word do you want to edit? (1-15 / e (end)): ', 's');
+        if ~strcmp(edit_num, 'e')
+            clear new_word
+            new_word = input(['what is the correct word for: ' char((target_run_words(str2num(edit_num)))) ' ?'], 's');
+            target_run_words{str2num(edit_num)} = new_word;
+        else
+            break
+        end
+    end
+    
+    % old
+    while true
+        [(1:numel(target_run_words))', string(target_run_words')]
+        edit_num = input('which word do you want to edit? (1-15 / e (end)): ', 's');
+        if ~strcmp(edit_num, 'e')
+            clear new_word
+            new_word = input(['what is the correct word for: ' char((target_run_words(str2num(edit_num)))) ' ?'], 's');
+            target_run_words{str2num(edit_num)} = new_word;
+        else
+            break
+        end
+    end
+    
+    response = target_run_words;
+    save(fname_words{run_num}, 'response')
+    
+    data = cell(size(fname_words,1), 15);
+    
+    for r = 1:size(fname_words,1)
+        load(fname_words{r});
+        if numel(response) == 15
+            data(r,:)=response;
+        end
+    end
+    
+    words = data;
+    
+    seg_result
+    
