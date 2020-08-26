@@ -91,7 +91,7 @@ screens = Screen('Screens');
 window_num = screens(end);
 Screen('Preference', 'SkipSyncTests', 1);
 window_info = Screen('Resolution', window_num);
-window_rect = [0 0 window_info.width window_info.height]; %
+window_rect = [0 0 window_info.width window_info.height] ; %
 
 W = window_rect(3); % width of screen
 H = window_rect(4); % height of screen
@@ -106,21 +106,13 @@ HideCursor;
 
 row = 3; column = 5;
 
-count_temp = 0 ;
-
-for r_response = 1:row % row
-    for c_response = 1:column % column
-        count_temp = count_temp+1;
-        temp_rc(count_temp,:) = [r_response, c_response];
-    end
-end
-
 Xgap = W/(column*2+2);
 Ygap = H/(row*2+2);
 
 y_len = 0.75; % half length of vertical lines
 
 % draw vertical lines and display target word
+
 
 for r = 1:row % row
     for c = 1:column % column
@@ -137,7 +129,7 @@ dim_rule = {2:3, 7:9, 11:12, 13:14, 16:17, ...
 idx = randperm(length(dim_rule));
 dim_rule = dim_rule(idx);
 
-for ii = 1:length(dim_rule)
+for ii = 1:length(dim_rule)    
     dim_rule{ii} = dim_rule{ii}(randperm(length(dim_rule{ii})));
 end
 
@@ -172,16 +164,6 @@ for run_i = run_number% start_run:1% size(words,1)
                     
                     draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
                     
-                    for ww = 1:word_count-1
-                        rcrc = temp_rc(ww,:);
-                        x3 = center_X(rcrc(1),rcrc(2)) - Xgap/2; % fix x coordinate (don't move)
-                        Screen('DrawDots', theWindow, [x3;y_collect(ww,:)], 9, orange, [0 0], 1);
-                    end
-                    
-                    %                     Screen('Flip', theWindow);
-                    
-                    %                     SetMouse(center_X(r_response,c_response), center_Y(r_response,c_response)+Ygap*y_len); % fix to zero point
-                    
                     [~, y, button] = GetMouse(theWindow);
                     
                     x = center_X(r_response,c_response) - Xgap/2; % fix x coordinate (don't move)
@@ -197,20 +179,32 @@ for run_i = run_number% start_run:1% size(words,1)
                     
                     Screen('Flip', theWindow);
                     
+                    %                     % if press 'b', go back one trial
+                    %                     if magic_keyboard
+                    %                         [~,~,keyCode]=PsychHID('KbCheck', 3);
+                    %                     else
+                    %                         [~,~,keyCode] = KbCheck;
+                    %                     end
+                    %
+                    %                     if keyCode(KbName('b'))==1
+                    %                         if c_response ~= 1
+                    %                             c_response = c_response - 1;
+                    %                         else % c_response == 1, r_response ~= 1
+                    %                             c_response = column; r_response = r_response - 1;
+                    %                         end
+                    %                         word_count = word_count - 1;
+                    %
+                    %                         draw_horizontal_lines(row,column, temp_words, target_dim);
+                    %                         Screen('Flip', theWindow);
+                    %                         WaitSecs(0.5);
+                    %                         break
+                    %                     end
+                    
                     if any(button)
-                        
                         draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
-                                                
-                        for ww = 1:word_count-1
-                            rcrc = temp_rc(ww,:);
-                            x3 = center_X(rcrc(1),rcrc(2)) - Xgap/2; % fix x coordinate (don't move)
-                            Screen('DrawDots', theWindow, [x3;y_collect(ww,:)], 9, orange, [0 0], 1);
-                        end
-                        
                         Screen('DrawDots', theWindow, [x;y], 12, red, [0 0], 1);
                         Screen('Flip', theWindow);
                         
-                        y_collect(word_count,1) = y;
                         survey.dat.response{dim_order(page_num)}(run_i, word_count) = ...
                             ((center_Y(r_response,c_response)+Ygap*y_len)-y)/(Ygap*y_len*2);
                         
@@ -228,6 +222,19 @@ for run_i = run_number% start_run:1% size(words,1)
     save(survey.surveyfile, 'survey');
 end
 save(survey.surveyfile, 'survey');
+
+
+
+% while (1)
+%     if magic_keyboard
+%         [~,~,keyCode]=PsychHID('KbCheck', 3);
+%     else
+%         [~,~,keyCode] = KbCheck;
+%     end
+%     if keyCode(KbName('space'))==1
+%         break
+%     end
+% end
 
 ShowCursor();
 Screen('Clear');
@@ -266,25 +273,14 @@ Screen('CloseAll');
                 
                 Screen('TextSize', theWindow, fontsize(1));
                 clear new_word new_word_temp
-                if numel(temp_words{wc}) > 6
+                if numel(temp_words{wc}) > 5
                     if contains(temp_words{wc}, ' ')
-                        new_word = strrep(temp_words{wc},' ','\n');
-%                         new_word_temp = char(split(temp_words{wc}, ' '));
-%                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
+                        new_word_temp = char(split(temp_words{wc}, ' '));
+                        new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
                     else % no space
-                        for sa = 1:floor(length(temp_words{wc})/5)
-                            temp{sa} = [temp_words{wc}(5*sa-4:5*sa), '\n'];
-                        end
-                        
-                        if mod(length(temp_words{wc}),5) ~=0
-                            temp{sa+1} = temp_words{wc}(5*sa+1:end);
-                        end
-                        
-                        new_word = cat(2,temp{:});
-                        
-%                         new_word_temp(1,:) = temp_words{wc}(1:ceil(numel(temp_words{wc})/2));
-%                         new_word_temp(2,:) = temp_words{wc}(ceil(numel(temp_words{wc})/2)+1:end);
-%                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
+                        new_word_temp(1,:) = temp_words{wc}(1:ceil(numel(temp_words{wc})/2));
+                        new_word_temp(2,:) = temp_words{wc}(ceil(numel(temp_words{wc})/2)+1:end);
+                        new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
                     end
                     DrawFormattedText(theWindow, double(new_word), center_X(r,c)-Xgap/4, center_Y(r,c), white);
                 else

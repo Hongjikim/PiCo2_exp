@@ -28,25 +28,25 @@ while true
     count = count + 1;
     if count == 1, string(target_run_words), end
     clc; clear add_or_delete;
-    add_or_delete = input('** ±¸ºĞ¼±À» ´õÇÏ°í ½ÍÀ¸¸é a¸¦, »©°í ½ÍÀ¸¸é d¸¦ ´­·¯ÁÖ¼¼¿ä. (³¡³»°í ½ÍÀ» ¶© z¸¦ ´­·¯ÁÖ¼¼¿ä.):', 's');
+    add_or_delete = input('** êµ¬ë¶„ì„ ì„ ë”í•˜ê³  ì‹¶ìœ¼ë©´ aë¥¼, ë¹¼ê³  ì‹¶ìœ¼ë©´ dë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”. (ëë‚´ê³  ì‹¶ì„ ë• zë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”.):', 's');
     [(1:numel(target_run_words))', string(target_run_words')]
     if strcmp(add_or_delete, 'a') % add
-        target_add = input('** ¸î ¹øÂ° ´Ü¾î µÚ¿¡ ±¸ºĞ¼±À» ´õÇÏ°í ½ÍÀ¸½Å°¡¿ä?(1-15): ');
+        target_add = input('** ëª‡ ë²ˆì§¸ ë‹¨ì–´ ë’¤ì— êµ¬ë¶„ì„ ì„ ë”í•˜ê³  ì‹¶ìœ¼ì‹ ê°€ìš”?(1-15): ');
         all_add = sort([all_add target_add]);
     elseif strcmp(add_or_delete, 'd') % delete
-        target_del = input('** ¸î ¹øÂ° ´Ü¾î µÚÀÇ ±¸ºĞ¼±À» »©°í ½ÍÀ¸½Å°¡¿ä?(1-15): ');
+        target_del = input('** ëª‡ ë²ˆì§¸ ë‹¨ì–´ ë’¤ì˜ êµ¬ë¶„ì„ ì„ ë¹¼ê³  ì‹¶ìœ¼ì‹ ê°€ìš”?(1-15): ');
         all_add(find(all_add==target_del)) = [];
         
     elseif strcmp(add_or_delete, 'z') % delete
         break;
     else % neither a or d, error
-        clc; add_or_delete = input('** Àß¸ø ´©¸£½Å °Í °°¾Æ¿ä. ±¸ºĞ¼±À» ´õÇÏ°í ½ÍÀ¸¸é a¸¦, »©°í ½ÍÀ¸¸é d¸¦ ´­·¯ÁÖ¼¼¿ä:', 's');
+        clc; add_or_delete = input('** ì˜ëª» ëˆ„ë¥´ì‹  ê²ƒ ê°™ì•„ìš”. êµ¬ë¶„ì„ ì„ ë”í•˜ê³  ì‹¶ìœ¼ë©´ aë¥¼, ë¹¼ê³  ì‹¶ìœ¼ë©´ dë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”:', 's');
         if strcmp(add_or_delete, 'a') % add
-            target_add = input('** ¸î ¹øÂ° ´Ü¾î µÚ¿¡ ±¸ºĞ¼±À» ´õÇÏ°í ½ÍÀ¸½Å°¡¿ä?: (1-15)', 's');
+            target_add = input('** ëª‡ ë²ˆì§¸ ë‹¨ì–´ ë’¤ì— êµ¬ë¶„ì„ ì„ ë”í•˜ê³  ì‹¶ìœ¼ì‹ ê°€ìš”?: (1-15)', 's');
             all_add = sort([all_add target_add]);
             
         elseif strcmp(add_or_delete, 'd') % delete
-            target_del = input('** ¸î ¹øÂ° ´Ü¾î µÚÀÇ ±¸ºĞ¼±À» »©°í ½ÍÀ¸½Å°¡¿ä?: (1-15)', 's');
+            target_del = input('** ëª‡ ë²ˆì§¸ ë‹¨ì–´ ë’¤ì˜ êµ¬ë¶„ì„ ì„ ë¹¼ê³  ì‹¶ìœ¼ì‹ ê°€ìš”?: (1-15)', 's');
             all_add(find(all_add==target_del)) = [];
             
         elseif strcmp(add_or_delete, 'z') % delete
