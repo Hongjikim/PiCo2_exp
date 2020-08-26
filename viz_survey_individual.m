@@ -4,12 +4,13 @@ clf; clear dat_all new_dat
 basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
 datdir = fullfile(basedir, 'data');
 
-list = {'coco006_psj', 'coco008_kjw', 'coco010_khb', 'coco011_lada'};
+list = {'coco001_hjw'};
+% list = {'coco006_psj', 'coco008_kjw', 'coco010_khb', 'coco011_lada'};
 
 load colormap_wani.mat
 cols = cols_14_wani([1, 5, 10, 12],:);
 
-for sub = 1:4
+for sub = 1:numel(list)
     
     subject_codes{1} = list{sub};
     
@@ -17,7 +18,7 @@ for sub = 1:4
     for sub_num = 1
         clear sub_dir; sub_dir = filenames(fullfile(datdir, subject_codes{sub_num}), 'char');
         clear survey_files; survey_files = filenames(fullfile(sub_dir, '*survey*run*.mat'));
-        for run = 1:numel(survey_files)
+        for run = 1:3%numel(survey_files)
             count = count+1;
             clear survey; load(survey_files{run});
             for dims_i = 1:numel(survey.dat.response)
@@ -32,6 +33,6 @@ for sub = 1:4
     end
     
     subplot(2,2, sub)
-    scatter(new_dat(13,:)', new_dat(14,:)', [], cols(sub,:), 'filled'); lsline;
+    scatter(new_dat(2,:)', new_dat(3,:)', [], cols(sub,:), 'filled'); lsline;
     set(gcf, 'color', 'white');
 end

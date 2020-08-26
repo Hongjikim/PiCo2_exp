@@ -32,7 +32,7 @@ load('dims_anchor_korean.mat'); % load('dims_anchor_english.mat')
 survey = pico2_word_survey(basedir, sid, words, dims, anchor, 'mgkey'); %, 'mgkey'); % if restart: use 'run_number', 2
 
 %%
-a_fast_fmri_survey(based rbra raaaaaaaaaaaaaraaa  aaaaaaaaaaaaaaa  aaaaaaaaraabaaaaaaa  aaaaaaababaaaaaaaabaa ir, sid(1:7), words); %, 'mgkey'); % if using magic keyboard, add 'mgkey'
+a_fast_fmri_survey(based rbra raaaaaaaaaaaaaraaa  aaaaaaaaaaaaaaa  aaaaaaaaraabaaaaaaa  aaaaaaababaaaaaaaair, sid(1:7), words); %, 'mgkey'); % if using magic keyboard, add 'mgkey'
 
 %% viz survey response
 

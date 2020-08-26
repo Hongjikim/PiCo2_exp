@@ -20,8 +20,10 @@ rng('shuffle');
 nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
+clear survey
+
 survey.subject = sid;
-survey.surveyfile = fullfile(savedir, ['surveydata_sub' sid '.mat']) ;
+survey.surveyfile = fullfile(savedir, [subjdate, '_surveydata_type2_' sid, '.mat']);
 survey.version = 'PICO2_v1_06-2020_Cocoanlab';
 survey.starttime = datestr(clock, 0);
 survey.starttime_getsecs = GetSecs;

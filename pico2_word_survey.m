@@ -19,6 +19,7 @@ run_number = input('which run do you want to run? (1, 2, 3, 4): ');
 nowtime = clock;
 subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
+clear survey
 survey.subject = sid;
 survey.surveyfile = fullfile(savedir, [subjdate, '_surveydata_' sid, '_run', num2str(run_number), '.mat']);
 survey.version = 'PICO2_v1_08-2020_Cocoanlab';
@@ -146,10 +147,14 @@ dim_order =cat(2,dim_rule{:});
 survey.dat.dim_order = dim_order;
 for run_i = run_number% start_run:1% size(words,1)
     
+    save(survey.surveyfile, 'survey');
+
     temp_words = words(run_i,:);
     
     for page_num = 1:numel(dims.name)
         
+        save(survey.surveyfile, 'survey');
+
         word_count = 0;
         
         if run_i == 1
@@ -219,11 +224,12 @@ for run_i = run_number% start_run:1% size(words,1)
                     end
                 end
             end
+            
         end
-        save(survey.surveyfile, 'survey');
         
         Screen('Flip', theWindow);
-        
+        save(survey.surveyfile, 'survey');
+
     end
     save(survey.surveyfile, 'survey');
 end

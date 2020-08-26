@@ -28,7 +28,7 @@ for run = 1:numel(survey_files)
     clear survey; dat{run} = load(survey_files{run});
 end
 figure;
-for run = 1:numel(survey_files)
+for run = 4 %1:numel(survey_files)
     for i = 1:numel(dat{run}.survey.dat.response)
         if ~isempty(dat{run}.survey.dat.response{i})
             subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
@@ -152,3 +152,27 @@ mycolormap = cbrewer('div','Spectral', length(sub011));
 for i = 1:length(sub011)
     s11(i).FaceColor = mycolormap(i,:);
 end
+
+%% type2 - individual result
+
+clf;
+
+survey_files = filenames(fullfile(pwd, '*survey*type2*.mat'));
+for run = 1:numel(survey_files)
+    clear survey; dat{run} = load(survey_files{run});
+end
+figure;
+
+
+load(survey_files{1});
+
+for i = 1:numel(dat{run}.survey.dat.response)
+        if ~isempty(dat{run}.survey.dat.response{i})
+            subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
+            title(dims.name{i}, 'FontSize', 15); hold on; box off;
+            %             ylim([-0.1, 1.1]);
+            set(gcf, 'color', 'white');
+            subplot(7,6,2*i), histogram(dat{run}.survey.dat.response{i}(run,:),30);
+            title(dims.name{i}, 'FontSize', 15); hold on;
+        end
+    end
