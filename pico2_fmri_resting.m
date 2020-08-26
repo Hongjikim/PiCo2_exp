@@ -341,7 +341,7 @@ data.resting.fixation_start_time = resting_sTime;
 
 rng('shuffle')
 
-resting_total_time = 10*60; % 10 minutes
+resting_total_time = 14*50+15; % 10 minutes
 
 Screen('TextSize', theWindow, fontsize(3));
 DrawFormattedText(theWindow, msg.fixation, 'center', 'center', text_color);
