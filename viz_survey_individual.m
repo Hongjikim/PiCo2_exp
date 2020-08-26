@@ -18,7 +18,7 @@ for sub = 1:numel(list)
     for sub_num = 1
         clear sub_dir; sub_dir = filenames(fullfile(datdir, subject_codes{sub_num}), 'char');
         clear survey_files; survey_files = filenames(fullfile(sub_dir, '*survey*run*.mat'));
-        for run = 1:3%numel(survey_files)
+        for run = 1:numel(survey_files)
             count = count+1;
             clear survey; load(survey_files{run});
             for dims_i = 1:numel(survey.dat.response)

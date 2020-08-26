@@ -28,7 +28,7 @@ for run = 1:numel(survey_files)
     clear survey; dat{run} = load(survey_files{run});
 end
 figure;
-for run = 4 %1:numel(survey_files)
+for run = 1:numel(survey_files)
     for i = 1:numel(dat{run}.survey.dat.response)
         if ~isempty(dat{run}.survey.dat.response{i})
             subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
