@@ -32,14 +32,15 @@ pico2_editwords(basedir, sid)
 %  -- Post-scan Ratings --  %
 %  -----------------------  %
 %% Type1: word segmentation
-cd(basedir); load('promt_kor3_event_seg.mat');
-pico2_post_type01_word_segmentation(basedir, sid, input_msg);
+cd(basedir); 
+pico2_post_type01_word_segmentation(basedir, sid);
 
 %% Type2: WORD SURVEY (19 dimensions)
 cd(basedir);
 words = pico2_wholewords(basedir, sid);
-load('dims_anchor_korean.mat'); % load('dims_anchor_english.mat') 
-survey = pico2_post_type02_word_survey(basedir, sid, words, dims, anchor, 'mgkey'); %, 'mgkey'); % if restart: use 'run_number', 2
+survey = pico2_post_type02_word_survey(basedir, sid, words, 'mgkey'); %, 'mgkey'); % if restart: use 'run_number', 2
 
 %% Type3: Word survey (5 dimensions + Bodymap)
+cd(basedir);
+words = pico2_wholewords(basedir, sid);
 pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); % if using magic keyboard, add 'mgkey'

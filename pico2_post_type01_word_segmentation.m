@@ -1,10 +1,12 @@
-function pico2_post_type01_word_segmentation(basedir, sid, input_msg)
+function pico2_post_type01_word_segmentation(basedir, sid)
 
 %%
 datdir = fullfile(basedir, 'data');
 subject_dir = filenames(fullfile(datdir, [sid, '*']), 'char');
 
 fname_words = filenames(fullfile(subject_dir, ['WORDS_*.mat']));
+
+load(fullfile(basedir, 'promt_kor3_event_seg.mat'));
 
 data = cell(size(fname_words,1), 15);
 
@@ -21,12 +23,19 @@ savename = fullfile(subject_dir, ['Post_rating01_word_seg_', sid, '.mat']);
 
 for run_num = numel(fname_words)
     
+    % To-Do
+    % display "this is nth runs"
+    % for loop for 4 runs
+    
+    start = false;
+    
     clear target_run_words
     target_run_words = words(run_num,:);
     
     all_add = []; clear temp_list
     count = 0 ;
-    while true
+    
+    while ~start
         count = count + 1;
         if count == 1, string(target_run_words), end
         clc; clear add_or_delete;
@@ -52,7 +61,7 @@ for run_num = numel(fname_words)
                 all_add(find(all_add==target_del)) = [];
                 
             elseif strcmp(add_or_delete, 'z') % delete
-                break;
+                break; start = true;
             end
         end
         

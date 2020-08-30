@@ -23,7 +23,7 @@ subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 clear survey
 
 survey.subject = sid;
-survey.surveyfile = fullfile(savedir, [subjdate, '_surveydata_type2_' sid, '.mat']);
+survey.surveyfile = fullfile(savedir, ['Post_rating03_fast_' sid, '.mat']);
 survey.version = 'PICO2_v1_06-2020_Cocoanlab';
 survey.starttime = datestr(clock, 0);
 survey.starttime_getsecs = GetSecs;
@@ -36,7 +36,7 @@ if exist(survey.surveyfile, 'file')
     if cont_or_not == 2
         error('Breaked.')
     elseif cont_or_not == 1
-        copy_fname = fullfile(savedir, ['surveydata_sub' sid '_copy.mat']);
+        copy_fname = fullfile(savedir, ['Post_rating03_fast_' sid, '_copy.mat']);
         copyfile(survey.surveyfile, copy_fname);
         save(survey.surveyfile, 'survey');
     end
@@ -125,7 +125,7 @@ if ~practice_mode % if not practice mode, save the data
         % add some task information
         survey.subject = sid;
         survey.wordfile = fullfile(savedir, ['WORDSAMPLING_' sid '_run1.mat']);
-        survey.surveyfile = fullfile(savedir, ['surveydata_sub' sid '.mat']);
+%         survey.surveyfile = fullfile(savedir, ['surveydata_sub' sid '.mat']);
         survey.dat_descript = {'survey.dat{ft_run_i, target_i}';'6 Questions'; '1:Valence'; '2:Self-relevance'; '3:Time'; '4:Vividness'; '5:SafetyThreat'; '6:Bodymap'};
         survey.body_xy = [body_x body_y];     % coordinate inside of body
         survey.words = words;
@@ -146,7 +146,7 @@ Screen('TextFont', theWindow, font);
 Screen('TextSize', theWindow, fontsize);
 HideCursor;
 
-load('promt_kor.mat');
+load(fullfile(basedir, 'promt_kor.mat'));
 
 %% PRACTICE
 if numel(start_line) == 1  % if restart, skip the practice

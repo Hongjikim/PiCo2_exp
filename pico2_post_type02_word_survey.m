@@ -1,14 +1,17 @@
-function survey = pico2_post_type02_word_survey(basedir, sid, words, dims, anchor, varargin)
+function survey = pico2_post_type02_word_survey(basedir, sid, words, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;
 % sid = input('Subject ID? (e.g., coco001_khj): ', 's');
 subject_dir = filenames(fullfile(datdir, sid), 'char');
+sid_orig = sid;
 [~, sid] = fileparts(subject_dir);
 
 testmode = false;
 practice_mode = false;
 savedir = subject_dir;
+
+load(fullfile(basedir, 'dims_anchor_korean.mat'));
 
 rng('shuffle');
 
@@ -21,7 +24,7 @@ subjdate = sprintf('%.2d%.2d%.2d', nowtime(1), nowtime(2), nowtime(3));
 
 clear survey
 survey.subject = sid;
-survey.surveyfile = fullfile(savedir, [subjdate, '_surveydata_' sid, '_run', num2str(run_number), '.mat']);
+survey.surveyfile = fullfile(savedir, ['Post_rating02_19_dims_' sid_orig, '_run', num2str(run_number,'%.2d'), '.mat']);
 survey.version = 'PICO2_v1_08-2020_Cocoanlab';
 survey.starttime = datestr(clock, 0);
 survey.starttime_getsecs = GetSecs;
@@ -34,7 +37,7 @@ if exist(survey.surveyfile, 'file')
     if cont_or_not == 2
         error('Breaked.')
     elseif cont_or_not == 1
-        copy_fname = fullfile(savedir, ['surveydata_sub' sid '_copy.mat']);
+        copy_fname = fullfile(savedir, ['Post_rating02_19_dims_' sid_orig, '_run', num2str(run_number,'%.2d'), '_copy.mat']);
         copyfile(survey.surveyfile, copy_fname);
         save(survey.surveyfile, 'survey');
     end
@@ -145,35 +148,64 @@ end
 dim_order =cat(2,dim_rule{:});
 
 survey.dat.dim_order = dim_order;
-for run_i = run_number% start_run:1% size(words,1)
+
+run_i = run_number;
+% for run_i = run_number% start_run:1% size(words,1)
+
+temp_words = words(run_i,:);
+
+for page_num = 1:numel(dims.name)
     
     save(survey.surveyfile, 'survey');
-
-    temp_words = words(run_i,:);
     
-    for page_num = 1:numel(dims.name)
-        
-        save(survey.surveyfile, 'survey');
-
-        word_count = 0;
-        
-        if run_i == 1
-            survey.dat.response{dim_order(page_num)} = nan(size(words));
-        end
-        
-        target_dim = dims.msg{dim_order(page_num)};
-        target_dim_num = dim_order(page_num);
-        survey.dat.dim_type{dim_order(page_num)} = target_dim;
-        
-        for r_response = 1:row % row
-            for c_response = 1:column % column
+    word_count = 0;
+    
+    if run_i == 1
+        survey.dat.response{dim_order(page_num)} = nan(size(words));
+    end
+    
+    target_dim = dims.msg{dim_order(page_num)};
+    target_dim_num = dim_order(page_num);
+    survey.dat.dim_type{dim_order(page_num)} = target_dim;
+    
+    for r_response = 1:row % row
+        for c_response = 1:column % column
+            
+            word_count = word_count + 1;
+            button = [];
+            
+            SetMouse(center_X(r_response,c_response), center_Y(r_response,c_response)+Ygap*y_len); % fix to zero point
+            
+            while ~any(button)
                 
-                word_count = word_count + 1;
-                button = [];
+                draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
                 
-                SetMouse(center_X(r_response,c_response), center_Y(r_response,c_response)+Ygap*y_len); % fix to zero point
+                for ww = 1:word_count-1
+                    rcrc = temp_rc(ww,:);
+                    x3 = center_X(rcrc(1),rcrc(2)) - Xgap/2; % fix x coordinate (don't move)
+                    Screen('DrawDots', theWindow, [x3;y_collect(ww,:)], 9, orange, [0 0], 1);
+                end
                 
-                while ~any(button)
+                %                     Screen('Flip', theWindow);
+                
+                %                     SetMouse(center_X(r_response,c_response), center_Y(r_response,c_response)+Ygap*y_len); % fix to zero point
+                
+                [~, y, button] = GetMouse(theWindow);
+                
+                x = center_X(r_response,c_response) - Xgap/2; % fix x coordinate (don't move)
+                
+                % prevent moving outside of the cell
+                if y > center_Y(r_response,c_response) + Ygap*y_len
+                    y = center_Y(r_response,c_response) + Ygap*y_len; SetMouse(x,y);
+                elseif y < center_Y(r_response,c_response) - Ygap*y_len
+                    y = center_Y(r_response,c_response) - Ygap*y_len; SetMouse(x,y);
+                end
+                
+                Screen('DrawDots', theWindow, [x;y], 9, orange, [0 0], 1);
+                
+                Screen('Flip', theWindow);
+                
+                if any(button)
                     
                     draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
                     
@@ -183,66 +215,30 @@ for run_i = run_number% start_run:1% size(words,1)
                         Screen('DrawDots', theWindow, [x3;y_collect(ww,:)], 9, orange, [0 0], 1);
                     end
                     
-                    %                     Screen('Flip', theWindow);
-                    
-                    %                     SetMouse(center_X(r_response,c_response), center_Y(r_response,c_response)+Ygap*y_len); % fix to zero point
-                    
-                    [~, y, button] = GetMouse(theWindow);
-                    
-                    x = center_X(r_response,c_response) - Xgap/2; % fix x coordinate (don't move)
-                    
-                    % prevent moving outside of the cell
-                    if y > center_Y(r_response,c_response) + Ygap*y_len
-                        y = center_Y(r_response,c_response) + Ygap*y_len; SetMouse(x,y);
-                    elseif y < center_Y(r_response,c_response) - Ygap*y_len
-                        y = center_Y(r_response,c_response) - Ygap*y_len; SetMouse(x,y);
-                    end
-                    
-                    Screen('DrawDots', theWindow, [x;y], 9, orange, [0 0], 1);
-                    
+                    Screen('DrawDots', theWindow, [x;y], 12, red, [0 0], 1);
                     Screen('Flip', theWindow);
                     
-                    if any(button)
-                        
-                        draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
-                                                
-                        for ww = 1:word_count-1
-                            rcrc = temp_rc(ww,:);
-                            x3 = center_X(rcrc(1),rcrc(2)) - Xgap/2; % fix x coordinate (don't move)
-                            Screen('DrawDots', theWindow, [x3;y_collect(ww,:)], 9, orange, [0 0], 1);
-                        end
-                        
-                        Screen('DrawDots', theWindow, [x;y], 12, red, [0 0], 1);
-                        Screen('Flip', theWindow);
-                        
-                        y_collect(word_count,1) = y;
-                        survey.dat.response{dim_order(page_num)}(run_i, word_count) = ...
-                            ((center_Y(r_response,c_response)+Ygap*y_len)-y)/(Ygap*y_len*2);
-                        
-                        WaitSecs(0.5);
-                        break
-                    end
+                    y_collect(word_count,1) = y;
+                    survey.dat.response{dim_order(page_num)}(run_i, word_count) = ...
+                        ((center_Y(r_response,c_response)+Ygap*y_len)-y)/(Ygap*y_len*2);
+                    
+                    WaitSecs(0.5);
+                    break
                 end
             end
-            
         end
         
-        Screen('Flip', theWindow);
-        save(survey.surveyfile, 'survey');
-
     end
+    
     save(survey.surveyfile, 'survey');
+    WaitSecs(0.5); Screen('Flip', theWindow);
+    
 end
 save(survey.surveyfile, 'survey');
 
 ShowCursor();
 Screen('Clear');
 Screen('CloseAll');
-
-%
-%
-% frameDuration = Screen('GetFlipInterval', theWindow);
-% fliptime = Screen('Flip', theWindow);
 
     function draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor)
         
@@ -275,8 +271,8 @@ Screen('CloseAll');
                 if numel(temp_words{wc}) > 6
                     if contains(temp_words{wc}, ' ')
                         new_word = strrep(temp_words{wc},' ','\n');
-%                         new_word_temp = char(split(temp_words{wc}, ' '));
-%                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
+                        %                         new_word_temp = char(split(temp_words{wc}, ' '));
+                        %                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
                     else % no space
                         for sa = 1:floor(length(temp_words{wc})/5)
                             temp{sa} = [temp_words{wc}(5*sa-4:5*sa), '\n'];
@@ -288,9 +284,9 @@ Screen('CloseAll');
                         
                         new_word = cat(2,temp{:});
                         
-%                         new_word_temp(1,:) = temp_words{wc}(1:ceil(numel(temp_words{wc})/2));
-%                         new_word_temp(2,:) = temp_words{wc}(ceil(numel(temp_words{wc})/2)+1:end);
-%                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
+                        %                         new_word_temp(1,:) = temp_words{wc}(1:ceil(numel(temp_words{wc})/2));
+                        %                         new_word_temp(2,:) = temp_words{wc}(ceil(numel(temp_words{wc})/2)+1:end);
+                        %                         new_word = [new_word_temp(1,:) '\n' deblank(new_word_temp(2,:))];
                     end
                     DrawFormattedText(theWindow, double(new_word), center_X(r,c)-Xgap/4, center_Y(r,c), white);
                 else
