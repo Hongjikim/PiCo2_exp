@@ -1,4 +1,4 @@
-function survey = a_fast_fmri_survey(basedir, sid, words, varargin)
+function survey = pico2_post_type03_fast_word_survey(basedir, sid, words, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;

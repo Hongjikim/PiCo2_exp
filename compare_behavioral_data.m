@@ -2,6 +2,8 @@
 
 inscanner = cell(4,5); %(5, 6); % 어차피 1개 단어
 filenames = {'20200826_coco001_HJW_resting_run01.mat', '20200826_coco001_HJW_FT_run01.mat', '20200826_coco001_HJW_FT_run02.mat', '20200826_coco001_HJW_FT_run03.mat', '20200826_coco001_HJW_FT_run04.mat', '20200826_coco001_HJW_resting_run02.mat'};
+% hj's feedback: Instead of hard-coding, use 'fullfile' and 'filenames' to get those files so that
+% you can use this code for other participants as well
 
 for i = 1:4 %6 % 6 runs (pre-resting, 1-4, post-resting)
     for j = 1:5 % valence / self / time / vivid / safety&threat
