@@ -23,12 +23,12 @@ mycolormap = flip(mycolormap);
 
 clf;
 
-survey_files = filenames(fullfile(pwd, '*survey*run*.mat'));
+survey_files = filenames(fullfile(pwd, '*rating02_19_dims*.mat'));
 for run = 1:numel(survey_files)
     clear survey; dat{run} = load(survey_files{run});
 end
 figure;
-for run = 1:numel(survey_files)
+for run = 3 %1:numel(survey_files)
     for i = 1:numel(dat{run}.survey.dat.response)
         if ~isempty(dat{run}.survey.dat.response{i})
             subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
@@ -167,12 +167,23 @@ figure;
 load(survey_files{1});
 
 for i = 1:numel(dat{run}.survey.dat.response)
-        if ~isempty(dat{run}.survey.dat.response{i})
-            subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
-            title(dims.name{i}, 'FontSize', 15); hold on; box off;
-            %             ylim([-0.1, 1.1]);
-            set(gcf, 'color', 'white');
-            subplot(7,6,2*i), histogram(dat{run}.survey.dat.response{i}(run,:),30);
-            title(dims.name{i}, 'FontSize', 15); hold on;
-        end
+    if ~isempty(dat{run}.survey.dat.response{i})
+        subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
+        title(dims.name{i}, 'FontSize', 15); hold on; box off;
+        %             ylim([-0.1, 1.1]);
+        set(gcf, 'color', 'white');
+        subplot(7,6,2*i), histogram(dat{run}.survey.dat.response{i}(run,:),30);
+        title(dims.name{i}, 'FontSize', 15); hold on;
     end
+end
+
+%% event segmentation
+
+seg_files = filenames(fullfile(pwd, '*rating01*word_seg*.mat'));
+load(seg_files{1});
+
+for run = 1:numel(seg_result)
+    event_number(run,1) = (numel(seg_result{run}) - 15 + 1);
+    a = find(count(seg_result{run}, '/'));
+    event_size{run} = [a(1)-1 diff(a)-1 numel(seg_result{run})-a(end)];
+end

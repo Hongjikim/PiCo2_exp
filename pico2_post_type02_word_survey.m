@@ -11,8 +11,6 @@ testmode = false;
 practice_mode = false;
 savedir = subject_dir;
 
-load(fullfile(basedir, 'dims_anchor_korean.mat'));
-
 rng('shuffle');
 
 run_number = input('which run do you want to run? (1, 2, 3, 4): ');
@@ -73,7 +71,9 @@ end
 global theWindow W H; % window property
 global white red orange blue bgcolor ; % color
 global fontsize window_rect lb tb bodymap recsize barsize rec; % rating scale
-global center_X center_Y Xgap Ygap y_len anchor
+global center_X center_Y Xgap Ygap y_len dims anchor
+
+load(fullfile(basedir, 'dims_anchor_korean.mat'));
 
 bgcolor = 100;
 
@@ -84,8 +84,6 @@ white = 255;
 red = [189 0 38];
 blue = [0 85 169];
 orange = [255 164 0];
-
-
 
 % [dims.name' dims.msg']
 
@@ -296,7 +294,6 @@ Screen('CloseAll');
                 % draw horizontal lines
                 line_coordinate = [center_X(r,c) - Xgap/2, center_X(r,c) - Xgap/2; center_Y(r,c) + Ygap*y_len, center_Y(r,c) - Ygap*y_len];
                 Screen('DrawLines', theWindow, line_coordinate, 3, white, [0 0]);
-                
             end
             
         end
