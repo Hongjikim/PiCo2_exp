@@ -98,7 +98,7 @@ barsizeO=[W*340/1280, W*180/1280, W*340/1280, W*180/1280, W*340/1280, 0;
     10, 10, 10, 10, 10, 0; 10, 0, 10, 0, 10, 0;
     10, 10, 10, 10, 10, 0; 1, 2, 3, 4, 5, 0];
 rec=[lb,tb; lb+recsize(1),tb; lb,tb+recsize(2); lb+recsize(1),tb+recsize(2);
-    lb,tb+2*recsize(2); lb+recsize(1),tb+2*recsize(2)]; %6�� �簢���� ���� �� �������� ��ǥ
+    lb,tb+2*recsize(2); lb+recsize(1),tb+2*recsize(2)]; 
 
 bodymap = imread('imgs/bodymap_bgcolor.jpg');
 bodymap = bodymap(:,:,1);

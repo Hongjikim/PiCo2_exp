@@ -1,4 +1,4 @@
-function survey = pico2_post_type02_word_survey(basedir, sid, words, varargin)
+function survey = pico2_post_type02_word_survey_v1(basedir, sid, words, varargin)
 %% default setting
 
 datdir = fullfile(basedir, 'data') ;
@@ -176,7 +176,7 @@ for page_num = 1:numel(dims.name)
             
             while ~any(button)
                 
-                draw_vertical_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
+                draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
                 
                 for ww = 1:word_count-1
                     rcrc = temp_rc(ww,:);
@@ -205,7 +205,7 @@ for page_num = 1:numel(dims.name)
                 
                 if any(button)
                     
-                    draw_vertical_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
+                    draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor);
                     
                     for ww = 1:word_count-1
                         rcrc = temp_rc(ww,:);
@@ -238,7 +238,7 @@ ShowCursor();
 Screen('Clear');
 Screen('CloseAll');
 
-    function draw_vertical_lines(row,column, temp_words, target_dim, target_dim_num, anchor)
+    function draw_horizontal_lines(row,column, temp_words, target_dim, target_dim_num, anchor)
         
         %         global words center_X center_Y white Xgap Ygap y_len
         
@@ -291,7 +291,7 @@ Screen('CloseAll');
                     DrawFormattedText(theWindow, double(temp_words{wc}), center_X(r,c)-Xgap/4, center_Y(r,c), white);
                 end
                 
-                % draw vertical lines
+                % draw horizontal lines
                 line_coordinate = [center_X(r,c) - Xgap/2, center_X(r,c) - Xgap/2; center_Y(r,c) + Ygap*y_len, center_Y(r,c) - Ygap*y_len];
                 Screen('DrawLines', theWindow, line_coordinate, 3, white, [0 0]);
             end

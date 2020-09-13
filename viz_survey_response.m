@@ -3,7 +3,7 @@
 %     '빈도', '안전', '위협', '시각적 형상', '텍스트성', '강도/세기', '구체성/선명도', '추상정/관념성', ...
 %     '자발성', '목표'};
 
-dims.name = {'self-relevance', 'positive', 'negetive', 'importance/value', 'social', 'centrality', 'past', 'present', 'future' ...
+dims.name = {'self-relevance', 'positive', 'negative', 'importance/value', 'social', 'centrality', 'past', 'present', 'future' ...
     'frequency', 'safe', 'threat', 'imagery', 'word', 'intensity', 'detail(vivid)', ...
     'abstract', 'spontaneous', 'deliberate(goal)'};
 
@@ -28,7 +28,7 @@ for run = 1:numel(survey_files)
     clear survey; dat{run} = load(survey_files{run});
 end
 figure;
-for run = 3 %1:numel(survey_files)
+for run = 1:numel(survey_files)
     for i = 1:numel(dat{run}.survey.dat.response)
         if ~isempty(dat{run}.survey.dat.response{i})
             subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
