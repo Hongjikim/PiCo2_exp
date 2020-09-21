@@ -35,7 +35,7 @@ if exist(survey.surveyfile, 'file')
     if cont_or_not == 2
         error('Breaked.')
     elseif cont_or_not == 1
-        copy_fname = fullfile(savedir, ['Post_rating02_19_dims_' sid_orig, '_run', num2str(run_number,'%.2d'), '_copy.mat']);
+        copy_fname = fullfile(savedir, ['Post_rating_copy_02_19_dims_' sid_orig, '_run', num2str(run_number,'%.2d'), '_copy.mat']);
         copyfile(survey.surveyfile, copy_fname);
         save(survey.surveyfile, 'survey');
     end

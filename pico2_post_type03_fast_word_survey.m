@@ -9,9 +9,7 @@ subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 testmode = false;
 practice_mode = false;
 savedir = subject_dir;
-%psychtoolboxdir = '/Users/byeoletoile/Documents/MATLAB/Psychtoolbox';
 
-% addpath(genpath(psychtoolboxdir));
 addpath(genpath(pwd));
 rng('shuffle');
 
@@ -69,6 +67,10 @@ global white red orange blue bgcolor ; % color
 global fontsize window_rect lb tb bodymap recsize barsize rec; % rating scale
 
 %% SETUP: Screen
+
+% keyboard setup
+device(1).product = 'Magic Keyboard';   % imac vcnl (short keyboard)
+device(1).vendorID= 1452;
 
 bgcolor = 100;
 
@@ -130,7 +132,7 @@ if ~practice_mode % if not practice mode, save the data
         survey.body_xy = [body_x body_y];     % coordinate inside of body
         survey.words = words;
         survey.exp_starttime = datestr(clock, 0); % date-time: timestamp of first start
-        survey.dat = cell(size(words,2), size(words,1));  % 15x3 cell
+        survey.dat = cell(size(words,1), size(words,2));  % 15x4 cell
         save(survey.surveyfile, 'survey');
     end
 end
@@ -175,6 +177,18 @@ if numel(start_line) == 1  % if restart, skip the practice
     end
     
     z = randperm(6);
+    
+    % try try try
+    barsize_customized = H/(3*2+2)*0.75*2;
+    
+    for bs = 1:5
+        if mod(bs,2) == 1 % odd number
+            barsizeO(1,bs) = barsize_customized*2;
+        else % even number
+            barsizeO(1,bs) = barsize_customized;
+        end
+    end
+    
     barsize = barsizeO(:,z);
     
     for j=1:numel(z)

@@ -26,7 +26,7 @@ while true
     edit_num = input('which word do you want to edit? (1-15 / e (end)): ', 's');
     if ~strcmp(edit_num, 'e')
         clear new_word
-        new_word = input(['what is the correct word for: ' char((target_run_words(str2num(edit_num)))) ' ?'], 's');
+        new_word = input(['what is the correct word for ' char((target_run_words(str2num(edit_num)))) ' ?: '], 's');
         target_run_words{str2num(edit_num)} = new_word;
     else
         break

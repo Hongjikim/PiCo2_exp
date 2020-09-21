@@ -195,27 +195,15 @@ subdir_all = filenames(fullfile(datdir, 'coco0*'));
 
 for sub_i = 1:numel(subdir_all)
     % in-scanner ft
-    ft_files = filenames(fullfile(subdir_all{sub_i}, '*FT_run0*.mat'));
-    type2_files = filenames(fullfile(subdir_all{sub_i}, '*rating02_19*.mat')); % out-scanner type2 (19 dims)
-%     type3_files = filenames(
+    ft_files=filenames(fullfile(subdir_all{sub_i}, '*FT_run0*.mat'));
     for run_i = 1:numel(ft_files)
         clear data; load(ft_files{run_i});
         for dim = 1:5
-            in_scanner{sub_i}(run_i,dim) = data.postrunQ.dat{dim}.rating;
-        end
-        clear survey; load(type2_files{run_i});
-        % type2
-        % 1: self-relevance, 9: positive, 10: negative,
-        % 11: safe, 12: threat, 16: vivid (concrete)
-        target = [1, 9, 10, 11, 12, 16];
-        count = 0;
-        for t = 1:numel(target)
-            count = count + 1;
-            out_scanner.type2{sub_i}(run_i, count) = survey.dat.response{1}(run_i,end);
+           post_rating{sub_i}(run_i,dim) = data.postrunQ.dat{dim}.rating;
         end
     end
-    
-    
-    
+    % out-scanner type2 (19 dims)
+        type2_=filenames(fullfile(subdir_all{sub_i}, '*FT_run0*.mat'));
+
     % out-scanner type3 (5 dims)
 end
