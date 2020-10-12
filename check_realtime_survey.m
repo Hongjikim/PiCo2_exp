@@ -6,6 +6,7 @@ datdir = fullfile(basedir, 'data');
 sub_i = input('Subject number? (1,2,3):');
 sub_dir = filenames(fullfile(datdir, ['coco', sprintf('%.3d',sub_i), '*']), 'char');
 
+%%
 dims.name = {'self-relevance', 'positive', 'negative', 'importance/value', 'social', 'centrality', 'past', 'present', 'future' ...
     'frequency', 'safe', 'threat', 'imagery', 'word', 'intensity', 'detail(vivid)', ...
     'abstract', 'spontaneous', 'deliberate(goal)'};

@@ -41,7 +41,7 @@ words = pico2_wholewords(basedir, sid);
 survey = pico2_post_type02_word_survey(basedir, sid, words); % , 'mgkey'); %, 'mgkey'); %, 'mgkey'); % if restart: use 'run_number', 2
 
 %% Type3: Word survey (5 dimensions + Bodymap)
-cd(basedir);   rba araraaabraaraababaarabaa  raraararabaaaaaaaaaa  aaaaararaaraaaaaaa  rabbaaaaaraaaaaabaaa 
+cd(basedir);   rba araraaabraaraababaarabaa  raraararabaaaaaaaaaa  aaaaararaaraaaaaaa  rab
 words = pico2_wholewords(basedir, sid); 
 pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); % if  ra   baaraaaabaqsca
   
