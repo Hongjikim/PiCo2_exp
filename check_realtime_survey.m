@@ -1,7 +1,10 @@
-%%
-% dims.name = {'자기 관련도', '긍정', '부정', '중요도', '관계성', '중심성', '과거', '현재', '미래', ...
-%     '빈도', '안전', '위협', '시각적 형상', '텍스트성', '강도/세기', '구체성/선명도', '추상정/관념성', ...
-%     '자발성', '목표'};
+%% while the participant is answering, please check the real-time answers
+
+basedir = pwd; %'/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
+datdir = fullfile(basedir, 'data');
+
+sub_i = input('Subject number? (1,2,3):');
+sub_dir = filenames(fullfile(datdir, ['coco', sprintf('%.3d',sub_i), '*']), 'char');
 
 dims.name = {'self-relevance', 'positive', 'negative', 'importance/value', 'social', 'centrality', 'past', 'present', 'future' ...
     'frequency', 'safe', 'threat', 'imagery', 'word', 'intensity', 'detail(vivid)', ...
@@ -19,24 +22,29 @@ mycolormap = [165,0,38; 215,48,39; 244,109,67; 253,174,97;
     116,173,209; 69,117,180; 49,54,149]/255;
 % mycolormap = cbrewer('div','Spectral',15);
 mycolormap = flip(mycolormap);
-%% subject-wise result
+
+% subject-wise result
 
 clf; close all;
 
-survey_files = filenames(fullfile(pwd, '*rating02_19_dims*.mat'));
+survey_files = filenames(fullfile(sub_dir, '*rating02_19_dims*.mat'));
 for run = 1:numel(survey_files)
     clear survey; dat{run} = load(survey_files{run});
 end
+
 figure;
+
 for run = 1:numel(survey_files)
-    for i = 1:numel(dat{run}.survey.dat.response)
-        if ~isempty(dat{run}.survey.dat.response{i})
-            subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
-            title(dims.name{i}, 'FontSize', 15); hold on; box off;
-            %             ylim([-0.1, 1.1]);
-            set(gcf, 'color', 'white');
-            subplot(7,6,2*i), histogram(dat{run}.survey.dat.response{i}(run,:),30);
-            title(dims.name{i}, 'FontSize', 15); hold on;
+    if sum(strcmp(fields(dat{run}.survey), 'dat')) == 1
+        for i = 1:numel(dat{run}.survey.dat.response)
+            if ~isempty(dat{run}.survey.dat.response{i})
+                subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
+                title(dims.name{i}, 'FontSize', 15); hold on; box off;
+                %             ylim([-0.1, 1.1]);
+                set(gcf, 'color', 'white');
+                subplot(7,6,2*i), histogram(dat{run}.survey.dat.response{i}(run,:),30);
+                title(dims.name{i}, 'FontSize', 15); hold on;
+            end
         end
     end
 end
@@ -195,15 +203,53 @@ subdir_all = filenames(fullfile(datdir, 'coco0*'));
 
 for sub_i = 1:numel(subdir_all)
     % in-scanner ft
-    ft_files=filenames(fullfile(subdir_all{sub_i}, '*FT_run0*.mat'));
+    ft_files = filenames(fullfile(subdir_all{sub_i}, '*FT_run0*.mat'));
+    type2_files = filenames(fullfile(subdir_all{sub_i}, '*rating02_19_dims_coco*.mat')); % out-scanner type2 (19 dims)
+    type3_files = filenames(fullfile(subdir_all{sub_i}, '*rating03_fast*.mat')); % out-scanner type3 (5 dims)
+    type3_dat = load(type3_files{1});
     for run_i = 1:numel(ft_files)
         clear data; load(ft_files{run_i});
         for dim = 1:5
-           post_rating{sub_i}(run_i,dim) = data.postrunQ.dat{dim}.rating;
+            in_scanner{sub_i}(run_i,dim) = data.postrunQ.dat{dim}.rating;
+            out_scanner.type3{sub_i}(run_i,dim) = type3_dat.survey.dat{run_i,15}{dim}.rating;
+        end
+        clear survey; load(type2_files{run_i});
+        % type2
+        % 1: self-relevance, 9: positive, 10: negative,
+        % 11: safe, 12: threat, 16: vivid (concrete)
+        target = [1, 9, 10, 11, 12, 16];
+        count = 0;
+        for t = 1:numel(target)
+            count = count + 1;
+            out_scanner.type2{sub_i}(run_i, count) = survey.dat.response{target(t)}(run_i,end);
         end
     end
-    % out-scanner type2 (19 dims)
-        type2_=filenames(fullfile(subdir_all{sub_i}, '*FT_run0*.mat'));
-
-    % out-scanner type3 (5 dims)
 end
+
+res.in_scanner = in_scanner;
+res.out_scanner = out_scanner;
+%%
+% sub_i = 1; clear a b c
+
+a = []; b = []; c = [];
+
+for sub_i = 8% [1:6, 8:9]
+    a = [a; res.in_scanner{sub_i}]; % 4 runs * 5 dims
+    b = [b; res.out_scanner.type2{sub_i}]; % 4 runs * 6 dims
+    c = [c; res.out_scanner.type3{sub_i}]; % 4 runs * 5 dims
+end
+
+%
+close all;
+for dim = 1:5
+    subplot(2,3,dim);
+    s = scatter(a(:,dim), c(:,dim), 'filled'); lsline;
+    s.MarkerFaceAlpha = 0.8;
+    [r,p] = corr(a(:,dim), c(:,dim));
+    title(['r = ', num2str(r,3), ', p = ', num2str(p,3)]);
+end
+
+%%
+% type2
+% 1: self-relevance, 9: positive, 10: negative,
+% 11: safe, 12: threat, 16: vivid (concrete)

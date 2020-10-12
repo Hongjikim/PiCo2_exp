@@ -8,7 +8,7 @@ addpath(genpath(pwd));
 %% Bar graph
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:6); % select manually
+subnames = subnames(5:17); % select manually
 
 for sub_i = 1:numel(subnames)
     
@@ -143,9 +143,9 @@ end
 
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:6); % select manually
+subnames = subnames(5:20); % select manually
 
-for sub_i = 1:2 %numel(subnames)
+for sub_i = 1:numel(subnames)
     sub_dir = fullfile(datdir, subnames{sub_i});
     mr_run = filenames(fullfile(sub_dir, '*_FT_run*.mat'));
     post_type1 = filenames(fullfile(sub_dir, '*_rating01_word*.mat'));
