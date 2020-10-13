@@ -19,6 +19,7 @@ subnames = subnames(1:14);
 for sub_i = 1:numel(subnames)
     
     sub_dir = fullfile(datdir, subnames{sub_i});
+    post_type1 = filenames(fullfile(sub_dir, '*_rating01_word_seg*.mat'));
     post_type2 = filenames(fullfile(sub_dir, '*_rating02_19_dims*.mat'));
     post_type3 = filenames(fullfile(sub_dir, '*_rating03_fast*.mat'));
     
@@ -36,18 +37,19 @@ for sub_i = 1:numel(subnames)
         color13 = [141,211,199; 255,255,179; 190,186,218; 251,128,114; 128,177,211; 253,180,98; 179,222,105; 252,205,229; 217,217,217; 188,128,189; 204,235,197; 255,237,111; 158,1,66]./255;
         
         figure;
-        bpost = bar(cell2mat(post2scanner));
+        bpost = plot(cell2mat(post2scanner));
         title('post2scanner with 19dim')
-        bpost.FaceColor = 'flat';
+        
         
         n = 0;
         
-%         a = find(count(seg_result, '/'));, [a(1) diff(a)-1]
-
-        seg_num = input('how much context are there?');
+        load(post_type1{1});
+        seg_num = numel(seg_result{1,run_i}) - 15 + 1;
+        
         for i = 1:seg_num % num of chunks
             if i == 1
-                seg_i(i) = input('Number of words in the same context? (1,3,10):'); % num of words in one chunk(context)
+                a = find(count(seg_result{1,run_i}, '/'))
+                seg_i(i) = [[a(1) diff(a)]-1 15-sum([a(1) diff(a)]-1)]; % num of words in one chunk(context)
                 for j = 1:seg_i(i)
                     bpost(j).FaceColor = color13(1,:);
                 end
