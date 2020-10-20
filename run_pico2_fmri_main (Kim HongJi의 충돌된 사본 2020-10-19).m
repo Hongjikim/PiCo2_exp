@@ -1,6 +1,6 @@
 %% Set directory and register participant 
 clear;
-[basedir, sid, subject_dir] = pico2_directory_sub_info('WL01'); 
+[basedir, sid, subject_dir] = pico2_directory_sub_info('hj_mac'); 
 % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac','hm_mac'
 cd(basedir);
 
@@ -9,7 +9,7 @@ cd(basedir);
 %  ----------------------  %
 %% Resting (N = 1, 2)
 cd(basedir); 
-pico2_fmri_resting(basedir, sid, 'biopac', 'eye'); 
+pico2_fmri_resting(basedir, sid, 'biopac'); 
 
 %% FREE THINKING (N = 1, 2, 3, 4)
 cd(basedir);
@@ -38,7 +38,7 @@ pico2_post_type01_word_segmentation(basedir, sid);
 cd(basedir);
 words = pico2_wholewords(basedir, sid);
 % load(fullfile(basedir, 'dims_anchor_korean.mat')); % dims, anchor, 
-survey = pico2_post_type02_word_survey(basedir, sid, words); % ,'mgkey'); % if restart: use 'run_number', 2
+survey = pico2_post_type02_word_survey(basedir, sid, words); % , 'mgkey'); %, 'mgkey'); %, 'mgkey'); % if restart: use 'run_number', 2
 
 %% Type3: Word survey (5 dimensions + Bodymap)
 cd(basedir);

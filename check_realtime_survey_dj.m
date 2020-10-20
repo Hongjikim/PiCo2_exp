@@ -1,12 +1,13 @@
 %% while the participant is answering, please check the real-time answers
 
-basedir = pwd; %'/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
+basedir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
 datdir = fullfile(basedir, 'data');
+savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/subject_wise';
 
-sub_i = input('Subject number? (1,2,3):');
-sub_dir = filenames(fullfile(datdir, ['coco', sprintf('%.3d',sub_i), '*']), 'char');
+for sub_i = [1:6, 8:14, 16:21]
+    sub_dir = filenames(fullfile(datdir, ['coco', sprintf('%.3d',sub_i), '*']), 'char');
 
-%%
+
 dims.name = {'self-relevance', 'positive', 'negative', 'importance/value', 'social', 'centrality', 'past', 'present', 'future' ...
     'frequency', 'safe', 'threat', 'imagery', 'word', 'intensity', 'detail(vivid)', ...
     'abstract', 'spontaneous', 'deliberate(goal)'};
@@ -40,15 +41,25 @@ for run = 1:numel(survey_files)
         for i = 1:numel(dat{run}.survey.dat.response)
             if ~isempty(dat{run}.survey.dat.response{i})
                 subplot(7,6,2*i-1), plot(dat{run}.survey.dat.response{i}(run,:));
-                title(dims.name{i}, 'FontSize', 15); hold on; box off;
+                title(dims.name{i}, 'FontSize', 20); hold on; box off;
                 %             ylim([-0.1, 1.1]);
                 set(gcf, 'color', 'white');
                 subplot(7,6,2*i), histogram(dat{run}.survey.dat.response{i}(run,:),30);
-                title(dims.name{i}, 'FontSize', 15); hold on;
+                set(gcf, 'units','normalized','outerposition',[0 0 1 1])
+                title(dims.name{i}, 'FontSize', 20); hold on;
             end
         end
     end
 end
+
+saveas(gcf,fullfile(savedir, ["type2_whole_" + 'coco' + sprintf('%.3d',sub_i) + '.png']))
+close all
+
+end
+
+
+
+
 
 %% group-wise result
 
@@ -59,10 +70,11 @@ datdir = fullfile(basedir, 'data');
 
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:20); % select manually
-subnames(7:14) = subnames(8:15); %7 out
-subnames(14) = subnames(16); %15 out
-subject_codes = subnames(1:14);
+subnames = subnames(5:25); % select manually
+subnames(7:20) = subnames(8:21); % 7 out
+subnames(14:20) = subnames(15:21); % 15 out
+subject_codes = subnames(1:19); % 1: numel(subnames)-# of extracted sub
+
 
 count = 0;
 for sub_num = 1:numel(subject_codes)
@@ -77,41 +89,67 @@ for sub_num = 1:numel(subject_codes)
     end
 end
 
-% for i = 1:numel(dat_all)
-%     subplot(7,6,2*i-1), plot(dat_all{i});
-%     title(dims.name{i}); hold on; box off;
-%     %             ylim([-0.1, 1.1]);
-%     set(gcf, 'color', 'white');
-%     subplot(7,6,2*i), histogram(dat_all{i},30);
-%     title(dims.name{i}); hold on;
-% end
+for i = 1:numel(dat_all)
+    subplot(7,6,2*i-1), plot(dat_all{i});
+    title(dims.name{i}); hold on; box off;
+                 ylim([-0.1, 1.1]);
+    set(gcf, 'color', 'white');
+    set(gcf, 'units','normalized','outerposition',[0 0 1 1])
+    subplot(7,6,2*i), histogram(dat_all{i},30);
+    title(dims.name{i}); hold on;
+end
+
+savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/check_graph';
+title("group-wise results");
+saveas(gcf, fullfile(savedir, ["type2_group_wise_graphs" + '.png']))
+
 %%
 
 % histogram only
+figure;
 clf;
 for i = 1:numel(dat_all)
     subplot(4,5,i)
     histogram(dat_all{i}, 20);
     set(gcf, 'color', 'white');
-    title(dims.name{i}, 'FontSize', 30); hold on;
+    set(gcf, 'units','normalized','outerposition',[0 0 1 1])
+    title(dims.name{i}, 'FontSize', 20); hold on;
 end
 
+savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/group_wise/check_graph';
+title("group-wise histogram");
+saveas(gcf, fullfile(savedir, ["type2_group_wise_hists" + '.png']))
+
 % correlation imagesc
+figure;
 for i = 1:numel(dat_all)
     new_dat(i,:) = dat_all{i}(:)';
 end
 
 clf; imagesc(corr(new_dat')); colorbar;
-set(gca, 'XTick', 1:19, 'XTickLabel', dims.name, 'FontSize', 22); xtickangle(30);
-set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 22); ytickangle(30);
+set(gcf, 'units','centimeters','Position',[8 0 35 35])
+set(gca, 'XTick', 1:19, 'XTickLabel', dims.name, 'FontSize', 20); xtickangle(30);
+set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 20); ytickangle(30);
+
+savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/heatmap';
+title("group-wise heatmap");
+saveas(gcf, fullfile(savedir, ["type2_group_wise_heatmap" + '.png']))
+close all;
 
 %% threshold with r and p values
 [r, p] = corrcoef(new_dat');
 
+figure;
 temp = r.*(p < 0.05);
 clf; imagesc(temp.*(r < -0.4 | r > 0.4)); colorbar;
 set(gca, 'XTick', 1:19, 'XTickLabel', dims.name, 'FontSize', 22); xtickangle(30);
 set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 22); ytickangle(30);
+set(gcf, 'units','centimeters','Position',[8 0 35 35])
+
+savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/heatmap';
+title("threhold(p<.05, |r|<.4 heatmap");
+saveas(gcf, fullfile(savedir, ["type2_thresholded_heatmap" + '.png']))
+close all;
 
 %%
 newnew_dat = new_dat(1:3,:);
