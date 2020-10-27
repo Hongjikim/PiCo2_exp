@@ -136,7 +136,8 @@ save(savename, 'subject_id', 'body_dat','ratings', 'words', '-v7.3');
 save(savename, 'body_white_binary', '-append');
 savedir =  '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/word_cloud';
 
-%% Valence max/min words
+
+%% type3 Valence max/min words
 
 val_word = cell(60, 14);
 val_r = [];
@@ -155,13 +156,13 @@ for subject_i2 = 1:subject_i
     val_r = [ratings{1,subject_i2}{2:end,1}]';
     for trial_i3 = 1:numel(val_r)
         val_word{trial_i3, subject_i2} = words{1, subject_i2}{trial_i3,1};
-        if ratings{1,subject_i2}{trial_i3,1} >= prctile(val_r, 80)
+        if ratings{1,subject_i2}{trial_i3+1,1} >= prctile(val_r, 80)
             max_num = max_num+1;
             max_i = max_i +1;
             val_max{max_num, A(subject_i2)} = val_word{trial_i3, subject_i2};
             val_max{max_num, B(subject_i2)} = ratings{1,subject_i2}{trial_i3,1};
             string_valmax{max_i,1} = val_word{trial_i3, subject_i2};
-        elseif ratings{1,subject_i2}{trial_i3,1} <= prctile(val_r, 20)
+        elseif ratings{1,subject_i2}{trial_i3+1,1} <= prctile(val_r, 20)
             min_num = min_num+1;
             min_i = min_i +1;
             val_min{min_num, A(subject_i2)} = val_word{trial_i3, subject_i2};
@@ -197,7 +198,7 @@ title("Valence min Word Cloud")
 saveas(gcf,fullfile(savedir,'type3_WordsCloud_ValenceMin.png'))
 
 
-%% safety&threat max/min words
+%% type3 safety&threat max/min words
 
 sth_word = cell(60, 14);
 sth_r = [];
@@ -216,13 +217,13 @@ for subject_i2 = 1:subject_i
     sth_r = [ratings{1,subject_i2}{2:end,5}]';
     for trial_i3 = 1:numel(sth_r)
         sth_word{trial_i3, subject_i2} = words{1, subject_i2}{trial_i3,1};
-        if ratings{1,subject_i2}{trial_i3,5} >= prctile(sth_r, 80)
+        if ratings{1,subject_i2}{trial_i3+1,5} >= prctile(sth_r, 80)
             max_num = max_num+1;
             max_i = max_i +1;
             sth_max{max_num, A(subject_i2)} = sth_word{trial_i3, subject_i2};
             sth_max{max_num, B(subject_i2)} = ratings{1,subject_i2}{trial_i3,5};
             string_sthmax{max_i,1} = sth_word{trial_i3, subject_i2};
-        elseif ratings{1,subject_i2}{trial_i3,5} <= prctile(sth_r, 20)
+        elseif ratings{1,subject_i2}{trial_i3+1,5} <= prctile(sth_r, 20)
             min_num = min_num+1;
             min_i = min_i +1;
             sth_min{min_num, A(subject_i2)} = sth_word{trial_i3, subject_i2};
@@ -260,7 +261,7 @@ title("safe/threat min Word Cloud")
 saveas(gcf,fullfile(savedir,'type3_WordsCloud_SthMin.png'))
 
 
-%% self max/min word
+%% type3 self max/min word
 
 % self max
  
@@ -281,13 +282,13 @@ for subject_i2 = 1:subject_i
     sf_r = [ratings{1,subject_i2}{2:end,2}]';
     for trial_i3 = 1:numel(sth_r)
         sf_word{trial_i3, subject_i2} = words{1, subject_i2}{trial_i3,1};
-        if ratings{1,subject_i2}{trial_i3,5} >= prctile(sf_r,80)
+        if ratings{1,subject_i2}{trial_i3+1,5} >= prctile(sf_r,80)
             max_num = max_num+1;
             max_i = max_i +1;
             sf_max{max_num, A(subject_i2)} = sf_word{trial_i3, subject_i2};
             sf_max{max_num, B(subject_i2)} = ratings{1,subject_i2}{trial_i3,2};
             string_sfmax{max_i,1} = sf_word{trial_i3, subject_i2};
-        elseif ratings{1,subject_i2}{trial_i3,2} <= prctile(sf_r, 20)
+        elseif ratings{1,subject_i2}{trial_i3+1,2} <= prctile(sf_r, 20)
             min_num = min_num+1;
             min_i = min_i +1;
             sf_min{min_num, A(subject_i2)} = sf_word{trial_i3, subject_i2};
@@ -329,7 +330,7 @@ title("self min Word Cloud")
 saveas(gcf,fullfile(savedir,'type3_WordsCloud_SelfMin.png'))
 
 
-%% vivid
+%% type3 vivid
 
 vv_word = cell(60, 14);
 vv_r = [];
@@ -348,13 +349,13 @@ for subject_i2 = 1:subject_i
     vv_r = [ratings{1,subject_i2}{2:end,4}]';
     for trial_i3 = 1:numel(vv_r)
         vv_word{trial_i3, subject_i2} = words{1, subject_i2}{trial_i3,1};
-        if ratings{1,subject_i2}{trial_i3,4} >= prctile(vv_r,80)
+        if ratings{1,subject_i2}{trial_i3+1,4} >= prctile(vv_r,80)
             max_num = max_num+1;
             max_i = max_i +1;
             vv_max{max_num, A(subject_i2)} = vv_word{trial_i3, subject_i2};
             vv_max{max_num, B(subject_i2)} = ratings{1,subject_i2}{trial_i3,4};
             string_vvmax{max_i,1} = vv_word{trial_i3, subject_i2};
-        elseif ratings{1,subject_i2}{trial_i3,4} <= prctile(vv_r, 20)
+        elseif ratings{1,subject_i2}{trial_i3+1,4} <= prctile(vv_r, 20)
             min_num = min_num+1;
             min_i = min_i +1;
             vv_min{min_num, A(subject_i2)} = vv_word{trial_i3, subject_i2};
@@ -389,7 +390,7 @@ saveas(gcf,fullfile(savedir,'type3_WordsCloud_VividMin.png'))
 
 
 
-%% time
+%% type3 time
 
 
 tm_word = cell(60, 14);
@@ -409,13 +410,13 @@ for subject_i2 = 1:subject_i
     tm_r = [ratings{1,subject_i2}{2:end,3}]';
     for trial_i3 = 1:numel(tm_r)
         tm_word{trial_i3, subject_i2} = words{1, subject_i2}{trial_i3,1};
-        if ratings{1,subject_i2}{trial_i3,3} >= prctile(tm_r,80)
+        if ratings{1,subject_i2}{trial_i3+1,3} >= prctile(tm_r,80)
             max_num = max_num+1;
             max_i = max_i +1;
             tm_max{max_num, A(subject_i2)} = tm_word{trial_i3, subject_i2};
             tm_max{max_num, B(subject_i2)} = ratings{1,subject_i2}{trial_i3,3};
             string_tmmax{max_i,1} = tm_word{trial_i3, subject_i2};
-        elseif ratings{1,subject_i2}{trial_i3,3} <= prctile(tm_r, 20)
+        elseif ratings{1,subject_i2}{trial_i3+1,3} <= prctile(tm_r, 20)
             min_num = min_num+1;
             min_i = min_i +1;
             tm_min{min_num, A(subject_i2)} = tm_word{trial_i3, subject_i2};
@@ -448,6 +449,8 @@ saveas(gcf,fullfile(savedir,'type3_WordsCloud_TimeMin.png'))
 
 %% word clouds for type2 (19dim)
 
+datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data';
+datadir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
 sublist = dir(datdir);
 subnames = {sublist.name}';
 subnames = subnames(5:25); % select manually
@@ -455,11 +458,11 @@ subnames(7:20) = subnames(8:21); % 7 out
 subnames(14:20) = subnames(15:21); % 15 out
 subject_codes = subnames(1:19); % 1: numel(subnames)-# of extracted sub
 
-
 count = 0;
 for sub_num = 1:numel(subject_codes)
     clear sub_dir; sub_dir = filenames(fullfile(datdir, subject_codes{sub_num}), 'char');
     clear survey_files; survey_files = filenames(fullfile(sub_dir, '*rating02_19_dims*.mat'));
+    
     for run = 1:numel(survey_files)
         count = count+1;
         clear survey; load(survey_files{run});
@@ -469,41 +472,63 @@ for sub_num = 1:numel(subject_codes)
     end
 end
 
+clear words;
+
+for sub_num = 1:numel(subject_codes)
+    clear sub_dir; sub_dir = filenames(fullfile(datdir, subject_codes{sub_num}), 'char');
+    clear survey_files; survey_files = filenames(fullfile(sub_dir, '*rating02_19_dims*.mat'));
+    load(survey_files{1})
+    for run = 1:numel(survey_files)
+        for dims_i = 1:numel(survey.dat.response)
+            dat_sixty{dims_i}(sub_num, 1+15*(run-1):15+15*(run-1)) = dat_all{dim_i}(run + 4*(sub_num-1), :);
+            words(:, sub_num) = reshape(survey.dat.whole_words, 1, 60);
+        end
+    end
+end
+
+
+
+
 % dat_all(1, dim)(4*sub,15words)
 % r -> dat_all(1, dim)([1:4]*sub)
 
-%%
+%% type2 pos // neg
 
-
-val_word = cell(60, 14);
-val_r = [];
-val_max = [];
-val_min = [];
-A = [1:2:subject_i*2-1];
-B = [2:2:subject_i*2];
-string_valmax = [];
-string_valmin = [];
+pos_r = [];
+neg_r = [];
+pos_max = [];
+neg_max = [];
+A = [1:2:sub_num*2-1];
+B = [2:2:sub_num*2];
+string_posmax = [];
+string_negmax = [];
 max_i = 0;
 min_i =0;
 
-for subject_i2 = 1:subject_i
+
+for subject_i2 = 1:sub_num
+    pos_r(subject_i2, :) = reshape([dat_all{1,2}(1+4*(subject_i2-1):4+4*(subject_i2-1),1:15)], 60, 1);
+    neg_r(subject_i2, :) = reshape([dat_all{1,3}(1+4*(subject_i2-1):4+4*(subject_i2-1),1:15)], 60, 1);
+end
+
+
+for subject_i2 = 1:sub_num
     max_num = 0;
     min_num = 0;
-    val_r = [ratings{1,subject_i2}{2:end,1}]';
-    for trial_i3 = 1:numel(val_r)
-        val_word{trial_i3, subject_i2} = words{1, subject_i2}{trial_i3,1};
-        if ratings{1,subject_i2}{trial_i3,1} >= prctile(val_r, 80)
+    for trial_i3 = 1:60
+        words{trial_i3, subject_i2};
+        if pos_r(subject_i2, trial_i3) >= prctile(pos_r(subject_i2, :), 80)
             max_num = max_num+1;
             max_i = max_i +1;
-            val_max{max_num, A(subject_i2)} = val_word{trial_i3, subject_i2};
-            val_max{max_num, B(subject_i2)} = ratings{1,subject_i2}{trial_i3,1};
-            string_valmax{max_i,1} = val_word{trial_i3, subject_i2};
-        elseif ratings{1,subject_i2}{trial_i3,1} <= prctile(val_r, 20)
+            pos_max{max_num, A(subject_i2)} = words{trial_i3, subject_i2};
+            pos_max{max_num, B(subject_i2)} = pos_r(subject_i2,trial_i3);
+            string_posmax{max_i,1} = words{trial_i3, subject_i2};
+        elseif pos_r(subject_i2, trial_i3) <= prctile(neg_r(subject_i2, :), 80)
             min_num = min_num+1;
             min_i = min_i +1;
-            val_min{min_num, A(subject_i2)} = val_word{trial_i3, subject_i2};
-            val_min{min_num, B(subject_i2)} = ratings{1,subject_i2}{trial_i3,1};
-            string_valmin{min_i,1} = val_word{trial_i3, subject_i2};
+            neg_max{min_num, A(subject_i2)} = words{trial_i3, subject_i2};
+            neg_max{min_num, B(subject_i2)} = neg_r(subject_i2,trial_i3);
+            string_negmax{min_i,1} = words{trial_i3, subject_i2};
         end
     end
 end
@@ -514,9 +539,203 @@ end
 % histogram(string_valmax);
 % saveas(gcf,fullfile(savedir,'hist_ValenceMax.png'))
 
-string_valmax = categorical(string_valmax);
+string_posmax = categorical(string_posmax);
+string_negmax = categorical(string_negmax);
 color = [252,141,89]./255;
-figure
-wordcloud(string_valmax, 'HighlightColor', color);
-title("Valence max Word Cloud")
-saveas(gcf,fullfile(savedir,'type3_WordsCloud_ValenceMax.png'))
+figure;
+wordcloud(string_posmax, 'HighlightColor', color);
+title("Positive dim max Word Cloud")
+saveas(gcf,fullfile(savedir,'type2_WordsCloud_PosMax.png'))
+
+
+figure;
+wordcloud(string_negmax, 'HighlightColor', color);
+title("Negative dim max Word Cloud")
+saveas(gcf,fullfile(savedir,'type2_WordsCloud_NegMax.png'))
+
+close all;
+
+
+%% type2 safe & threat
+
+
+
+saf_r = [];
+thr_r = [];
+saf_max = [];
+thr_max = [];
+A = [1:2:sub_num*2-1];
+B = [2:2:sub_num*2];
+string_safmax = [];
+string_thrmax = [];
+max_i = 0;
+min_i =0;
+
+
+for subject_i2 = 1:sub_num
+    saf_r(subject_i2, :) = reshape([dat_all{1,11}(1+4*(subject_i2-1):4+4*(subject_i2-1),1:15)], 60, 1);
+    thr_r(subject_i2, :) = reshape([dat_all{1,12}(1+4*(subject_i2-1):4+4*(subject_i2-1),1:15)], 60, 1);
+end
+
+
+for subject_i2 = 1:sub_num
+    max_num = 0;
+    min_num = 0;
+    for trial_i3 = 1:60
+        words{trial_i3, subject_i2};
+        if saf_r(subject_i2, trial_i3) >= prctile(saf_r(subject_i2, :), 80)
+            max_num = max_num+1;
+            max_i = max_i +1;
+            saf_max{max_num, A(subject_i2)} = words{trial_i3, subject_i2};
+            saf_max{max_num, B(subject_i2)} = saf_r(subject_i2,trial_i3);
+            string_safmax{max_i,1} = words{trial_i3, subject_i2};
+        elseif thr_r(subject_i2, trial_i3) <= prctile(thr_r(subject_i2, :), 80)
+            min_num = min_num+1;
+            min_i = min_i +1;
+            thr_max{min_num, A(subject_i2)} = words{trial_i3, subject_i2};
+            thr_max{min_num, B(subject_i2)} = thr_r(subject_i2,trial_i3);
+            string_thrmax{min_i,1} = words{trial_i3, subject_i2};
+        end
+    end
+end
+
+
+string_safmax = categorical(string_safmax);
+string_thrmax = categorical(string_thrmax);
+color = [252,141,89]./255;
+figure;
+wordcloud(string_safmax, 'HighlightColor', color);
+title("Safe max Word Cloud")
+saveas(gcf,fullfile(savedir,'type2_WordsCloud_safeMax.png'))
+
+
+figure;
+wordcloud(string_thrmax, 'HighlightColor', color);
+title("Threat max Word Cloud")
+saveas(gcf,fullfile(savedir,'type2_WordsCloud_threatMax.png'))
+
+close all;
+
+%% type2 present / future / past
+
+pre_r = [];
+fut_r = [];
+pas_r = [];
+pre_max = [];
+fut_max = [];
+pas_max = [];
+A = [1:2:sub_num*2-1];
+B = [2:2:sub_num*2];
+string_premax = [];
+string_futmax = [];
+string_pasmax = [];
+pre_i = 0;
+fut_i = 0;
+pas_i =0;
+
+
+for subject_i2 = 1:sub_num
+    pre_r(subject_i2, :) = reshape([dat_all{1,8}(1+4*(subject_i2-1):4+4*(subject_i2-1),1:15)], 60, 1);
+    pas_r(subject_i2, :) = reshape([dat_all{1,7}(1+4*(subject_i2-1):4+4*(subject_i2-1),1:15)], 60, 1);
+    fut_r(subject_i2, :) = reshape([dat_all{1,9}(1+4*(subject_i2-1):4+4*(subject_i2-1),1:15)], 60, 1);
+end
+
+
+for subject_i2 = 1:sub_num
+    pre_num = 0;
+    fut_num = 0;
+    pas_num = 0;
+    for trial_i3 = 1:60
+        words{trial_i3, subject_i2};
+        if pre_r(subject_i2, trial_i3) >= prctile(pre_r(subject_i2, :), 80)
+            pre_num = pre_num+1;
+            pre_i = pre_i +1;
+            pre_max{pre_num, A(subject_i2)} = words{trial_i3, subject_i2};
+            pre_max{pre_num, B(subject_i2)} = pre_r(subject_i2,trial_i3);
+            string_premax{pre_i,1} = words{trial_i3, subject_i2};
+        elseif pas_r(subject_i2, trial_i3) <= prctile(pas_r(subject_i2, :), 80)
+            pas_num = pas_num+1;
+            pas_i = pas_i +1;
+            pas_max{pas_num, A(subject_i2)} = words{trial_i3, subject_i2};
+            pas_max{pas_num, B(subject_i2)} = pas_r(subject_i2,trial_i3);
+            string_pasmax{pas_i,1} = words{trial_i3, subject_i2};
+        elseif fut_r(subject_i2, trial_i3) <= prctile(fut_r(subject_i2, :), 80)
+            fut_num = fut_num+1;
+            fut_i = fut_i +1;
+            fut_max{fut_num, A(subject_i2)} = words{trial_i3, subject_i2};
+            fut_max{fut_num, B(subject_i2)} = fut_r(subject_i2,trial_i3);
+            string_futmax{fut_i,1} = words{trial_i3, subject_i2};
+        end
+    end
+end
+
+
+
+string_pasmax = categorical(string_pasmax);
+string_premax = categorical(string_premax);
+string_futmax = categorical(string_futmax);
+color = [252,141,89]./255;
+
+figure;
+wordcloud(string_premax, 'HighlightColor', color);
+title("Present max Word Cloud")
+saveas(gcf,fullfile(savedir,'type2_WordsCloud_PresentMax.png'))
+
+
+figure;
+wordcloud(string_pasmax, 'HighlightColor', color);
+title("Past max Word Cloud")
+saveas(gcf,fullfile(savedir,'type2_WordsCloud_PastMax.png'))
+
+figure;
+wordcloud(string_futmax, 'HighlightColor', color);
+title("Future max Word Cloud")
+saveas(gcf,fullfile(savedir,'type2_WordsCloud_FutureMax.png'))
+
+
+close all;
+
+
+%% find x and 없음
+
+
+
+datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data';
+
+sublist = dir(datdir);
+subnames = {sublist.name}';
+subnames = subnames(5:25); % select manually
+subnames(7:20) = subnames(8:21); % 7 out
+subnames(14:20) = subnames(15:21); % 15 out
+subnames = subnames(1:19); % 1: numel(subnames)-# of extracted sub
+
+x = 0;
+xindex = cell(1,1);
+
+for trial = 1:60
+    for sub = 1: 19
+        if isequal(words{trial, sub}, "X") ||  isequal(words{trial, sub}, "??") 
+            x = x + 1;
+            xindex{x,1} = trial;
+            xindex(x,2) = subnames(sub);
+         end
+    end
+end
+
+% x, X, ?, ??, ??? 10개
+% 없음 / 아무생각없음 / 아무생각없다 / 생각이안나요(coco013)
+
+for trial = 1:60
+    for sub = 1: 19
+%         if isequal(words{trial, sub}, "없음") ||  isequal(words{trial, sub}, "없다")
+            x = x + 1;
+            xindex{x,1} = trial;
+            xindex(x,2) = subnames(sub);
+         end
+    end
+end
+
+
+% for w_i = 1:19, for w_ii = 1:60, W{w_ii + 60*(w_i-1)}=words{1,w_i}{w_ii}; end, end
+
+

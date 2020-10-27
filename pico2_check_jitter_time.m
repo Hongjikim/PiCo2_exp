@@ -22,7 +22,7 @@ end
 
 % size(jitter) % num(sub) * trial (60)
 
-histogram(jitter(:), 30)
+histogram(jitter(:), 100)
 
 mean(jitter') % mean = 46.6667 same for every subject
 mean(jitter(:)) % total mean = 46.6667

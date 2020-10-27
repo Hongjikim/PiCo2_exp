@@ -8,8 +8,8 @@ for sub_i = [1:6, 8:14, 16:21]
     sub_dir = filenames(fullfile(datdir, ['coco', sprintf('%.3d',sub_i), '*']), 'char');
 
 
-dims.name = {'self-relevance', 'positive', 'negative', 'importance/value', 'social', 'centrality', 'past', 'present', 'future' ...
-    'frequency', 'safe', 'threat', 'imagery', 'word', 'intensity', 'detail(vivid)', ...
+dims.name = {'self-relevance','importance/value', 'centrality', 'social', 'past', 'present', 'future',  ...
+    'frequency', 'positive', 'negative', 'safe', 'threat', 'imagery', 'word', 'intensity', 'detail(vivid)', ...
     'abstract', 'spontaneous', 'deliberate(goal)'};
 
 dims.msg = {'이 생각은 나와 관련이 있다.', '이 생각은 나에게 중요하다.', '이 생각은 나의 자아정체감에 핵심적이다', ...
@@ -80,27 +80,28 @@ count = 0;
 for sub_num = 1:numel(subject_codes)
     clear sub_dir; sub_dir = filenames(fullfile(datdir, subject_codes{sub_num}), 'char');
     clear survey_files; survey_files = filenames(fullfile(sub_dir, '*rating02_19_dims*.mat'));
+    
     for run = 1:numel(survey_files)
-        count = count+1;
         clear survey; load(survey_files{run});
         for dims_i = 1:numel(survey.dat.response)
-            dat_all{dims_i}(count,:) = survey.dat.response{dims_i}(run,:);
+            dat_all{dims_i}(sub_num,15*(run-1)+1:15*run) = survey.dat.response{dims_i}(run,:);
         end
     end
 end
 
-for i = 1:numel(dat_all)
-    subplot(7,6,2*i-1), plot(dat_all{i});
-    title(dims.name{i}); hold on; box off;
-                 ylim([-0.1, 1.1]);
+close all;
+
+for dim = 1:19
+    subplot(7,6,2*dim-1), plot(dat_all{dim}');
+    title(dims.name{dim}); hold on; box off;
+    ylim([-0.1, 1.1]);
     set(gcf, 'color', 'white');
     set(gcf, 'units','normalized','outerposition',[0 0 1 1])
-    subplot(7,6,2*i), histogram(dat_all{i},30);
-    title(dims.name{i}); hold on;
+    subplot(7,6,2*dim), histogram(dat_all{dim},30);
+    title(dims.name{dim}); hold on; 
 end
 
 savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/check_graph';
-title("group-wise results");
 saveas(gcf, fullfile(savedir, ["type2_group_wise_graphs" + '.png']))
 
 %%
@@ -108,31 +109,29 @@ saveas(gcf, fullfile(savedir, ["type2_group_wise_graphs" + '.png']))
 % histogram only
 figure;
 clf;
-for i = 1:numel(dat_all)
-    subplot(4,5,i)
-    histogram(dat_all{i}, 20);
+for dim = 1:19
+    subplot(4,5,dim)
+    histogram(dat_all{dim}, 30);
     set(gcf, 'color', 'white');
     set(gcf, 'units','normalized','outerposition',[0 0 1 1])
-    title(dims.name{i}, 'FontSize', 20); hold on;
+    title(dims.name{dim}, 'FontSize', 20); hold on;
 end
 
-savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/group_wise/check_graph';
-title("group-wise histogram");
+savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/check_graph';
 saveas(gcf, fullfile(savedir, ["type2_group_wise_hists" + '.png']))
 
-% correlation imagesc
+%% correlation imagesc
 figure;
-for i = 1:numel(dat_all)
-    new_dat(i,:) = dat_all{i}(:)';
+for dim = 1:19
+    new_dat(dim,:) = dat_all{dim}(:)';
 end
 
 clf; imagesc(corr(new_dat')); colorbar;
 set(gcf, 'units','centimeters','Position',[8 0 35 35])
-set(gca, 'XTick', 1:19, 'XTickLabel', dims.name, 'FontSize', 20); xtickangle(30);
-set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 20); ytickangle(30);
+set(gca, 'XTick', 1:19, 'XTickLabel', dims.name, 'FontSize', 15); xtickangle(30);
+set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 15); ytickangle(30);
 
 savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/heatmap';
-title("group-wise heatmap");
 saveas(gcf, fullfile(savedir, ["type2_group_wise_heatmap" + '.png']))
 close all;
 
@@ -142,14 +141,30 @@ close all;
 figure;
 temp = r.*(p < 0.05);
 clf; imagesc(temp.*(r < -0.4 | r > 0.4)); colorbar;
-set(gca, 'XTick', 1:19, 'XTickLabel', dims.name, 'FontSize', 22); xtickangle(30);
-set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 22); ytickangle(30);
+set(gca, 'XTick', 1:19, 'XTickLabel', dims.name, 'FontSize', 15); xtickangle(30);
+set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 15); ytickangle(30);
 set(gcf, 'units','centimeters','Position',[8 0 35 35])
 
 savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/heatmap';
 title("threhold(p<.05, |r|<.4 heatmap");
 saveas(gcf, fullfile(savedir, ["type2_thresholded_heatmap" + '.png']))
 close all;
+
+%% new heat map (within-subject)
+subject_corr = [];
+
+for sub_i = 1:19
+    subplot(4,5,sub_i)
+    for dim = 1:19
+        subject_19dim{sub_i}(:,dim) = dat_all{dim}(sub_i,:)';
+        subject_corr(:,:,sub_i) = corr(subject_19dim{sub_i});
+%         imagesc(subject_corr); colorbar;
+    end
+end
+
+for sub_i=1:19, subplot(4,5,sub_i), imagesc(subject_corr(:,:,sub_i)); colorbar; end
+subplot(4,5,20)
+imagesc(mean(subject_corr,3)), colorbar;
 
 %%
 newnew_dat = new_dat(1:3,:);
