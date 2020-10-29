@@ -52,10 +52,12 @@ for sub_i = 1:numel(subnames)
             title("Run" + run_i + extractBefore(sub, "_") +  extractAfter(sub, "_"))
             
             b = find(count(seg_result{1,run_i}, '/'));
-            seg_position = b-[1:numel(b)];
+            seg_position = b-[0.5:numel(b)];
             
             for x =1:numel(seg_position)
                 xl = xline(seg_position(x)); xl.Color = [1 0 0]; xl.LineWidth = 2;
+                set(gca,'XTick',[1:1:15]);
+                set(gca, 'YTick', [-1:1:1]);
                 hold on;
             end
             

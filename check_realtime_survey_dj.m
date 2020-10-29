@@ -146,7 +146,7 @@ set(gca, 'YTick', 1:19, 'YTickLabel', dims.name, 'FontSize', 15); ytickangle(30)
 set(gcf, 'units','centimeters','Position',[8 0 35 35])
 
 savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/check_type2/group_wise/heatmap';
-title("threhold(p<.05, |r|<.4 heatmap");
+title("threhold(p<0.05, |r|>0.4 heatmap");
 saveas(gcf, fullfile(savedir, ["type2_thresholded_heatmap" + '.png']))
 close all;
 
