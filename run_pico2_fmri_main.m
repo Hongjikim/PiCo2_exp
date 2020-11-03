@@ -1,6 +1,6 @@
 %% Set directory and register participant 
 clear;
-[basedir, sid, subject_dir] = pico2_directory_sub_info('exp_room'); 
+[basedir, sid, subject_dir] = pico2_directory_sub_info('dj_mac'); 
 % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac','hm_mac'
 cd(basedir);
 

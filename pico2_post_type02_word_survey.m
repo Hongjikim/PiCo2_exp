@@ -93,7 +93,7 @@ screens = Screen('Screens');
 window_num = screens(end);
 Screen('Preference', 'SkipSyncTests', 1);
 window_info = Screen('Resolution', window_num);
-window_rect = [0 0 window_info.width window_info.height]; %
+window_rect = [0 0 window_info.width window_info.height]; %[0 0 2560 1600]/2; % 
 
 W = window_rect(3); % width of screen
 H = window_rect(4); % height of screen
@@ -133,8 +133,11 @@ for r = 1:row % row
 end
 
 % pseudo-randomize dimension orders
-dim_rule = {2:3, 7:9, 11:12, 13:14, 16:17, ...
-    1, 4, 5, 6, 10, 15, 18, 19};
+% dim_rule = {2:3, 7:9, 11:12, 13:14, 16:17, ...
+%     1, 4, 5, 6, 10, 15, 18, 19}; % dim_rule (ver1: based on wrong dim
+%     list with pos/neg in 2nd, 3rd)
+
+dim_rule = {5:7, 9:10, 11:12, 13:14, 16:17, 1, 2, 3, 4, 8, 15, 18, 19};
 
 idx = randperm(length(dim_rule));
 dim_rule = dim_rule(idx);

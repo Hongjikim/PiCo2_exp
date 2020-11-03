@@ -39,7 +39,7 @@ end
 
 figure;
 
-for run = 1%:numel(survey_files)
+for run = 1:numel(survey_files)
     if sum(strcmp(fields(dat{run}.survey), 'dat')) == 1
         for i = 1:numel(dat{run}.survey.dat.response)
             if ~isempty(dat{run}.survey.dat.response{i})
