@@ -133,21 +133,19 @@ for r = 1:row % row
 end
 
 % pseudo-randomize dimension orders
-% dim_rule = {2:3, 7:9, 11:12, 13:14, 16:17, ...
-%     1, 4, 5, 6, 10, 15, 18, 19}; % dim_rule (ver1: based on wrong dim
-%     list with pos/neg in 2nd, 3rd)
+% dim_rule = {5:7, 9:10, 11:12, 13:14, 16:17, 1, 2, 3, 4, 8, 15, 18, 19};
+% 
+% idx = randperm(length(dim_rule));
+% dim_rule = dim_rule(idx);
+% 
+% for ii = 1:length(dim_rule)
+%     dim_rule{ii} = dim_rule{ii}(randperm(length(dim_rule{ii})));
+% end
+% 
+% dim_order =cat(2,dim_rule{:});
 
-dim_rule = {5:7, 9:10, 11:12, 13:14, 16:17, 1, 2, 3, 4, 8, 15, 18, 19};
-
-idx = randperm(length(dim_rule));
-dim_rule = dim_rule(idx);
-
-for ii = 1:length(dim_rule)
-    dim_rule{ii} = dim_rule{ii}(randperm(length(dim_rule{ii})));
-end
-
-dim_order =cat(2,dim_rule{:});
-
+% simple-randomize dimension orders
+dim_order = randperm(19);
 survey.dat.dim_order = dim_order;
 
 run_i = run_number;
