@@ -33,6 +33,15 @@ switch where
         
     case 'hm_mac' % Hyemin
         basedir = '/Users/hyemin_shin/Dropbox/sync/PiCo2_exp';
+        
+    case 'hj_mac2'
+        basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
+    
+    case 'je_mac'
+        basedir =  '/Users/Janice/Dropbox/PiCo2_sync/PiCo2_exp';
+
+           
+        
 end
 
 addpath(genpath(basedir));

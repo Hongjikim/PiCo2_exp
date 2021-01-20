@@ -97,8 +97,8 @@ for response_i = response_n   % in case of no-sound, 1:40
     
     input_key = '';
     while isempty(deblank(input_key))
-        sprintf('    %2d¹øÂ° ÀÚÀ¯»ı°¢ ´Ü¾î´Â ¹«¾ùÀÎ°¡¿ä   ', response_i);
-        input_key = input('´Ü¾î¸¦ Àû°í ¿£ÅÍÅ°¸¦ ´­·¯ÁÖ¼¼¿ä. ¸ø µé¾úÀ¸¸é ''X''¸¦ ÀûÀº ÈÄ ¿£ÅÍÅ°¸¦ ´­·¯ÁÖ¼¼¿ä:  ', 's');
+        sprintf('    %2dë²ˆì§¸ ììœ ìƒê° ë‹¨ì–´ëŠ” ë¬´ì—‡ì¸ê°€ìš”   ', response_i);
+        input_key = input('ë‹¨ì–´ë¥¼ ì ê³  ì—”í„°í‚¤ë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”. ëª» ë“¤ì—ˆìœ¼ë©´ ''X''ë¥¼ ì ì€ í›„ ì—”í„°í‚¤ë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”:  ', 's');
     end
     
     response{response_i} = input_key;
@@ -123,4 +123,3 @@ fclose(fid)
 
 copyfile(fname_txt, fname_seg);
 end
-

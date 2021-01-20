@@ -2,7 +2,7 @@
 
 datdir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp/data';
 
-for sub_i = 25 % 1:26
+for sub_i = 11 % 1:26
     clear sub_dir;
     sub_dir = filenames(fullfile(datdir, ['coco0', num2str(sub_i, '%.2d'), '*']), 'char');
     

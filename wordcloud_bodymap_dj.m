@@ -2,13 +2,14 @@
 datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data';
 datadir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
 
-
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:25); % select manually
-subnames(7:20) = subnames(8:21); % 7 out
-subnames(14:20) = subnames(15:21); % 15 out
-subnames = subnames(1:19); % 1: numel(subnames)-# of extracted sub
+subnames = subnames(5:end-6); % select manually
+subnames(7:end-1) = subnames(8:end); % 7 out
+subnames(12:end-1) = subnames(13:end); % 13 out
+subnames(13:end-1) = subnames(14:end); % 15 out
+subnames(20:end-1) = subnames(21:end);% 23 out
+subnames = subnames(1:end-4); % 1: end-# of extracted sub
 
 j=0;
 
@@ -25,19 +26,19 @@ cut_edge = round(cut_edge);
 ratings = cell(1, numel(subnames));
 W = cell(1, numel(subnames));
 
-
 for subject_i = 1:numel(subnames)
     sub_dir = fullfile(datdir, subnames{subject_i});
     
     fprintf('\n>>> working on sub_%02d >>>', subject_i)
+    
     j=j+1;
     
-    % load survey data of one subject    
+    % load survey data of one subject
     post_type3 = filenames(fullfile(sub_dir, '*_rating03_fast*.mat'));
     load(post_type3{1});
     original = survey.dat;
     
-    % ratings 
+    % ratings
     for run_i = 1:4
         for dim_i = 1:5
             for word_i = 1:15
@@ -45,7 +46,8 @@ for subject_i = 1:numel(subnames)
             end
         end
     end
-        
+    
+    
     % words
     original_word = survey.words;
     original_word = reshape(original_word', 60, 1);
@@ -63,8 +65,8 @@ for subject_i = 1:numel(subnames)
     % bodymap
     b{j,1} = num2str(extractAfter(sub_dir, "/data/")); % the first column of B is subnum
     b{j,2} = cell(60,2);  % the first column of B{j,2} is for red.
-                                    % the second column of B{j,2} is for blue.
-    b{j,3} = cell(60,2);                         
+    % the second column of B{j,2} is for blue.
+    b{j,3} = cell(60,2);
     for run_i = 1:4
         for word_i = 1:15
             b{j,2}{word_i+15*(run_i-1),1} = original{run_i,word_i}{1,6}.rating_red;
@@ -99,10 +101,10 @@ for subject_i = 1:numel(subnames)
     
     % B{j,3} = 42 x 2 cell
     for i = 1:60
-        b{j,3}{i,1} = zeros(size(body_white_binary));     % 644 x 216 
+        b{j,3}{i,1} = zeros(size(body_white_binary));     % 644 x 216
         b{j,3}{i,2} = zeros(size(body_white_binary));     % 644 x 216
     end
-
+    
     for i = 1:60
         if ~isempty(b{j,2}{i,1})    % rating red
             for m = 1:size(b{j,2}{i,1},1)
@@ -121,6 +123,7 @@ for subject_i = 1:numel(subnames)
         end
     end
 end
+
 
 
 B.data = b;
@@ -451,16 +454,19 @@ saveas(gcf,fullfile(savedir,'type3_WordsCloud_TimeMin.png'))
 
 datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data';
 datadir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
+
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:25); % select manually
-subnames(7:20) = subnames(8:21); % 7 out
-subnames(14:20) = subnames(15:21); % 15 out
-subject_codes = subnames(1:19); % 1: numel(subnames)-# of extracted sub
+subnames = subnames(5:end-6); % select manually
+subnames(7:end-1) = subnames(8:end); % 7 out
+subnames(12:end-1) = subnames(13:end); % 13 out
+subnames(13:end-1) = subnames(14:end); % 15 out
+subnames(20:end-1) = subnames(21:end);% 23 out
+subnames = subnames(1:end-4); % 1: end-# of extracted sub
 
 count = 0;
-for sub_num = 1:numel(subject_codes)
-    clear sub_dir; sub_dir = filenames(fullfile(datdir, subject_codes{sub_num}), 'char');
+for sub_num = 1:numel(subnames)
+    clear sub_dir; sub_dir = filenames(fullfile(datdir, subnames{sub_num}), 'char');
     clear survey_files; survey_files = filenames(fullfile(sub_dir, '*rating02_19_dims*.mat'));
     
     for run = 1:numel(survey_files)
@@ -474,8 +480,8 @@ end
 
 clear words;
 
-for sub_num = 1:numel(subject_codes)
-    clear sub_dir; sub_dir = filenames(fullfile(datdir, subject_codes{sub_num}), 'char');
+for sub_num = 1:numel(subnames)
+    clear sub_dir; sub_dir = filenames(fullfile(datdir, subnames{sub_num}), 'char');
     clear survey_files; survey_files = filenames(fullfile(sub_dir, '*rating02_19_dims*.mat'));
     load(survey_files{1})
     for run = 1:numel(survey_files)
@@ -696,7 +702,121 @@ saveas(gcf,fullfile(savedir,'type2_WordsCloud_FutureMax.png'))
 close all;
 
 
-%% find x and ¾øÀ½
+%% Words : cross subjectly repeated words & its ratings(same words, various ratings)
+
+C = [];
+counts = 0;
+
+for sub = 1:numel(subnames)
+    sam = 0;
+    for subs = 2:numel(subnames)-1
+    countss = 0;
+    for trial = 2:60
+        for trials = 1:59
+        if isequal(words{1, sub}{trial}, words{1, subs}{trials}) && ~isequal(trial, trials) && ~isequal(sub, subs) && ~isequal(words{1,sub}{trial}, 'ì—†ìŒ') && ~isequal(words{1,sub}{trial}, '??') && ~isequal(words{1,sub}{trial}, 'ì•„ë¬´ìƒê°ì—†ìŒ') && ~isequal(words{1,sub}{trial}, 'X') && ~isequal(words{1,sub}{trial}, 'ê±´ì¡°í•¨') && ~isequal(words{1,sub}{trial}, 'ì†Œë¦¬') && ~isequal(words{1,sub}{trial}, 'ì‹­ìê°€') && ~isequal(words{1,sub}{trial}, 'ì‹¤í—˜') && ~isequal(words{1,sub}{trial}, 'ë¨¸ë¦¬')
+            counts = counts + 1;
+            countss = countss + 1;
+            C{counts,1} = words{1,sub}{trial};
+            C{counts,2} = countss;
+            C{counts,3} = sub;
+            C{counts,4} = trial;
+            C{counts,5} = subs;
+            C{counts,6} = trials;
+        end
+        end
+    end
+    end
+end
+
+A = categorical(C(:,1));
+figure;
+AA = histogram(A);
+
+
+for i = 1:numel(AA.Values)
+    if isequal(AA.Values(i), 1) || isequal(AA.Values(i),2)
+        for j = 1:size(A,1)
+            if isequal(C{j,1}, AA.Categories{i})
+                C{j,1} = 'ì—†ìŒ';
+            end
+        end
+    end
+end
+
+
+for i = 1:size(C,1)
+    if isequal(C{i,1}, 'ì—†ìŒ')
+        C(i, :) = [];
+    end
+end
+
+
+for i = 1:size(C,1)
+    for j = 1:size(C,1)
+        if ~isequal(i, j) && isequal(C{i,1}, C{j,1}) && isequal(C{i, 2}, C{j,2})
+        C(i, :) = [];
+    end
+    end
+end
+
+for i = 1:size(C,1)
+    if isequal(C{i,1}, 'ì»¤í”¼') || isequal(C{i,1}, 'ìì·¨ë°©') || isequal(C{i,1}, 'ì˜í™”ê´€') 
+        C(i, :) = [];
+    end
+end
+
+A = categorical(C(:,1));
+figure;
+AA = histogram(A);
+
+           
+
+% 
+% BB = cell(1,1);
+% % paste A's contents
+% save('pico2_dat_dongju.mat', 'BB');
+% histogram(categorical(BB))
+%        
+%        
+%     
+a = get(gca,'XTickLabel');
+set(gca,'XTickLabel',a,'FontName','Times','fontsize',18);
+title('repeated words across subjects');
+
+%% Bodymaps : similar emotional ratings + similar body sensation
+
+counts = 0;
+
+for sub = 1:numel(subnames)
+    for trials = 1:60
+        if isequal(words{1, sub}{trials}, 'ê²Œì„')
+            counts = counts +1;
+            D{counts, 6} = sub;
+            for dim_i = 1:5
+                D{counts, dim_i} = ratings{1,sub}{trials+1,dim_i};
+            end
+        end
+    end
+end
+
+
+D(:,6) = []; D = cell2mat(D);
+
+mycolor = [166,206,227; 31,120,180; 178,223,138; 51,160,44; 251,154,153; ...
+227,26,28; 253,191,111; 255,127,0; 202,178,214; 106,61,154; ...
+55,126,184; 77,175,74; 152,78,163; 27,158,119; 217,95,2; ...
+117,112,179; 166,86,40; 247,129,191; 153,153,153; 166,206,227; 31,120,180;]./255;
+
+
+E = boxplot_wani_2016(D, 'color', mycolor, 'dots', 'nobox', 'violin');
+%{'valence'}    {'self'  }    {'time'   }    {'safety-threat'}    {'safety-threat'}    {[ 3]}
+
+set(gca,'XTickLabel',{'valence'; 'self-relevance'; 'time'; 'vividness'; 'safety-threat'});
+a = get(gca,'XTickLabel');
+set(gca,'XTickLabel',a,'FontName','Times','fontsize',28);
+title('5dims Ratings for Repeated Word : ê²Œì„');
+
+%% find x and ï¿½ï¿½ï¿½ï¿½
 
 
 
@@ -722,12 +842,12 @@ for trial = 1:60
     end
 end
 
-% x, X, ?, ??, ??? 10°³
-% ¾øÀ½ / ¾Æ¹«»ı°¢¾øÀ½ / ¾Æ¹«»ı°¢¾ø´Ù / »ı°¢ÀÌ¾È³ª¿ä(coco013)
+% x, X, ?, ??, ??? 10ï¿½ï¿½
+% ï¿½ï¿½ï¿½ï¿½ / ï¿½Æ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ / ï¿½Æ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ / ï¿½ï¿½ï¿½ï¿½ï¿½Ì¾È³ï¿½ï¿½ï¿½(coco013)
 
 for trial = 1:60
     for sub = 1: 19
-%         if isequal(words{trial, sub}, "¾øÀ½") ||  isequal(words{trial, sub}, "¾ø´Ù")
+         if isequal(words{trial, sub}, "ï¿½ï¿½ï¿½ï¿½") ||  isequal(words{trial, sub}, "ï¿½ï¿½ï¿½ï¿½")
             x = x + 1;
             xindex{x,1} = trial;
             xindex(x,2) = subnames(sub);

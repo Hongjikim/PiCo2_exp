@@ -1,7 +1,7 @@
 %% Set directory and register participant 
 clear;
-[basedir, sid, subject_dir] = pico2_directory_sub_info('dj_mac'); 
-% 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac','hm_mac', 'je_mac'
+[basedir, sid, subject_dir] = pico2_directory_sub_info('hj_mac'); 
+% 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac','hm_mac'
 cd(basedir);
 
 %% ---------------------- %%
@@ -40,8 +40,9 @@ words = pico2_wholewords(basedir, sid); words'
 % load(fullfile(basedir, 'dims_anchor_korean.mat')); % dims,1 anchor, 
 survey = pico2_post_type02_word_survey(basedir, sid, words); % ,'mgkey'); 
 
+
 %% Type3: Word survey (5 dimensions + Bodymap)
-cd(basedir); 
+cd(basedir);
 words = pico2_wholewords(basedir, sid);
 pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); 
   
