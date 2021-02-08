@@ -7,12 +7,12 @@ addpath(genpath(pwd));
 
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:end-6); % select manually
-subnames(7:end-1) = subnames(8:end); % 7 out
-subnames(12:end-1) = subnames(13:end); % 13 out
-subnames(13:end-1) = subnames(14:end); % 15 out
-subnames(20:end-1) = subnames(21:end);% 23 out
-subnames = subnames(1:end-4); % 1: end-# of extracted sub
+subnames = subnames(5:end-5); % select manually
+% subnames(7:end-1) = subnames(8:end); % 7 out
+% subnames(13:end-1) = subnames(14:end); % 13 out
+% subnames(13:end-1) = subnames(14:end); % 15 out
+% subnames(20:end-1) = subnames(21:end);% 23 out
+% subnames = subnames(1:end-1); % 1: end-# of extracted sub
 
 
 
@@ -237,7 +237,7 @@ for whole = 1:12
                 rating.post_type3_last_word(run_i, :) = rating.post_type3_all{run_i,15};
             end
             
-            subplot(6, 4, sub_i)
+            subplot(13, 4, sub_i)
             scatter(rating.inside(:,1), rating.post_type3_last_word(:,1),'MarkerEdgeAlpha',.7);
             title("Cor=" + corr(rating.inside(:,1), rating.post_type3_last_word(:,1)) + " " + "sub0" + extractBetween(sub, "0", "_")  +  extractAfter(sub, "_"));
             xlabel('post3 valence dim');
@@ -255,7 +255,7 @@ for whole = 1:12
                 rating.post_type3_last_word(run_i, :) = rating.post_type3_all{run_i,15};
             end
             
-            subplot(6, 4, sub_i)
+            subplot(13, 4, sub_i)
             scatter(rating.inside(:,2), rating.post_type3_last_word(:,2),'MarkerEdgeAlpha',.7);
             title("Cor=" + corr(rating.inside(:,2), rating.post_type3_last_word(:,2)) + " " + "sub0" + extractBetween(sub, "0", "_")  +  extractAfter(sub, "_"));
             xlabel('post3 self dim');
@@ -273,7 +273,7 @@ for whole = 1:12
                 rating.post_type3_last_word(run_i, :) = rating.post_type3_all{run_i,15};
             end
             
-            subplot(6, 4, sub_i)
+            subplot(13, 4, sub_i)
             scatter(rating.inside(:,3), rating.post_type3_last_word(:,3),'MarkerEdgeAlpha',.7);
             title("Cor=" + corr(rating.inside(:,3), rating.post_type3_last_word(:,3)) + " " + "sub0" + extractBetween(sub, "0", "_")  +  extractAfter(sub, "_"));
             xlabel('post3 time dim');
@@ -291,7 +291,7 @@ for whole = 1:12
                 rating.post_type3_last_word(run_i, :) = rating.post_type3_all{run_i,15};
             end
             
-            subplot(6, 4, sub_i)
+            subplot(13, 4, sub_i)
             scatter(rating.inside(:,4), rating.post_type3_last_word(:,4),'MarkerEdgeAlpha',.7);
             title("Cor=" + corr(rating.inside(:,4), rating.post_type3_last_word(:,4)) + " " + "sub0" + extractBetween(sub, "0", "_")  +  extractAfter(sub, "_"));
             xlabel('post3 vivid dim');
@@ -310,7 +310,7 @@ for whole = 1:12
                 rating.post_type3_last_word(run_i, :) = rating.post_type3_all{run_i,15};
             end
             
-            subplot(6, 4, sub_i)
+            subplot(13, 4, sub_i)
             scatter(rating.inside(:,5), rating.post_type3_last_word(:,5),'MarkerEdgeAlpha',.7);
             title("Cor=" + corr(rating.inside(:,5), rating.post_type3_last_word(:,5)) + " " + "sub0" + extractBetween(sub, "0", "_")  +  extractAfter(sub, "_"));
             xlabel('post3 safe&threat dim');
@@ -334,7 +334,7 @@ for whole = 1:12
             
             self(:,3) = type3_selflastwords;
             
-            subplot(6, 4, sub_i)
+            subplot(13, 4, sub_i)
             scatter(self(:,2), self(:,1),'MarkerEdgeAlpha',.7)
             title("Cor=" + corr(self(:,2), self(:,1)) + " "+"sub0" + extractBetween(sub, "0", "_") +  extractAfter(sub, "_"));
             xlabel('post2 self');
@@ -354,7 +354,7 @@ for whole = 1:12
                 end
             end
             
-            subplot(6, 4, sub_i)
+            subplot(13, 4, sub_i)
             scatter(self2(:,1), self2(:,2),'MarkerEdgeAlpha',.7)
             title("Cor=" + corr(self2(:,2), self2(:,1))+ " " + "sub0" + extractBetween(sub, "0", "_") +  extractAfter(sub, "_"));
             xlabel('post2 self');
@@ -373,7 +373,7 @@ for whole = 1:12
             vivid(:,2) = rating.post_type2_vivid(:,end);
             vivid(:,3) = rating.post_type3_last_word(:,4);
             
-            subplot(6,4,sub_i);
+            subplot(13,4,sub_i);
             scatter(vivid(:,2), vivid(:,1),'MarkerEdgeAlpha',.7);
        
             title("Cor=" + corr(vivid(:,2), vivid(:,1)) +" "+ "sub0" + extractBetween(sub, "0", "_") +  extractAfter(sub, "_") );
@@ -393,7 +393,7 @@ for whole = 1:12
                 end
             end
             
-            subplot(6, 4, sub_i);
+            subplot(13, 4, sub_i);
             scatter(vivid2(:,1), vivid2(:,2),'MarkerEdgeAlpha',.7)
             title("Cor=" + corr(vivid2(:,2), vivid2(:,1)) + " " + "sub0" + extractBetween(sub, "0", "_") + extractAfter(sub, "_"));
             xlabel('post2');
@@ -409,7 +409,7 @@ for whole = 1:12
             val(:,2) = rating.post_type2_pos(:,end); 
             val(:,3) = rating.post_type3_last_word(:,1);
             
-            subplot(6,4,sub_i);
+            subplot(13,4,sub_i);
             scatter(val(:,2), val(:,1),'MarkerEdgeAlpha',.7); 
             title("Cor=" + corr(val(:,2), val(:,1)) +" "+ "sub0" + extractBetween(sub, "0", "_") +  extractAfter(sub, "_") );
             xlabel('post2 pos');
@@ -427,7 +427,7 @@ for whole = 1:12
                 end
             end
             
-            subplot(6, 4, sub_i);
+            subplot(13, 4, sub_i);
             scatter(val2(:,1), val2(:,2),'MarkerEdgeAlpha',.7)
             title("Cor=" + corr(val2(:,2), val2(:,1)) + " " + "sub0" + extractBetween(sub, "0", "_") + extractAfter(sub, "_"));
             xlabel('post2 pos');
@@ -443,7 +443,7 @@ for whole = 1:12
             val(:,2) = rating.post_type2_neg(:,end);
             val(:,3) = rating.post_type3_last_word(:,1);
             
-            subplot(6,4,sub_i);
+            subplot(13,4,sub_i);
             scatter(val(:,2), val(:,1),'MarkerEdgeAlpha',.7); 
             title("Cor=" + corr(val(:,2), val(:,1)) +" "+ "sub0" + extractBetween(sub, "0", "_") +  extractAfter(sub, "_") );
             xlabel('post2 neg');
@@ -462,7 +462,7 @@ for whole = 1:12
                 end
             end
             
-            subplot(6, 4, sub_i);
+            subplot(13, 4, sub_i);
             scatter(val2(:,1), val2(:,2),'MarkerEdgeAlpha',.7)
             title("Cor=" + corr(val2(:,2), val2(:,1)) + " " + "sub0" + extractBetween(sub, "0", "_") + extractAfter(sub, "_"));
             xlabel('post2 neg');
@@ -478,7 +478,7 @@ for whole = 1:12
             sfth(:,2) = rating.post_type2_safe(:,end); 
             sfth(:,3) = rating.post_type3_last_word(:,5);
             
-            subplot(6,4,sub_i);
+            subplot(13,4,sub_i);
             scatter(sfth(:,2), sfth(:,1),'MarkerEdgeAlpha',.7); 
             title("Cor=" + corr(sfth(:,2), sfth(:,1)) +" "+ "sub0" + extractBetween(sub, "0", "_") +  extractAfter(sub, "_") );
             xlabel('post2 safe');
@@ -498,7 +498,7 @@ for whole = 1:12
                 end
             end
             
-            subplot(6, 4, sub_i);
+            subplot(13, 4, sub_i);
             scatter(sfth2(:,1), sfth2(:,2),'MarkerEdgeAlpha',.7)
             title("Cor=" + corr(sfth2(:,2), sfth2(:,1)) + " " + "sub0" + extractBetween(sub, "0", "_") + extractAfter(sub, "_"));
             xlabel('post2 safe');
@@ -514,7 +514,7 @@ for whole = 1:12
             sfth(:,2) = rating.post_type2_threat(:,end); 
             sfth(:,3) = rating.post_type3_last_word(:,5);
             
-            subplot(6,4,sub_i);
+            subplot(13,4,sub_i);
             scatter(sfth(:,2), sfth(:,1),'MarkerEdgeAlpha',.7); 
             title("Cor=" + corr(sfth(:,2), sfth(:,1)) +" "+ "sub0" + extractBetween(sub, "0", "_") +  extractAfter(sub, "_") );
             xlabel('post2 threat');
@@ -533,7 +533,7 @@ for whole = 1:12
                 end
             end
             
-            subplot(6, 4, sub_i);
+            subplot(13, 4, sub_i);
             scatter(sfth2(:,1), sfth2(:,2),'MarkerEdgeAlpha',.7)
             title("Cor=" + corr(sfth2(:,2), sfth2(:,1)) + " " + "sub0" + extractBetween(sub, "0", "_") + extractAfter(sub, "_"));
             xlabel('post2 threat');

@@ -41,7 +41,6 @@ words = pico2_wholewords(basedir, sid); words'
 survey = pico2_post_type02_word_survey(basedir, sid, words); % ,'mgkey'); 
 
 %% Type3: Word survey (5 dimensions + Bodymap)
-cd(basedir); 
+cd(basedir);  
 words = pico2_wholewords(basedir, sid); 
 pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); 
-  
