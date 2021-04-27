@@ -79,6 +79,7 @@ window_num = screens(end);
 Screen('Preference', 'SkipSyncTests', 1);
 window_info = Screen('Resolution', window_num);
 window_rect = [0 0 window_info.width window_info.height];
+% window_rect = [0 0 window_info.width window_info.height]/2; % hj macbook
 
 W = window_rect(3); %width of screen
 H = window_rect(4); %height of screen

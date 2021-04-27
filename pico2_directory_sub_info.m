@@ -32,7 +32,7 @@ switch where
         basedir = '/Users/cocoanlab/Dropbox/PiCo2_sync/PiCo2_exp';
         
     case 'hm_mac' % Hyemin
-        basedir = '/Users/hyemin_shin/Dropbox/sync/PiCo2_exp';
+        basedir = '/Users/hyemin_shin/cocoanlab Dropbox/projects/PiCo2/sync/PiCo2_exp';
         
     case 'hj_mac2'
         basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';

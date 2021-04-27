@@ -7,7 +7,7 @@ subject_dir = filenames(fullfile(datdir, sid), 'char');
 sid_orig = sid;
 [~, sid] = fileparts(subject_dir);
 
-testmode = false;
+testmode = true;
 practice_mode = false;
 savedir = subject_dir;
 

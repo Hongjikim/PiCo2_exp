@@ -1,6 +1,6 @@
 %% Set directory and register participant 
 clear;
-[basedir, sid, subject_dir] = pico2_directory_sub_info('exp_room'); 
+[basedir, sid, subject_dir] = pico2_directory_sub_info('WL01'); 
 % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac','hm_mac', 'je_mac'
 cd(basedir);
 
@@ -25,7 +25,7 @@ cd(basedir);
 pico2_wordsampling(basedir, sid);    
 
 %% Edit words (if needed)
-cd(basedir);
+
 pico2_editwords(basedir, sid);
 
 %% ----------------------- %%
@@ -41,6 +41,6 @@ words = pico2_wholewords(basedir, sid); words'
 survey = pico2_post_type02_word_survey(basedir, sid, words); % ,'mgkey'); 
 
 %% Type3: Word survey (5 dimensions + Bodymap) 
-cd(basedir);  
+cd(basedir);
 words = pico2_wholewords(basedir, sid);   
-pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); 
+pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey');   rba rbarararaaaabrbarbarabaaaararara  aararbrzaarararararaaraaraa  aaraabaraaarrabaaaraaraa  arbaaaaararaaabaaarbabra 

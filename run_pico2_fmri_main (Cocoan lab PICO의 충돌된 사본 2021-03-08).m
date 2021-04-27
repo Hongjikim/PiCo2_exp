@@ -25,7 +25,7 @@ cd(basedir);
 pico2_wordsampling(basedir, sid);    
 
 %% Edit words (if needed)
-cd(basedir);
+
 pico2_editwords(basedir, sid);
 
 %% ----------------------- %%
@@ -40,7 +40,7 @@ words = pico2_wholewords(basedir, sid); words'
 % load(fullfile(basedir, 'dims_anchor_korean.mat')); % dims,1 anchor, 
 survey = pico2_post_type02_word_survey(basedir, sid, words); % ,'mgkey'); 
 
-%% Type3: Word survey (5 dimensions + Bodymap) 
-cd(basedir);  
-words = pico2_wholewords(basedir, sid);   
+%% Type3: Word survey (5 dimensions + Bodymap) brbra raaarabaaraaaraaaaara  raraaraaaaaraaraaaaa  aaaaaraaarararaarararav  aaraaraaraaaaaaaaa  
+cd(basedir);     
+words = pico2_wholewords(basedir, sid); 
 pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); 

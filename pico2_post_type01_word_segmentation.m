@@ -43,12 +43,12 @@ clear target_run_words
 target_run_words = words(run_num,:);
 
 all_add = []; clear temp_list
-count = 0 ;
+count_n = 0 ;
 
 while true
     
-    count = count + 1;
-    if count == 1
+    count_n = count_n + 1;
+    if count_n == 1
         disp([num2str(run_num) input_msg.d])
         string(target_run_words)
     else
@@ -119,8 +119,26 @@ end
 seg_result{run_num} = temp_list;
 save(savename, 'seg_result')
 
-% end
+% if the last run is done, show results
+if run_num == 4
+    
+    for run_i=1:4
+        % number of segments
+        res.num(run_i) = numel(seg_result{run_i}) - 15 + 1;
+        % size of segments
+        clear a; a = find(count(seg_result{run_i}, '/'));
+        if isempty(a) % no segment in the run
+           res.size{run_i} = [1]; 
+        else
+            res.size{run_i} = [[a(1) diff(a)]-1 15-sum([a(1) diff(a)]-1)];
+        end
+    end
+    
+    res
+    
+    % save and exit
+    save(savename, 'seg_result', 'res')
+end
 
-save(savename, 'seg_result')
 
 

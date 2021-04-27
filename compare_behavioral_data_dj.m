@@ -7,7 +7,7 @@ addpath(genpath(pwd));
 
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:end-5); % select manually
+subnames = subnames(4:end-2); % select manually
 % subnames(7:end-1) = subnames(8:end); % 7 out
 % subnames(13:end-1) = subnames(14:end); % 13 out
 % subnames(13:end-1) = subnames(14:end); % 15 out
@@ -188,9 +188,66 @@ saveas(gcf, fullfile(savedir, ["group_wise_segment_hist" + '.png']))
 
 
 
+%% Violin plot of mean seg values
+
+savedir = '/Users/dongjupark/Dropbox/PiCo2_sync/scripts/behavioral';
+cd('/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp');
+eachseg = [];
+wholeseg = [];
+
+for sub_i = 1:numel(subnames)
+    
+    sub_dir = fullfile(datdir, subnames{sub_i});
+    post_type1 = filenames(fullfile(sub_dir, '*_rating01_word_seg*.mat'));
+    load(post_type1{1});
+    
+    for run_i = 1:4
+        eachseg(run_i) = numel(seg_result{run_i}) - 15 + 1;
+        wholeseg(sub_i) = mean(eachseg);
+    end
+       
+end
+
+mycolor = [252,141,89; 153,153,153; 145,207,96; 255,255,255]./255;
+boxplot_wani_2016(wholeseg', 'color', mycolor(1,:), 'mediancolor', mycolor(2,:), 'dotcolor', mycolor(3,:), 'boxlinecolor', mycolor(4,:), 'dots', 'violin');
+
+title("mean values of all runs")
+ylabel('# of segmentation chunks');
+set(gcf, 'units','normalized','outerposition',[0 0 0.25 1])
+saveas(gcf, fullfile(savedir, ["group_wise_seg_mean1_violin_plot" + '.png']))
 
 
-%% Scatter_group wise
+% 4 mean values for each sub
+
+savedir = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/word_seg/group_wise';
+cd('/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp');
+eachseg = [];
+wholeseg = [];
+
+for sub_i = 1:numel(subnames)
+    
+    sub_dir = fullfile(datdir, subnames{sub_i});
+    post_type1 = filenames(fullfile(sub_dir, '*_rating01_word_seg*.mat'));
+    load(post_type1{1});
+    
+    for run_i = 1:4
+        eachseg(run_i) = numel(seg_result{run_i}) - 15 + 1;
+        wholeseg(sub_i) = mean(eachseg);
+    end
+       
+end
+
+mycolor = [252,141,89; 153,153,153; 145,207,96; 255,255,255]./255;
+boxplot_wani_2016(wholeseg', 'color', mycolor(1,:), 'mediancolor', mycolor(2,:), 'dotcolor', mycolor(3,:), 'boxlinecolor', mycolor(4,:), 'dots', 'violin');
+
+title("mean values of all runs")
+ylabel('# of segmentation chunks');
+set(gcf, 'units','normalized','outerposition',[0 0 0.25 1])
+saveas(gcf, fullfile(savedir, ["group_wise_seg_mean1_violin_plot" + '.png']))
+
+
+
+%% Scatter_group wise : every subs for each dims
 
 savedir  = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/scatter';
 
@@ -564,7 +621,7 @@ subnames(20:end-1) = subnames(21:end);% 23 out
 subnames = subnames(1:end-4); % 1: end-# of extracted sub
 
  
-  for sub_i = 1:numel(subnames)
+  for sub_i = 1%:numel(subnames)
       sub_dir = fullfile(datdir, subnames{sub_i});
       sub = subnames{sub_i};
       mr_run = filenames(fullfile(sub_dir, '*_FT_run*.mat'));
@@ -643,7 +700,7 @@ savedir23 = '/Users/dongjupark/Dropbox/onlyme/PICO2/behavioral_result/scatter/ty
 
 for whole = 1:5
     figure;
-for sub_i = 1:numel(subnames)
+for sub_i = 1%:numel(subnames)
     sub_dir = fullfile(datdir, subnames{sub_i});
     sub = subnames{sub_i};
     mr_run = filenames(fullfile(sub_dir, '*_FT_run*.mat'));
@@ -675,7 +732,7 @@ for sub_i = 1:numel(subnames)
         % compare 2) 5 dimensions (fig 7-8) 4 words for each sub
         figure;
         scatter(rating.inside(:), rating.post_type3(:),'MarkerEdgeAlpha',.7);
-        title("post3 / in for slef in" + sub + "(4words)"+ "cor=" + corr(rating.inside(:), rating.post_type3(:)));
+        title("post3 / in for self in" + sub + "(4words)"+ "cor=" + corr(rating.inside(:), rating.post_type3(:)));
         xlabel('post3');
         ylabel('inscanner');
         lsline;

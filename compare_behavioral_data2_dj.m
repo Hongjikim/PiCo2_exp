@@ -1,5 +1,5 @@
-% datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data';
-datdir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp/data';
+datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data';
+%datdir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp/data';
 cd(datdir);
 addpath(genpath(pwd));
 
@@ -7,14 +7,14 @@ sublist = dir(datdir);
 subnames = {sublist.name}';
 subnames = subnames(5:end-4);
 
-% savedir = '/Users/dongjupark/Dropbox/PiCo2_sync/figures/behavioral/behav_sanity_check/correlation_among_tasks';
-savedir = '/Users/hongji/Dropbox/PiCo2_sync/figures/behavioral/behav_sanity_check/correlation_among_tasks';
+savedir = '/Users/dongjupark/Dropbox/PiCo2_sync/figures/behavioral/behav_sanity_check/correlation_among_tasks';
+%savedir = '/Users/hongji/Dropbox/PiCo2_sync/figures/behavioral/behav_sanity_check/correlation_among_tasks';
 
 %% type 3 | in_scanner
 
 dims = ["VAL"; "SELF"; "TIME"; "VIVID"; "SAFTH"; "ALL"];
 
-for sub_i = 55 %1:numel(subnames)
+for sub_i = 1%:numel(subnames)
     close all;
     figure; set(gcf, 'units','normalized','outerposition',[0 0 1 1]);
     sub_dir = fullfile(datdir, subnames{sub_i});
@@ -28,7 +28,7 @@ for sub_i = 55 %1:numel(subnames)
     survey2 = load(post_type3{1});
     
     for run_i = 1:numel(mr_run)
-        clear data survey rating
+%         clear data survey rating
         load(mr_run{run_i}); load(post_type2{run_i});
         for dd = 1:5 % valence, self, time, vivid, safe&threat
             rating.inside(run_i,dd) = data.postrunQ.dat{dd}.rating;
@@ -101,7 +101,7 @@ end
 
 
 dims = [];
-dims = ["self"; "pos"; "neg"; "vivid"; "safe"; "threat";];
+dims2 = ["self"; "pos"; "neg"; "vivid"; "safe"; "threat";];
 
 for sub_i = 40%1:numel(subnames)
     close all;
