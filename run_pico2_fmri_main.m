@@ -1,6 +1,6 @@
 %% Set directory and register participant 
 clear;
-[basedir, sid, subject_dir] = pico2_directory_sub_info('exp_room'); 
+[basedir, sid, subject_dir] = pico2_directory_sub_info('hj_mac'); 
 % 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac','hm_mac', 'je_mac'
 cd(basedir);
 
@@ -44,3 +44,11 @@ survey = pico2_post_type02_word_survey(basedir, sid, words); % ,'mgkey');
 cd(basedir);
 words = pico2_wholewords(basedir, sid);   
 pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); 
+
+%% make nan_idx for words
+pico2_words_nan_idx(basedir, sid);
+
+%% type3: edit bodymap
+cd(basedir);
+words = pico2_wholewords(basedir, sid);   
+pico2_post_type03_fast_edit_bodymap(basedir, sid(1:7), words); %, 'mgkey'); 
