@@ -36,7 +36,7 @@ subjectdir = filenames(contains(filenames','surveydata'))';
 B = []; b = [];
 B.bodymap = bodymap;
 B.bodymap_binary = body_white_binary;
-trials_num = 60;
+trials_num = 42;
 
 W = [];
 w = [];
@@ -49,7 +49,7 @@ for subject_i = 1:numel(subjectdir)
     
     % load survey data of one subject   
     O.survey = survey; % pico2
-    O = load(fullfile(datadir, 'pico_bodymap', subjectdir{subject_i}));
+%     O = load(fullfile(datadir, 'pico_bodymap', subjectdir{subject_i}));
     original = O.survey.dat;
     original = reshape(original, trials_num, 1);
     
@@ -61,7 +61,7 @@ for subject_i = 1:numel(subjectdir)
         all_sub_words{trial_i, subject_i} = original_word{trial_i};
     end
     
-    b{j,1} = subjectdir{subject_i}; % the first column of B is subnum
+    b{j,1} = {'xx'};%subjectdir{subject_i}; % the first column of B is subnum
     % B{j,2} & B{j,3} = 42 x 2 cell
     b{j,2} = cell(trials_num,2);    % the first column of B{j,2} is for red.
                                     % the second column of B{j,2} is for blue.
@@ -152,7 +152,7 @@ conv_circle =  [0 0 0 1 1 1 1 0 0 0;
           
            
 % example data 
-body_data = body_dat{1}{5,1};
+body_data = body_dat{3}{1}; %body_dat{1}{5,1};
 clim = max([max(max(body_data)) abs(min(min(body_data)))]);
 % body_data = body_data + clim * body_white_binary; 
 

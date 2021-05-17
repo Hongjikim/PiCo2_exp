@@ -41,6 +41,7 @@ subject_dir = filenames(fullfile(datdir, [sid '*']), 'char');
 
 run_n = input('RUN number? (1, 2, 3, 4): ');
 
+load(fullfile(basedir, 'prompt_kor4_wordsampling.mat'));
 %% CREATE AND SAVE DATA
 
 nowtime = clock;
@@ -97,8 +98,8 @@ for response_i = response_n   % in case of no-sound, 1:40
     
     input_key = '';
     while isempty(deblank(input_key))
-        sprintf('    %2d번째 자유생각 단어는 무엇인가요   ', response_i);
-        input_key = input('단어를 적고 엔터키를 눌러주세요. 못 들었으면 ''X''를 적은 후 엔터키를 눌러주세요:  ', 's');
+        sprintf(msg.wordsampling, response_i);
+        input_key = input(msg.start, 's');
     end
     
     response{response_i} = input_key;
