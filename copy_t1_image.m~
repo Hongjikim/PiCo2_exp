@@ -7,7 +7,7 @@ manual_dir = filenames(fullfile(target_dir, '/*pdf'), 'char');
 zip_dir = filenames(fullfile(target_dir, '/syngo*zip'), 'char');
 
 for sub_i = 65:68  % 1-64 done
-        
+      
     sub_dir = filenames(fullfile(basedir, ['COCO0', num2str(sub_i, '%.2d'), '*']), 'char');
     
     hc_dir = filenames(fullfile(sub_dir, '/*/*HEAD_SCOUT_MPR*'), 'char');

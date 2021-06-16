@@ -39,9 +39,7 @@ switch where
     
     case 'je_mac'
         basedir =  '/Users/Janice/Dropbox/PiCo2_sync/PiCo2_exp';
-
-           
-        
+  
 end
 
 addpath(genpath(basedir));

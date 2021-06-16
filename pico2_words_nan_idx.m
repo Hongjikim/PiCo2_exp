@@ -1,4 +1,4 @@
-function pico2_words_nan_idx(basedir, sid)
+function pico2_words_nan_idx(where)
 
 %% manual input of nan idx
 % 0: not a NaN (a word)
@@ -7,12 +7,58 @@ function pico2_words_nan_idx(basedir, sid)
 
 clc;
 
+switch where
+    case 'hj_mac'
+        basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'dj_mac'
+        basedir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'WL01'
+        basedir = '/Users/Cocoanlab_WL01/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'BE_imac'
+        basedir = '/Users/cocoanlab/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'int01' % interview room 01 in CNIR
+        basedir = '/Users/cocoan/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'exp_room' % interview room 01 in CNIR
+        basedir = '/Users/cocoanlab/Dropbox/PiCo2_sync/PiCo2_exp';
+        
+    case 'hm_mac' % Hyemin
+        basedir = '/Users/hyemin_shin/cocoanlab Dropbox/projects/PiCo2/sync/PiCo2_exp';
+        
+    case 'hj_mac2'
+        basedir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp';
+    
+    case 'je_mac'
+        basedir =  '/Users/Janice/Dropbox/PiCo2_sync/PiCo2_exp';
+  
+end
+
+addpath(genpath(basedir));
+
+s_num = input('Input subject number (e.g., 3, 15, 221): ');
+if s_num < 10
+    sub_dir = filenames(fullfile(basedir, 'data', ['coco00', num2str(s_num), '*']), 'char');
+    [~, sid] = fileparts(sub_dir);
+elseif s_num > 199 % session2
+    sub_dir = filenames(fullfile(basedir, 'data_session2', ['coco', num2str(s_num), '*']), 'char');
+    [~, sid] = fileparts(sub_dir);
+else
+    sub_dir = filenames(fullfile(basedir, 'data', ['coco0', num2str(s_num), '*']), 'char');
+    [~, sid] = fileparts(sub_dir);
+end
+
+% sid(isspace(sid)) = []; % remove every blank
+
 load(fullfile(basedir, 'prompt_kor4_nan_idx.mat'));
 
-datdir = fullfile(basedir, 'data');
-subject_dir = filenames(fullfile(datdir, [sid, '*']), 'char');
+% datdir = fullfile(basedir, 'data');
+% subject_dir = filenames(fullfile(datdir, [sid, '*']), 'char');
 
-fname_words = filenames(fullfile(subject_dir, ['WORDS_*.mat']));
+fname_words = filenames(fullfile(sub_dir, ['WORDS_*.mat']));
 
 data = cell(15, size(fname_words,1)); % for words
 
@@ -25,7 +71,7 @@ end
 
 words = data;
 
-savename = fullfile(subject_dir, ['word_nan_idx_', sid, '.mat']);
+savename = fullfile(sub_dir, ['word_nan_idx_', sid, '.mat']);
 
 nan_idx = zeros(size(words)); % 0: not-nan, 1: ¾øÀ½, 2: X
 
@@ -70,6 +116,8 @@ for run_num = 1:4
     end
     
 end
+
+nan_idx
 
 save(savename, 'nan_idx')
 end

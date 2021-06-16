@@ -1,7 +1,7 @@
 %% Set directory and register participant 
 clear;
 [basedir, sid, subject_dir] = pico2_directory_sub_info('exp_room'); 
-% 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac','hm_mac', 'je_mac'
+% 'exp_room', 'dj_mac', 'WL01', 'BE_imac' 'int01', 'hj_mac',c'hm_mac', 'je_mac'
 cd(basedir);
 
 %% ---------------------- %%
@@ -41,12 +41,12 @@ words = pico2_wholewords(basedir, sid); words'
 survey = pico2_post_type02_word_survey(basedir, sid, words); % ,'mgkey'); 
 
 %% Type3: Word survey (5 dimensions + Bodymap) 
-cd(basedir);  ra raar abaaaaaabaaraarara  aaaaaraaarababazaraaaara  araaaararaababrabaaaaara  aarararararbaaaaaaaaaa 
+cd(basedir);  
 words = pico2_wholewords(basedir, sid);
- pico2_post_type03_fast_word_survey(basedir, sid(1:7), words); %, 'mgkey'); 
+pico2_post_type03_fast_word_surv ra rbaraarbarbabaaraababaaabaa  aaarararbabaarabaararaarba b baarababaarabararaaararbaa  abaaeraaararabaaaaaa brba vey(basedir, sid(1:7), words); %, 'mgkey');
 
 %% make nan_idx for words
-pico2_words_nan_idx(basedir, sid);
+pico2_words_nan_idx('dj_mac');
 
 %% type3: edit bodymap
 cd(basedir);
