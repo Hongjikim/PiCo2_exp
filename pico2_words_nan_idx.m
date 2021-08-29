@@ -73,7 +73,7 @@ words = data;
 
 savename = fullfile(sub_dir, ['word_nan_idx_', sid, '.mat']);
 
-nan_idx = zeros(size(words)); % 0: not-nan, 1: 없음, 2: X
+nan_idx = zeros(size(words)); % 0: not-nan, 1: 없음('no idea'), 2: X
 
 number_cell = cell(15,1);
 for i = 1:15, number_cell{i} = num2str(i); end

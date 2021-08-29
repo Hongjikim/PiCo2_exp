@@ -6,7 +6,7 @@ target_dir = '/Volumes/wissen/dropbox/data/PiCo2/imaging/T1_send';
 manual_dir = filenames(fullfile(target_dir, '/*pdf'), 'char');
 zip_dir = filenames(fullfile(target_dir, '/syngo*zip'), 'char');
 
-for sub_i = 65:68  % 1-64 done
+for sub_i = 69:70  % 1-68 done
         
     sub_dir = filenames(fullfile(basedir, ['COCO0', num2str(sub_i, '%.2d'), '*']), 'char');
     

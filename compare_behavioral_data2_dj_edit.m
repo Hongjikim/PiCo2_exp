@@ -1,11 +1,11 @@
-datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data'; %for session2 _session2';
+datdir = '/Users/dongjupark/Dropbox/PiCo2_sync/PiCo2_exp/data_session2'; %for session2 _session2';
 %datdir = '/Users/hongji/Dropbox/PiCo2_sync/PiCo2_exp/data';
 cd(datdir);
 addpath(genpath(pwd));
 
 sublist = dir(datdir);
 subnames = {sublist.name}';
-subnames = subnames(5:end-4); %for session2 (4:end);
+subnames = subnames(4:end); %(4:end-6); %for session2 (4:end);
 
 savedir = '/Users/dongjupark/Dropbox/PiCo2_sync/figures/behavioral/behav_sanity_check/correlation_among_tasks';
 %savedir = '/Users/hongji/Dropbox/PiCo2_sync/figures/behavioral/behav_sanity_check/correlation_among_tasks';
@@ -15,7 +15,7 @@ savedir = '/Users/dongjupark/Dropbox/PiCo2_sync/figures/behavioral/behav_sanity_
 dims = ["VAL"; "SELF"; "TIME"; "VIVID"; "SAFTH"; "ALL"];
 dims2 = ["self"; "pos"; "neg"; "vivid"; "safe"; "threat"];
 
-for sub_i = 1:numel(subnames)
+for sub_i = 20:numel(subnames)
     close all;
     figure; set(gcf, 'units','normalized','outerposition',[0 0 1/2 1]);
     sub_dir = fullfile(datdir, subnames{sub_i});
