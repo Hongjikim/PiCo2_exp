@@ -7,7 +7,7 @@ datdir = fullfile(basedir, 'data');
 
 clear jitter 
 
-for sub_i =1:21
+for sub_i =1:70
     clear sub_dir
     sub_dir = filenames(fullfile(datdir, ['coco', sprintf('%.3d',sub_i), '*']), 'char');
     
@@ -24,8 +24,10 @@ end
 
 histogram(jitter(:), 100)
 
+% n = 70, session 1
 mean(jitter') % mean = 46.6667 same for every subject
 mean(jitter(:)) % total mean = 46.6667
-std(jitter(:)) % std = 5.9535
+std(jitter(:)) % std = 5.8911
 max(jitter(:)) % max = 60.6667
 min(jitter(:)) % min = 32.6667
+% 46.67 +- 14 seconds
